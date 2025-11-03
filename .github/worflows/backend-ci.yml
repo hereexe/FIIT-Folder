@@ -35,3 +35,6 @@ jobs:
 
     - name: Run tests
       run: dotnet test --no-build --verbosity normal
+      # --watchAll=false не нужен для dotnet test
+
+      # Здесь можно добавить дополнительные шаги, например, публикацию артефактов или деплой
