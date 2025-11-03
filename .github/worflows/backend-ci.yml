@@ -1,0 +1,37 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'backend/**'   # <-- Магия здесь!
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'backend/**'   # <-- И здесь!
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./backend # Устанавливаем рабочую директорию
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x' # Укажите вашу версию .NET
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Run tests
+      run: dotnet test --no-build --verbosity normal

@@ -1,0 +1,33 @@
+# =========================================
+# General
+# =========================================
+.DS_Store
+*.log
+.env
+.env.*.local
+
+# =========================================
+# Frontend (Node.js / React)
+# =========================================
+frontend/node_modules/
+frontend/build/
+frontend/dist/
+frontend/.pnp
+frontend/.pnp.js
+
+# =========================================
+# Backend (.NET / C#)
+# =========================================
+backend/src/**/bin/
+backend/src/**/obj/
+backend/tests/**/bin/
+backend/tests/**/obj/
+*.user
+*.suo
+
+# =========================================
+# IDE / Editor specific
+# =========================================
+.vscode/
+.idea/
+.vs/
