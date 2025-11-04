@@ -1,0 +1,6 @@
+@FIIT_folder.Api_HostAddress = http://localhost:5179
+
+GET {{FIIT_folder.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
