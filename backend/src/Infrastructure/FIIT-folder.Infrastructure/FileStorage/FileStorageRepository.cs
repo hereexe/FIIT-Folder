@@ -1,6 +1,8 @@
-﻿namespace FIIT_folder.Infrastructure.FileStorage;
+﻿using FIIT_folder.Domain.Interfaces;
 
-public class FileStorageRepository
+namespace FIIT_folder.Infrastructure.FileStorage;
+
+public class FileStorageRepository : IFileStorageRepository
 {
     
 }

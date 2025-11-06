@@ -1,6 +1,6 @@
 ﻿namespace FIIT_folder.Domain.Models;
 
-public class FileMatadata
+public class FileMetadata
 {
     
 }
