@@ -14,10 +14,10 @@ public class Material
     public string[] ValidTypes = //Здесь добавляем допустимые типы
     {
         "pdf",
-        "word",
+        "word",//...
     };
 
-    private Material()
+    private Material() //защита целостности
     {
         
     }
