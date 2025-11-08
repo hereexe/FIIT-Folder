@@ -11,4 +11,9 @@
       <ProjectReference Include="..\FIIT-folder.Domain\FIIT-folder.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MediatR" Version="13.1.0" />
+      <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
+    </ItemGroup>
+
 </Project>
