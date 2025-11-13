@@ -4,7 +4,7 @@ public class User
 {
     public Guid Id {get; private set;}
     public string Login { get; private set; }
-    public string PasswordHash { get; set; }
+    public string PasswordHash { get; private set; }
     public string Role { get; private set; }
     public DateTime CreatedAt { get; private set; }
 
