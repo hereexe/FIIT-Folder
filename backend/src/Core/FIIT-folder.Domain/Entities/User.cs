@@ -8,7 +8,7 @@ public class User
     public string Role { get; private set; }
     public DateTime CreatedAt { get; private set; }
 
-    public User(string login, string passwordHash, string role = "Student", DateTime createdAt = DateTime.UtcNow)
+    public User(string login, string passwordHash, string role = "Student", DateTime createdAt = default)
     {
         Id = Guid.NewGuid();
         
@@ -21,7 +21,7 @@ public class User
         PasswordHash = passwordHash;
         
         Role = role;
-        CreatedAt = createdAt;
+        CreatedAt = createdAt == default ? DateTime.UtcNow : createdAt;
     }
 
     public void UpdatePassword(string newPasswordHash)
