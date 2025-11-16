@@ -26,7 +26,7 @@ app.MapControllers();
 
 //это мое
 //Console.WriteLine("================");
-await StorageTester.TestOnlySave(); //Запускать через консоль
+await StorageTester.TestFileIsCloud(); //Запускать через консоль
 //Console.WriteLine("================");
 //это мое
 

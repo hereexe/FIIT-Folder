@@ -37,13 +37,12 @@ public class FileStorageRepository : IFileStorageRepository
             var bucketExists = response.Buckets.Any(bucket => bucket.BucketName == BucketName);//проверка на сущ
             
             if (!bucketExists) //бакета нет
-                throw new InvalidOperationException($"Бакет не существует в Yandex Object Storage." +
-                                                    $" Создайте его через консоль управления.");
+                throw new InvalidOperationException($"Бакет не существует в Yandex Object Storage.");
             Console.WriteLine("Облако - контейнер инициализировано");
         }
         catch (Exception ex)
         {
-            throw new InvalidOperationException($"Ошибка инициализации: {ex.Message}", ex);
+            throw new InvalidOperationException("Ошибка инициализации");
         }
     }
     
@@ -85,13 +84,43 @@ public class FileStorageRepository : IFileStorageRepository
         return null;
     }
 
-    public Task DeleteFile(string fullPathFile)
+    public async Task DeleteFile(string fullPathFile)
     {
-        return null;
+        try
+        {
+            if (string.IsNullOrEmpty(fullPathFile))
+                throw new ArgumentException("Путь нулевой", nameof(fullPathFile));
+
+            var request = new DeleteObjectRequest
+            {
+                BucketName = BucketName,
+                Key = fullPathFile
+            };
+
+            await Client.DeleteObjectAsync(request);
+            Console.WriteLine("Файл удален из облака");
+        }
+        catch
+        {
+            throw new FileNotFoundException("Файл не найден!");
+        }
     }
 
-    public Task<bool> IsFileInRepository(string fullPathFile)
+
+    public async Task<bool> IsFileInRepository(string fullPathFile)
     {
-        return null;
+        try
+        {
+            if (string.IsNullOrEmpty(fullPathFile))
+                return false;
+
+            await Client.GetObjectMetadataAsync(BucketName, fullPathFile);
+            return true;
+        }
+        catch
+        {
+            Console.WriteLine("Файл не найден!");
+            return false;
+        }
     }
 }
