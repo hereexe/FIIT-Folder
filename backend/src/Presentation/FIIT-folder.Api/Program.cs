@@ -1,3 +1,5 @@
+using FIIT_folder.Infrastructure.Test;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -21,5 +23,11 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+//это мое
+//Console.WriteLine("================");
+await StorageTester.TestOnlySave(); //Запускать через консоль
+//Console.WriteLine("================");
+//это мое
 
 app.Run();
