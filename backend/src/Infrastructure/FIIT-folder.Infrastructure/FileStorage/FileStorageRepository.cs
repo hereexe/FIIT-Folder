@@ -7,9 +7,9 @@ namespace FIIT_folder.Infrastructure.FileStorage;
 
 public class FileStorageRepository : IFileStorageRepository
 {
-    private readonly IAmazonS3 S3Client;
-    private readonly string BucketName;
-    private readonly string ServiceUrl;
+    private readonly IAmazonS3 Client; //клиент для облака
+    private readonly string BucketName; //имя создаваемого бакета(нового контейнера)
+    private readonly string ServiceUrl; //ссылка соответственно
     
     public FileStorageRepository(string accessKey, string secretKey, string bucketName, string region = "ru-central1")
     {
@@ -23,7 +23,7 @@ public class FileStorageRepository : IFileStorageRepository
             ForcePathStyle = true
         };
 
-        S3Client = new AmazonS3Client(accessKey, secretKey, config);
+        Client = new AmazonS3Client(accessKey, secretKey, config);
         
         InitializeBucketAsync().Wait();
     }
@@ -32,12 +32,14 @@ public class FileStorageRepository : IFileStorageRepository
     {
         try
         {
-            var bucketExists = await S3Client.DoesS3BucketExistAsync(BucketName);
-            if (!bucketExists)
-                throw new InvalidOperationException($"Бакет '{BucketName}' " +
-                                                    $"не существует в Yandex Object Storage. Создайте его через консоль управления.");
+            var request = new ListBucketsRequest(); //сделал запрос на получение
+            var response = await Client.ListBucketsAsync(request); //получаю список бакетов
+            var bucketExists = response.Buckets.Any(bucket => bucket.BucketName == BucketName);//проверка на сущ
             
-            Console.WriteLine("Облако - контейнер инициализировано: {BucketName}");
+            if (!bucketExists) //бакета нет
+                throw new InvalidOperationException($"Бакет не существует в Yandex Object Storage." +
+                                                    $" Создайте его через консоль управления.");
+            Console.WriteLine("Облако - контейнер инициализировано");
         }
         catch (Exception ex)
         {
@@ -50,27 +52,27 @@ public class FileStorageRepository : IFileStorageRepository
         try
         {
             var safeFileName = name;
-            string objectKey;
+            string pathInCloud;
             
             if (string.IsNullOrEmpty(folder))
-                objectKey = safeFileName;
+                pathInCloud = safeFileName;
             else
-                objectKey = $"{folder.Trim('/')}/{safeFileName}";
+                pathInCloud = $"{folder.Trim('/')}/{safeFileName}";
             
             var uploadRequest = new TransferUtilityUploadRequest
             {
                 InputStream = content,
                 BucketName = BucketName,
-                Key = objectKey,
+                Key = pathInCloud,
                 ContentType = type,
                 AutoCloseStream = false
             };
-            var transferUtility = new TransferUtility(S3Client);
+            var transferUtility = new TransferUtility(Client);
             await transferUtility.UploadAsync(uploadRequest);
 
-            Console.WriteLine($"Файл загружен в облако чиназес: {objectKey}");
+            Console.WriteLine($"Файл загружен в облако чиназес: {pathInCloud}");
             
-            return objectKey;
+            return pathInCloud; //возвращаем путь к файлику для MobgoBD
         }
         catch (Exception ex)
         {
