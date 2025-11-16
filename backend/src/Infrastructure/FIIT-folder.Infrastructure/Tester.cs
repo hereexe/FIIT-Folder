@@ -65,7 +65,8 @@ namespace FIIT_folder.Infrastructure.Test
                 Console.WriteLine("Тест на существование уже созданного файла");
                 var folder = "";
                 var name = "test101.txt";
-                var pathInCloud = $"{folder.Trim('/')}/{name}";
+                
+                var pathInCloud = string.IsNullOrEmpty(folder) ? name : $"{folder.Trim('/')}/{name}";
 
                 var repository = GetRepository();
 
