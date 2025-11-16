@@ -7,5 +7,5 @@ public interface IFileStorageRepository
     
     Task DeleteFile(string fullPathFile);
     
-    Task<bool> IsFile(string fullPathFile);
+    Task<bool> IsFileInRepository(string fullPathFile);
 }
