@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIIT-folder.Api", "..\src\Presentation\FIIT-folder.Api\FIIT-folder.Api.csproj", "{52A29720-B0B3-404A-A9C3-617341B53EF6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIIT-folder.Api", "..\src\Api\FIIT-folder.Api\FIIT-folder.Api.csproj", "{52A29720-B0B3-404A-A9C3-617341B53EF6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIIT-folder.Application", "..\src\Core\FIIT-folder.Application\FIIT-folder.Application.csproj", "{20CEC4CF-B4FA-4CF4-BC0F-2917B4D70F8E}"
 EndProject
