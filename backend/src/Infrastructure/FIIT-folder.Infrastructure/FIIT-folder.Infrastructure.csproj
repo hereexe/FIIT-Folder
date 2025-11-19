@@ -17,4 +17,8 @@
       <PackageReference Include="Azure.Storage.Blobs" Version="12.26.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Core\FIIT-folder.Domain\FIIT-folder.Domain.csproj" />
+    </ItemGroup>
+
 </Project>
