@@ -7,8 +7,4 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\..\Core\FIIT-folder.Application\FIIT-folder.Application.csproj" />
-    </ItemGroup>
-
 </Project>
