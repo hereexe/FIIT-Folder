@@ -79,9 +79,8 @@ namespace FIIT_folder.Infrastructure.Test
                     Console.WriteLine("Файл в облаке нет!");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                
             }
         }
     }
