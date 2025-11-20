@@ -11,6 +11,7 @@ builder.Services.AddControllers(options =>
     options.Filters.Add<ValidationFilter>();
 });
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

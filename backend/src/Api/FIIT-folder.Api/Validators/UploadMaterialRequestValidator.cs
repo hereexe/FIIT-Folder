@@ -16,8 +16,8 @@ public class UploadMaterialRequestValidator : AbstractValidator<UploadMaterialRe
             .DependentRules(() =>
             {
                 RuleFor(x => x.File!.Length)
-                    .LessThanOrEqualTo(10 * 1024 * 1024) 
-                    .WithMessage("Размер файла не должен превышать 10 МБ");
+                    .LessThanOrEqualTo(25 * 1024 * 1024) 
+                    .WithMessage("Размер файла не должен превышать 25 МБ");
 
                 RuleFor(x => x.File!.FileName)
                     .Must(HaveValidExtension)
