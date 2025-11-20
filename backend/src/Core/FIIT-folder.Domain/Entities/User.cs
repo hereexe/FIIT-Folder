@@ -3,9 +3,9 @@ namespace FIIT_folder.Domain.Entities;
 public class User
 {
     public Guid Id {get; private set;}
-    public string Login { get; private set; }
-    public string PasswordHash { get; private set; }
-    public string Role { get; private set; }
+    public string Login { get; private set; } = string.Empty;
+    public string PasswordHash { get; private set; } = string.Empty;
+    public string Role { get; private set; } = string.Empty;
     public DateTime CreatedAt { get; private set; }
 
     public User(string login, string passwordHash, string role = "Student", DateTime createdAt = default)

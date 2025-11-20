@@ -3,10 +3,10 @@
 public class Material // ValueObject
 {
     public Guid Id { get; private set; } //Guid - создает уникальный идентефикатор
-    public string Name { get; private set; }
-    public string Path { get; private set; }
+    public string Name { get; private set; } = string.Empty;
+    public string Path { get; private set; } = string.Empty;
     public long Size { get; private set; }
-    public string Type { get; private set; }
+    public string Type { get; private set; } = string.Empty;
     public DateTime Date { get; private set; }
     
     //Далее идут огр на файл

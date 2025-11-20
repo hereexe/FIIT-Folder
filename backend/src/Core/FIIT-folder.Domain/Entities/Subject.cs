@@ -3,7 +3,7 @@ namespace FIIT_folder.Domain.Entities;
 public class Subject
 {
     public Guid Id {get; private set;}
-    public string Name {get; private set;}
+    public string Name {get; private set;} = string.Empty;
 
     public Subject(string name)
     {
