@@ -25,4 +25,14 @@ public class SubjectsController : ControllerBase
     {
         return Created("", new { Name = request.Name, Id = Guid.NewGuid() });
     }
+    
+    [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAll()
+    {
+        var mockSubjects = new[] { "Математический анализ", "Основы программирования", "История" };
+        return await Task.FromResult(Ok(mockSubjects));
+    }
+}
+    
 }
