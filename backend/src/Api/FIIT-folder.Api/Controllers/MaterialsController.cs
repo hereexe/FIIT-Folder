@@ -1,3 +1,4 @@
+using FIIT_folder.Api.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,15 +31,10 @@ public class MaterialsController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Upload([FromForm] string subject, [FromForm] IFormFile file)
+    public async Task<IActionResult> Upload([FromForm] UploadMaterialRequest request)
     {
-        if (file == null || file.Length == 0)
-        {
-            return BadRequest("Файл не выбран или пуст.");
-        }
-        
         var newMaterialId = Guid.NewGuid();
-        return CreatedAtAction(nameof(GetBySubject), new { subject = newMaterialId }, new { Id = newMaterialId });
+        return CreatedAtAction(nameof(GetBySubject), new { subject = request.Subject }, new { Id = newMaterialId });
     }
 
     [HttpGet("{id}/download-link")]

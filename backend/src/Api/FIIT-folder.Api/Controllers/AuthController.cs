@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using FIIT_folder.Api.Models;
 
 namespace FIIT_folder.Api.Controllers;
 
@@ -17,7 +18,7 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Register()
+    public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
         // TODO: Дописать полноценую логику потом.....
         return Ok(new { Message = "пользователь зарегался" });

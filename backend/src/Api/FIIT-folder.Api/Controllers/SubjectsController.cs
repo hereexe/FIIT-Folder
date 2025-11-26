@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using FIIT_folder.Api.Models;
 
 
 
@@ -16,7 +17,15 @@ public class SubjectsController : ControllerBase
     {
         _mediator = mediator;
     }
-
+    
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Create([FromBody] CreateSubjectRequest request)
+    {
+        return Created("", new { Name = request.Name, Id = Guid.NewGuid() });
+    }
+    
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll()
@@ -25,3 +34,4 @@ public class SubjectsController : ControllerBase
         return await Task.FromResult(Ok(mockSubjects));
     }
 }
+    
