@@ -14,13 +14,12 @@ export default function Index() {
     "Английский язык",
     "Основы проектной\nдеятельности",
   ];
-  function MyComponent() {
-    const navigate = useNavigate();
   
-    const handleClick = () => {
-      navigate('/target-page');
+  const navigate = useNavigate();
+  
+  const handleClick = () => {
+      navigate("/exam_type");
     };
-  }
 
   return (
     <div className="min-h-screen bg-app-background flex flex-col">
@@ -89,7 +88,7 @@ export default function Index() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-x-[66px] md:gap-y-[50px]">
             {subjects.map((subject, index) => (
               <button
-                
+                onClick={handleClick}
                 key={index}
                 className="h-[105px] bg-app-purple rounded-[10px] flex items-center justify-center px-4 text-app-text text-lg md:text-[25px] font-medium tracking-[0.25px] leading-normal text-center hover:opacity-30 hover:scale-110 transition-all whitespace-pre-line"
               >

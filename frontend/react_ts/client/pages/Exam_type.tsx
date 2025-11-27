@@ -13,11 +13,19 @@ import {
   Menu,
   X,
 } from "lucide-react";
+import { useNavigate } from 'react-router-dom';
 
 export default function Index() {
   const [examsExpanded, setExamsExpanded] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const navigate = useNavigate();
+  const handleClickBack = () => {
+    navigate("/main_page");
+  };
+  const handleClickExam = () => {
+    navigate("/doc_page");
+  };
 
   return (
     <div className="flex min-h-screen bg-app-bg font-[Inter]">
@@ -110,30 +118,40 @@ export default function Index() {
       {/* Main Content */}
       <main className="flex-1">
         {/* Top Bar */}
-        <div className="flex items-center gap-4 md:gap-[121px] px-5 md:px-[24px] py-[14px] flex-wrap md:flex-nowrap">
-          <div className="flex items-center gap-2">
+        <div className="flex items-center justify-between px-5 md:px-[24px] py-[14px]">
+          {/* Левая часть - кнопки */}
+          <div className="flex items-center gap-2 flex-shrink-0">
             <button
               className="md:hidden hover:opacity-80 transition-opacity"
               onClick={() => setSidebarOpen(!sidebarOpen)}
             >
               <Menu className="w-8 h-8 text-app-text stroke-[2]" />
             </button>
-            <button className="hover:opacity-80 transition-opacity">
+            <button 
+              onClick={handleClickBack}
+              className="hover:opacity-80 transition-opacity"
+            >
               <ChevronLeft className="w-10 h-10 text-app-text stroke-[2]" />
             </button>
           </div>
 
-          <h1 className="text-app-text text-[28px] md:text-[45px] font-semibold tracking-[0.9px] flex-1 min-w-0">
-            Математический анализ
-          </h1>
+          {/* Центральная часть - заголовок */}
+          <div className="flex-1 flex justify-center">
+            <h1 className="text-app-text text-[28px] md:text-[45px] font-semibold tracking-[0.9px] text-center">
+              Математический анализ
+            </h1>
+          </div>
 
-          <button className="hover:opacity-80 transition-opacity">
-            <Search className="w-10 h-10 text-app-text stroke-[2]" />
-          </button>
+          {/* Правая часть - кнопка поиска */}
+          <div className="flex-shrink-0">
+            <button className="hover:opacity-80 transition-opacity">
+              <Search className="w-10 h-10 text-app-text stroke-[2]" />
+            </button>
+          </div>
         </div>
 
         {/* Content Sections */}
-        <div className="px-5 md:px-[24px] py-0 flex flex-col gap-[15px] max-w-[780px]">
+        <div className="px-5 md:px-[24px] py-0 flex flex-col gap-[15px] max-w-[780px] md:mr-auto md:ml-20 md:top-20">
           {/* Экзамены Section */}
           <div className="flex flex-col gap-[15px]">
             <button
@@ -156,7 +174,7 @@ export default function Index() {
             {examsExpanded && (
               <div className="flex flex-col gap-[15px]">
                 <div className="bg-app-item rounded-[10px] px-9 py-[11px] hover:opacity-80 transition-opacity cursor-pointer">
-                  <span className="text-black text-[23px] font-medium tracking-[0.23px]">
+                  <span className="text-black text-[23px] font-medium tracking-[0.23px]" onClick={handleClickExam}>
                     Экзамен, 1 семестр
                   </span>
                 </div>

@@ -7,7 +7,7 @@ interface Material {
   author: string;
   likes: number;
 }
-
+{/* TODO Автоматическое определение количества объектов*/}
 export default function Index() {
   const [materials] = useState<Material[]>([
     { id: "1", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202 },

@@ -14,7 +14,7 @@ import Main_page from "./pages/Main_page"
 import Exam_type from "./pages/Exam_type"
 
 const queryClient = new QueryClient();
-
+{/*Todo: разобраться как встроить загрузку уже полученного файла*/}
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -22,9 +22,9 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Docs_page />} />
-          <Route path="/" element={<Main_page />} />
-          <Route path="/" element={<Exam_type />} />
+          <Route path="/main_page" element={<Main_page />} />
+          <Route path="/doc_page" element={<Docs_page />} />
+          <Route path="/exam_type" element={<Exam_type />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           
           <Route path="*" element={<NotFound />} />
