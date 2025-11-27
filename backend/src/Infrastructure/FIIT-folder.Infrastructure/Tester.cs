@@ -8,11 +8,6 @@ namespace FIIT_folder.Infrastructure.Test
 {
     public static class StorageTester
     {
-        public static string PathInCloud(string name, string folder)
-        {
-            return string.IsNullOrEmpty(folder) ? name : $"{folder.Trim('/')}/{name}";
-        }
-        
         public static FileStorageRepository GetRepository()
         {
             return new FileStorageRepository(
@@ -23,34 +18,42 @@ namespace FIIT_folder.Infrastructure.Test
             );
         }
         
-        public static async Task TestDeleteFile()
+        public static async Task TestDeleteFile(string name, string folder)
         {
             var repository = GetRepository();
-            var name = "aboba.txt";
-            var folder = "";
-            var filePath = PathInCloud(name, folder);
+            var filePath = FileStorageRepository.CreatePathInCloud(name, folder);
             await repository.DeleteFile(filePath);
             
             Console.WriteLine("Файл удален");
         }
-        
-        public static async Task TestSaveInRepository()
+
+        public static async Task TestGetFile(FileStorageRepository repository, string name, string folder)
         {
-            var repository = GetRepository();
+            Console.WriteLine("Тест скачивание файл");
+            var filePath = FileStorageRepository.CreatePathInCloud(name, folder);
+            if (await repository.IsFileInRepository(filePath))
+            {
+                using var downloadedStream = await repository.GetFile(filePath);
+            }
+        }
+        
+        public static async Task TestSaveInRepository(
+            FileStorageRepository repository, string testContent, 
+            string type, string name, string folder)
+        {
             try
             {
                 Console.WriteLine("Тест на сохранение");
-
-                var testContent = "Простой тестовый файл";
+                
                 var bytes = Encoding.UTF8.GetBytes(testContent);
                 var stream = new MemoryStream(bytes);
                 
                 await repository.SaveFile(
-                    "aboba.txt",
+                    name,
                     bytes.Length,
-                    "text/plain",
+                    type,
                     stream,
-                    ""
+                    folder
                 );
                 
                 Console.WriteLine($"Файл сохранен");
@@ -61,15 +64,13 @@ namespace FIIT_folder.Infrastructure.Test
             }
         }
         
-        public static async Task TestFileIsCloud()
+        public static async Task TestFileIsCloud(string name, string folder)
         {
             try
             {
                 Console.WriteLine("Тест на существование уже созданного файла");
-                var folder = "";
-                var name = "aboba.txt";
                 
-                var pathInCloud = PathInCloud(name, folder);
+                var pathInCloud = FileStorageRepository.CreatePathInCloud(name, folder);
 
                 var repository = GetRepository();
 
@@ -84,6 +85,7 @@ namespace FIIT_folder.Infrastructure.Test
             }
             catch (Exception)
             {
+                throw new Exception("Неизвестная ошибка при поиске файла");
             }
         }
     }

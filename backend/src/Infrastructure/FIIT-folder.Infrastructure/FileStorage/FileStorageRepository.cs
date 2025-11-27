@@ -37,7 +37,7 @@ public class FileStorageRepository : IFileStorageRepository
             var bucketExists = response.Buckets.Any(bucket => bucket.BucketName == BucketName);//проверка на сущ
             
             if (!bucketExists) //бакета нет
-                throw new InvalidOperationException($"Бакет не существует в Yandex Object Storage.");
+                throw new InvalidOperationException($"Бакет не существует в облаке.");
             Console.WriteLine("Облако - контейнер инициализировано");
         }
         catch (Exception ex)
@@ -56,7 +56,7 @@ public class FileStorageRepository : IFileStorageRepository
             if (string.IsNullOrEmpty(folder))
                 pathInCloud = safeFileName;
             else
-                pathInCloud = $"{folder.Trim('/')}/{safeFileName}";
+                pathInCloud = CreatePathInCloud(safeFileName, folder);
             
             var uploadRequest = new TransferUtilityUploadRequest
             {
@@ -69,19 +69,54 @@ public class FileStorageRepository : IFileStorageRepository
             var transferUtility = new TransferUtility(Client);
             await transferUtility.UploadAsync(uploadRequest);
 
-            Console.WriteLine($"Файл загружен в облако чиназес: {pathInCloud}");
+            Console.WriteLine($"Файл загружен в облако с путем: {pathInCloud}");
             
             return pathInCloud; //возвращаем путь к файлику для MobgoBD
         }
         catch (Exception ex)
         {
-            throw new InvalidOperationException($"Ошибка загрузки файла '{name}' в облако плаки плаки: {ex.Message}", ex);
+            throw new InvalidOperationException($"Ошибка загрузки файла '{name}' в облако плаки плаки");
         }
     }
 
-    public Task<Stream> GetFile(string fullPathFile)
+    public async Task<Stream> GetFile(string fullPathFile)
     {
-        return null;
+        try
+        {
+            if (string.IsNullOrEmpty(fullPathFile))
+                throw new ArgumentException("Путь к файлу не может быть пустым");
+
+            var request = new GetObjectRequest
+            {
+                BucketName = BucketName,
+                Key = fullPathFile
+            };
+
+            var response = await Client.GetObjectAsync(request);
+    
+            // Копируем содержимое в MemoryStream для безопасного использования
+            var memoryStream = new MemoryStream();
+            await response.ResponseStream.CopyToAsync(memoryStream);
+            memoryStream.Position = 0; // Возвращаем указатель в начало
+    
+            // Закрываем исходный поток
+            response.ResponseStream.Close();
+    
+            Console.WriteLine($"Файл {fullPathFile} успешно скачан");
+            return memoryStream;
+        }
+        catch (AmazonS3Exception ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            throw new FileNotFoundException($"Файл {fullPathFile} не найден в облачном хранилище", ex);
+        }
+        catch (AmazonS3Exception ex)
+        {
+            throw new InvalidOperationException($"Ошибка при скачивании файла {fullPathFile}: {ex.Message}", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Неожиданная ошибка при скачивании файла {fullPathFile}: {ex.Message}", ex);
+        }
     }
 
     public async Task DeleteFile(string fullPathFile)
@@ -92,7 +127,7 @@ public class FileStorageRepository : IFileStorageRepository
                 throw new ArgumentException("Путь нулевой", nameof(fullPathFile));
 
             if (!await IsFileInRepository(fullPathFile))
-                throw new ArgumentException("Файл в репеозитории нет!");
+                throw new ArgumentException("Файла в репеозитории нет!");
             
             var request = new DeleteObjectRequest
             {
@@ -108,7 +143,11 @@ public class FileStorageRepository : IFileStorageRepository
             throw new InvalidOperationException($"Ошибка удаления файла");
         }
     }
-
+    
+    public static string CreatePathInCloud(string name, string folder)
+    {
+        return string.IsNullOrEmpty(folder) ? name : $"{folder.Trim('/')}/{name}";
+    }
 
     public async Task<bool> IsFileInRepository(string fullPathFile)
     {

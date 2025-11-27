@@ -1,6 +1,7 @@
 using FluentValidation;
 using FIIT_folder.Api.Middlware;
 using FIIT_folder.Infrastructure.Test;
+using FIIT_folder.Infrastructure.FileStorage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,7 +45,18 @@ app.MapControllers();
 
 //это мое
 //Console.WriteLine("================");
-await StorageTester.TestDeleteFile(); //Запускать через консоль
+var name = "test-file11111.txt";
+var folder = "test-folder";
+var repository = new FileStorageRepository(
+    "YCAJEJjZUAxs4F0iCpajJG4_L",
+    "YCNbbq1t3RGwiRuNrNAnCsODmPVgWFM1s6jT201L",  
+    "my-fiit",
+    "ru-central1"
+);
+var testContent = "еееее acwqdwqdwqеееееу";
+var type = "text/plain";
+//await StorageTester.TestSaveInRepository(repository, testContent, type, name, folder); //Запускать через консоль
+await StorageTester.TestGetFile(repository,name, folder);
 //Console.WriteLine("================");
 //это мое
 
