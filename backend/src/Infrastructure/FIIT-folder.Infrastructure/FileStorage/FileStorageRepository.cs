@@ -105,13 +105,7 @@ public class FileStorageRepository : IFileStorageRepository
         }
         catch (AmazonS3Exception ex)
         {
-            Console.WriteLine($"Ошибка при удалении файла: {ex.Message}");
-            throw new InvalidOperationException($"Ошибка удаления файла: {ex.Message}", ex);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Неожиданная ошибка: {ex.Message}");
-            throw new InvalidOperationException($"Ошибка удаления файла: {ex.Message}", ex);
+            throw new InvalidOperationException($"Ошибка удаления файла");
         }
     }
 
