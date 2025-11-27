@@ -9,6 +9,7 @@ public class MaterialMongoDB : IMaterialMongoDB
     public Task<Material> GetByIdMaterial(string id)
     {
         throw new NotImplementedException();
+        var a = "mongodb+srv://admin:<db_password>@cluster0.rzsw1qe.mongodb.net/?appName=Cluster0";
     }
 
     public Task<bool> DeleteMaterial(string id)
