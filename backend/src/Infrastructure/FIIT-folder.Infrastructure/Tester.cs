@@ -8,14 +8,11 @@ namespace FIIT_folder.Infrastructure.Test
 {
     public static class StorageTester
     {
-        private static async Task TestDeleteFile(FileStorageRepository repository)
+        public static string PathInCloud(string name, string folder)
         {
-            var filePath = "test-folder/test-file.txt";
-            await repository.DeleteFile(filePath);
-            
-            Console.WriteLine("Файл удален");
+            return string.IsNullOrEmpty(folder) ? name : $"{folder.Trim('/')}/{name}";
         }
-
+        
         public static FileStorageRepository GetRepository()
         {
             return new FileStorageRepository(
@@ -26,7 +23,18 @@ namespace FIIT_folder.Infrastructure.Test
             );
         }
         
-        public static async Task TestOnlySave()
+        public static async Task TestDeleteFile()
+        {
+            var repository = GetRepository();
+            var name = "aboba.txt";
+            var folder = "";
+            var filePath = PathInCloud(name, folder);
+            await repository.DeleteFile(filePath);
+            
+            Console.WriteLine("Файл удален");
+        }
+        
+        public static async Task TestSaveInRepository()
         {
             var repository = GetRepository();
             try
@@ -38,9 +46,9 @@ namespace FIIT_folder.Infrastructure.Test
                 var stream = new MemoryStream(bytes);
                 
                 await repository.SaveFile(
-                    "test101.txt",
+                    "aboba.txt",
                     bytes.Length,
-                    "text/plain", 
+                    "text/plain",
                     stream,
                     ""
                 );
@@ -53,20 +61,15 @@ namespace FIIT_folder.Infrastructure.Test
             }
         }
         
-        public static async Task TestOnlyDelete()
-        {
-            
-        }
-        
         public static async Task TestFileIsCloud()
         {
             try
             {
                 Console.WriteLine("Тест на существование уже созданного файла");
                 var folder = "";
-                var name = "test101.txt";
+                var name = "aboba.txt";
                 
-                var pathInCloud = string.IsNullOrEmpty(folder) ? name : $"{folder.Trim('/')}/{name}";
+                var pathInCloud = PathInCloud(name, folder);
 
                 var repository = GetRepository();
 

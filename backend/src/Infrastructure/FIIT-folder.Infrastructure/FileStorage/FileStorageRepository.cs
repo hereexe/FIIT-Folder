@@ -91,6 +91,9 @@ public class FileStorageRepository : IFileStorageRepository
             if (string.IsNullOrEmpty(fullPathFile))
                 throw new ArgumentException("Путь нулевой", nameof(fullPathFile));
 
+            if (!await IsFileInRepository(fullPathFile))
+                throw new ArgumentException("Файл в репеозитории нет!");
+            
             var request = new DeleteObjectRequest
             {
                 BucketName = BucketName,
@@ -100,9 +103,15 @@ public class FileStorageRepository : IFileStorageRepository
             await Client.DeleteObjectAsync(request);
             Console.WriteLine("Файл удален из облака");
         }
-        catch
+        catch (AmazonS3Exception ex)
         {
-            throw new FileNotFoundException("Файл не найден!");
+            Console.WriteLine($"Ошибка при удалении файла: {ex.Message}");
+            throw new InvalidOperationException($"Ошибка удаления файла: {ex.Message}", ex);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Неожиданная ошибка: {ex.Message}");
+            throw new InvalidOperationException($"Ошибка удаления файла: {ex.Message}", ex);
         }
     }
 
