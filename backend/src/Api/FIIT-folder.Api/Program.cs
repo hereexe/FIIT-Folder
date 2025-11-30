@@ -45,8 +45,8 @@ app.MapControllers();
 
 //это мое
 //Console.WriteLine("================");
-var name = "test-file11111.txt";
-var folder = "test-folder";
+var name = "ewweweewew.txt";
+var folder = "twewewewe-folder";
 var repository = new FileStorageRepository(
     "YCAJEJjZUAxs4F0iCpajJG4_L",
     "YCNbbq1t3RGwiRuNrNAnCsODmPVgWFM1s6jT201L",  
@@ -56,7 +56,7 @@ var repository = new FileStorageRepository(
 var testContent = "еееее acwqdwqdwqеееееу";
 var type = "text/plain";
 //await StorageTester.TestSaveInRepository(repository, testContent, type, name, folder); //Запускать через консоль
-await StorageTester.TestGetFile(repository,name, folder);
+await StorageTester.TestDeleteFile(name, folder);
 //Console.WriteLine("================");
 //это мое
 

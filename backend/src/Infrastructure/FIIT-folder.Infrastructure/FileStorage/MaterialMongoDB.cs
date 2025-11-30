@@ -2,22 +2,19 @@
 using FIIT_folder.Domain.Models;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
-using MongoDB.Driver;  
+using MongoDB.Driver;
 
 namespace FIIT_folder.Infrastructure.FileStorage;
 
 public class MaterialMongoDB : IMaterialMongoDB
 {
-    private readonly IMongoCollection<BsonDocument> Materials;
-
     public MaterialMongoDB(IConfiguration configuration)
     {
         var connectionString = configuration["MongoDbSettings:ConnectionString"];
-        var databaseName = configuration["MongoDbSettings:DatabaseName"];
+        var name = configuration["MongoDbSettings:DatabaseName"];
             
         var client = new MongoClient(connectionString);
-        var database = client.GetDatabase(databaseName);
-        Materials = database.GetCollection<BsonDocument>("Materials");
+        var database = client.GetDatabase(name);
     }
     
     public async Task<Material> CreateMaterial(Material material)
@@ -34,10 +31,8 @@ public class MaterialMongoDB : IMaterialMongoDB
                 { "size", material.Size },
                 { "type", material.Type },
                 { "date", DateTime.UtcNow },
-                { "createdAt", DateTime.UtcNow }
             };
-
-            await Materials.InsertOneAsync(document);
+            
             return material;
         }
         catch (Exception ex)
