@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Api\FIIT-folder.Application\FIIT-folder.Application.csproj" />
       <ProjectReference Include="..\..\Core\FIIT-folder.Domain\FIIT-folder.Domain.csproj" />
     </ItemGroup>
 

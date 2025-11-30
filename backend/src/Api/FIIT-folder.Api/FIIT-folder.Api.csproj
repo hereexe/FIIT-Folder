@@ -25,6 +25,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Infrastructure\FIIT-folder.Infrastructure\FIIT-folder.Infrastructure.csproj" />
+      <ProjectReference Include="..\FIIT-folder.Application\FIIT-folder.Application.csproj" />
     </ItemGroup>
 
 </Project>
