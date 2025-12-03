@@ -1,30 +1,25 @@
+using FIIT_folder.Domain.Value_Object;
+
 namespace FIIT_folder.Domain.Entities;
 
 public class User
 {
-    public Guid Id {get; private set;}
-    public string Login { get; private set; } = string.Empty;
-    public string PasswordHash { get; private set; } = string.Empty;
-    public string Role { get; private set; } = string.Empty;
+    public UserId Id {get; private set;}
+    public Login Login { get; private set; }
+    public PasswordHash PasswordHash { get; private set; }
+    public UserRole Role { get; private set; }
     public DateTime CreatedAt { get; private set; }
 
-    public User(string login, string passwordHash, string role = "Student", DateTime createdAt = default)
+    public User(UserId id, Login login, PasswordHash passwordHash, UserRole role)
     {
-        Id = Guid.NewGuid();
-        
-        if (string.IsNullOrWhiteSpace(login))
-            throw new ArgumentException("Login cannot be empty");
+        Id = id;
         Login = login;
-        
-        if (string.IsNullOrWhiteSpace(passwordHash))
-            throw new ArgumentException("Password cannot be empty");
         PasswordHash = passwordHash;
-        
         Role = role;
-        CreatedAt = createdAt == default ? DateTime.UtcNow : createdAt;
+        CreatedAt = DateTime.UtcNow;
     }
 
-    public void UpdatePassword(string newPasswordHash)
+    public void UpdatePassword(PasswordHash newPasswordHash)
     {
         PasswordHash = newPasswordHash;
     }
