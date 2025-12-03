@@ -8,7 +8,7 @@ public record Login
     public string Value { get; }
     private static readonly Regex AllowedPattern = new(@"^[a-zA-Z0-9_]+$", RegexOptions.Compiled);
 
-    public Login(string value)
+    private Login(string value)
     {
         Value = value;
     }
