@@ -1,5 +1,4 @@
-﻿using FIIT_folder.Domain.Models;
-using FIIT_folder.Domain.Interfaces;
+﻿using FIIT_folder.Domain.Interfaces;
 using FIIT_folder.Infrastructure.FileStorage;
 using Microsoft.Extensions.Configuration;
 using System.IO;

@@ -1,5 +1,5 @@
 ﻿using FIIT_folder.Domain.Interfaces;
-using FIIT_folder.Domain.Models;
+using FIIT_folder.Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -8,6 +8,7 @@ namespace FIIT_folder.Infrastructure.FileStorage;
 
 public class MaterialMongoDB : IMaterialMongoDB
 {
+    private readonly IMongoCollection<BsonDocument> _collection;
     public MaterialMongoDB(IConfiguration configuration)
     {
         var connectionString = configuration["MongoDbSettings:ConnectionString"];
@@ -15,24 +16,29 @@ public class MaterialMongoDB : IMaterialMongoDB
             
         var client = new MongoClient(connectionString);
         var database = client.GetDatabase(name);
+        _collection = database.GetCollection<BsonDocument>("materials");
     }
     
-    public async Task<Material> CreateMaterial(Material material)
+    public async Task<StudyMaterial> CreateMaterial(StudyMaterial material)
     {
         try
         {
             Console.WriteLine("Сохраняю материал");
             
-            var document = new BsonDocument //пока обычный словарик чтобы просто проверить
+            var document = new BsonDocument
             {
-                { "materialId", material.Id.ToString() },
-                { "name", material.Name },
-                { "path", material.Path },
-                { "size", material.Size },
-                { "type", material.Type },
-                { "date", DateTime.UtcNow },
+                { "materialId", material.Id.Value.ToString() },
+                { "subjectId", material.SubjectId.Value.ToString() },
+                { "userId", material.UserId.Value.ToString() },
+                { "name", material.Name.Value },
+                { "year", material.Year.Value },
+                { "size", material.Size.ToString() },
+                { "type", material.MaterialType.ToString() },
+                { "filePath", material.FilePath.Value },
+                { "uploadedAt", material.UploadedAt }
             };
             
+            await _collection.InsertOneAsync(document);
             return material;
         }
         catch (Exception ex)
@@ -41,7 +47,7 @@ public class MaterialMongoDB : IMaterialMongoDB
         }
     }
     
-    public Task<Material> GetByIdMaterial(string id)
+    public Task<StudyMaterial> GetByIdMaterial(string id)
     {
         throw new NotImplementedException();
     }

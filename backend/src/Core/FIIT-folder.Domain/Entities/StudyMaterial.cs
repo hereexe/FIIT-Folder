@@ -10,10 +10,11 @@ public class StudyMaterial
     public MaterialName Name { get; private set; }
     public StudyYear Year { get; private set; }
     public MaterialType MaterialType { get; private set; }
-    public ResourceLocation FileReference { get; private set; }
+    public MaterialSize Size { get; private set; }
+    public ResourceLocation FilePath { get; private set; }
     public DateTime UploadedAt { get; private set; }
 
-    public StudyMaterial(MaterialName name, SubjectId subjectId, UserId userId, StudyYear year, MaterialType materialType,
+    public StudyMaterial(MaterialName name, SubjectId subjectId, UserId userId, StudyYear year,MaterialSize size, MaterialType materialType,
         ResourceLocation fileReference)
     {
         Id = StudyMaterialId.New();
@@ -21,9 +22,9 @@ public class StudyMaterial
         SubjectId = subjectId;
         UserId = userId;
         Year = year;       
+        Size = size;
         MaterialType = materialType;
-        FileReference = fileReference;
-        
+        FilePath = fileReference;
         UploadedAt = DateTime.UtcNow;
     }
     

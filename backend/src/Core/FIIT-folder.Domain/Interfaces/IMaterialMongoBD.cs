@@ -1,10 +1,10 @@
 ﻿namespace FIIT_folder.Domain.Interfaces;
 
-using FIIT_folder.Domain.Models;
+using FIIT_folder.Domain.Entities;
 
 public interface IMaterialMongoDB
 {
-    Task<Material> GetByIdMaterial(string id);
+    Task<StudyMaterial> GetByIdMaterial(string id);
     Task<bool> DeleteMaterial(string id);
-    Task<Material> CreateMaterial(Material material);
+    Task<StudyMaterial> CreateMaterial(StudyMaterial material);
 }
