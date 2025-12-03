@@ -4,9 +4,18 @@ public record PasswordHash
 {
     public string Value { get; }
 
-    public PasswordHash(string hash)
+    private PasswordHash(string hash)
     {
-        if (string.IsNullOrWhiteSpace(hash)) throw new ArgumentNullException(nameof(hash));
         Value = hash;
     }
+
+    public static PasswordHash Create(string hash)
+    {
+        if (string.IsNullOrWhiteSpace(hash))
+            throw new ArgumentException("Хеш пароля не может быть пустым");
+
+        return new PasswordHash(hash);
+    }
+
+    public override string ToString() => "***";
 }
