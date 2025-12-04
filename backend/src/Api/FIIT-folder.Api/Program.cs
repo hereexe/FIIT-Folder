@@ -44,20 +44,24 @@ app.UseAuthorization();
 app.MapControllers();
 
 //это мое
-//Console.WriteLine("================");
-var name = "ewweweewew.txt";
-var folder = "twewewewe-folder";
-var repository = new FileStorageRepository(
-    "YCAJEJjZUAxs4F0iCpajJG4_L",
-    "YCNbbq1t3RGwiRuNrNAnCsODmPVgWFM1s6jT201L",  
-    "my-fiit",
-    "ru-central1"
-);
-var testContent = "еееее acwqdwqdwqеееееу";
-var type = "text/plain";
-//await StorageTester.TestSaveInRepository(repository, testContent, type, name, folder); //Запускать через консоль
-await StorageTester.TestDeleteFile(name, folder);
+// var name = "ewweweewew.txt";
+// var folder = "twewewewe-folder";
+// var repository = new FileStorageRepository(
+//     "YCAJEJjZUAxs4F0iCpajJG4_L",
+//     "YCNbbq1t3RGwiRuNrNAnCsODmPVgWFM1s6jT201L",  
+//     "my-fiit",
+//     "ru-central1"
+// );
+// var testContent = "еееее acwqdwqdwqеееееу";
+// var type = "text/plain";
+//
+// //await StorageTester.TestSaveInRepository(repository, testContent, type, name, folder); //Запускать через консоль
+//
+// await StorageTester.TestDeleteFile(name, folder);
 //Console.WriteLine("================");
 //это мое
+
+
+await TesterMongoDB.CreateMaterial();
 
 app.Run();
