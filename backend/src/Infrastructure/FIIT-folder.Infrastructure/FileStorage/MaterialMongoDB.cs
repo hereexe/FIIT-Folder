@@ -32,6 +32,12 @@ public class MaterialMongoDB : IMaterialMongoDB
             (idIndex, new CreateIndexOptions { Unique = true })
         );
         Console.WriteLine("Создан уникальный индекс по Id");
+        
+        var subjectIdIndex = Builders<StudyMaterial>.IndexKeys.Ascending(m => m.SubjectId);
+        StudyMaterials.Indexes.CreateOne(
+            new CreateIndexModel<StudyMaterial>(subjectIdIndex)
+        );
+        Console.WriteLine("Создан индекс по SubjectId");
     }
     
     catch (Exception ex)
