@@ -1,7 +1,5 @@
 namespace FIIT_folder.Domain.Entities;
 
-"rrrrr"
-
 public class StudyMaterial
 {
     public Guid Id { get; private set; }
