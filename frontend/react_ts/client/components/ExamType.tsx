@@ -1,0 +1,68 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+    Heart,
+    Download,
+    PlusCircle,
+    Settings,
+    ChevronLeft,
+    Search,
+    ChevronUp,
+    ChevronDown,
+    UserCircle,
+    LayoutGrid,
+    Menu,
+    X,
+  } from "lucide-react";
+
+export interface ExamTypeProps{
+    examType: string;
+    examNames: string[];
+}
+
+const ExamType: React.FC<ExamTypeProps> = ({ examType, examNames }) => {
+    const [examsExpanded, setExamsExpanded] = useState(true);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+    const navigate = useNavigate();
+    const handleClickExam = () => {
+        navigate("/doc_page");
+      };
+    return(
+        <>
+          {/* Экзамены Section */}
+          <div className="flex flex-col gap-[15px]">
+            <button
+              onClick={() => setExamsExpanded(!examsExpanded)}
+              className="flex items-center justify-between w-full md:w-[300px] hover:opacity-80 transition-opacity"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-5 h-5 rounded-full bg-app-text flex-shrink-0" />
+                <span className="text-app-text text-[25px] font-medium tracking-[0.25px]">
+                  {examType}
+                </span>
+              </div>
+              {examsExpanded ? (
+                <ChevronUp className="w-[30px] h-[30px] text-app-text stroke-[2] flex-shrink-0" />
+              ) : (
+                <ChevronDown className="w-[30px] h-[30px] text-app-text stroke-[2] flex-shrink-0" />
+              )}
+            </button>
+
+            {examsExpanded && (
+                <div className="flex flex-col gap-[15px]">
+                {examNames.map((examName) => (
+                    <div className="bg-app-item rounded-[10px] px-9 py-[11px] hover:opacity-80 transition-opacity cursor-pointer">
+                    <span className="text-black text-[23px] font-medium tracking-[0.23px]" onClick={handleClickExam}>
+                      {examName}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </>
+    )
+}
+
+export default ExamType
