@@ -1,4 +1,5 @@
 ﻿using FIIT_folder.Domain.Interfaces;
+using FIIT_folder.Domain.Entities;
 using FIIT_folder.Domain.Models;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
@@ -8,6 +9,7 @@ namespace FIIT_folder.Infrastructure.FileStorage;
 
 public class MaterialMongoDB : IMaterialMongoDB
 {
+    private readonly IMongoCollection<StudyMaterial> StudyMaterials;
     public MaterialMongoDB(IConfiguration configuration)
     {
         var connectionString = configuration["MongoDbSettings:ConnectionString"];
@@ -15,38 +17,68 @@ public class MaterialMongoDB : IMaterialMongoDB
             
         var client = new MongoClient(connectionString);
         var database = client.GetDatabase(name);
+        StudyMaterials = database.GetCollection<StudyMaterial>(name);
+        Console.WriteLine("MongoDB подключен!");
+        
+        CreateIndexes();
     }
     
-    public async Task<Material> CreateMaterial(Material material)
+    private void CreateIndexes()
+{
+    try
+    {
+        var idIndex = Builders<StudyMaterial>.IndexKeys.Ascending(m => m.Id);
+        StudyMaterials.Indexes.CreateOne(new CreateIndexModel<StudyMaterial>
+            (idIndex, new CreateIndexOptions { Unique = true })
+        );
+        Console.WriteLine("Создан уникальный индекс по Id");
+    }
+    
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Ошибка создания индексов");
+    }
+}
+    public async Task<StudyMaterial> CreateStudyMaterial(StudyMaterial material)
     {
         try
         {
-            Console.WriteLine("Сохраняю материал");
+            if (material == null)
+                throw new ArgumentNullException(nameof(material), "StudyMaterial не должен быть null");
             
-            var document = new BsonDocument //пока обычный словарик чтобы просто проверить
-            {
-                { "materialId", material.Id.ToString() },
-                { "name", material.Name },
-                { "path", material.Path },
-                { "size", material.Size },
-                { "type", material.Type },
-                { "date", DateTime.UtcNow },
-            };
+            var existing = await StudyMaterials
+                .Find(m => m.Id == material.Id)
+                .FirstOrDefaultAsync();
             
+            if (existing != null)
+                throw new InvalidOperationException("StudyMaterial с таким id уже есть!");
+            await StudyMaterials.InsertOneAsync(material);
+            Console.WriteLine($"Материал сохранен в MongoDB!");
             return material;
         }
+        
+        catch (MongoWriteException ex) when (ex.WriteError.Code == 11000)
+        {
+            throw new InvalidOperationException("Материал с таким ID уже существует!");
+        }
+        
         catch (Exception ex)
         {
-            throw new Exception("Ошибка в сохранении файла");
+            throw new InvalidOperationException("Ошибка сохранения материала в MongoDB");
         }
     }
-    
-    public Task<Material> GetByIdMaterial(string id)
+
+    public Task<StudyMaterial> UpdateStudyMaterial(StudyMaterial material)
     {
         throw new NotImplementedException();
     }
 
-    public Task<bool> DeleteMaterial(string id)
+    public Task<StudyMaterial> GetByIdStudyMaterial(string id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> DeleteStudyMaterial(string id)
     {
         throw new NotImplementedException();
     }
