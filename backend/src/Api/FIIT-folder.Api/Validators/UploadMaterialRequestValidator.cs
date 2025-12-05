@@ -1,4 +1,3 @@
-using System.Data;
 using FIIT_folder.Api.Models;
 using FIIT_folder.Domain.Entities;
 using FluentValidation;
