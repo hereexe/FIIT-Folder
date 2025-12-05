@@ -8,8 +8,8 @@ public record SubjectSemester
 
     public SubjectSemester(int value)
     {
-        if (value < 0 || value > 8)
-            throw new ArgumentException("Value must be between 0 and 8", nameof(value));
+        if (value < 1 || value > 8)
+            throw new ArgumentException("Value must be between 1 and 8", nameof(value));
         Value = value;
     }
 
