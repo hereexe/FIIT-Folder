@@ -1,23 +1,21 @@
+using FIIT_folder.Domain.Value_Object;
+
 namespace FIIT_folder.Domain.Entities;
 
 public class Subject
 {
-    public Guid Id {get; private set;}
-    public string Name {get; private set;} = string.Empty;
+    public SubjectId Id {get; private set;}
+    public SubjectName Name {get; private set;} 
 
-    public Subject(string name)
+    public Subject(SubjectId id, SubjectName name)
     {
-        Id = Guid.NewGuid();
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentNullException("Subject cannot be empty");
+        Id = id;
         Name = name;
     }
 
     public void UpdateName(string newName)
     {
-        if (string.IsNullOrWhiteSpace(newName))
-            throw new ArgumentNullException("Name subject cannot be empty");
-        Name = newName;
+        Name = new SubjectName(newName);
     }
 
     private Subject() { }
