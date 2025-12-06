@@ -13,9 +13,12 @@ public class TesterMongoDB
     
     public static MaterialMongoDB GetRepository(string connectionString = null, string databaseName = null)
     {
+        connectionString ??= "mongodb://localhost:27017";
+        databaseName ??= "newbd";
+        
         return new MaterialMongoDB(
-            "",
-            ""
+            connectionString,
+            databaseName
         );
     }
     
@@ -28,8 +31,19 @@ public class TesterMongoDB
             var repository = GetRepository();
             
             Console.WriteLine("Создаю новый StudyMaterial");
-            var material = new StudyMaterial(new MaterialName("Матан"), new SubjectId(new Guid()), new UserId(new Guid()), 
-                new StudyYear(2024), new MaterialSize(2000), MaterialType.Colloquium, new ResourceLocation(""));
+            
+            int currentYear = DateTime.Now.Year;
+            int validYear = currentYear > 2018 ? currentYear : 2019;
+            
+            var material = new StudyMaterial(
+                new MaterialName("Матан"), 
+                new SubjectId(Guid.NewGuid()), 
+                new UserId(Guid.NewGuid()), 
+                new StudyYear(validYear), 
+                new MaterialSize(2000), 
+                MaterialType.Colloquium, 
+                new ResourceLocation("/путь/к/файлу.pdf")
+            );
             
             Console.WriteLine("Пытаюсь сохранить новый StudyMaterial");
             var createdMaterial = await repository.CreateStudyMaterial(material);

@@ -76,7 +76,21 @@ public class MaterialMongoDB : IMaterialMongoDB
             
             // if (existing != null)
             //     throw new InvalidOperationException("StudyMaterial с таким id уже есть!");
-            await CollectionStudyMaterial.InsertOneAsync(BsonDocument.Create(material));
+            
+            var bsonDocument = new BsonDocument
+            {
+                { "materialId", material.Id.Value.ToString() },
+                { "subjectId", material.SubjectId.Value.ToString() },
+                { "userId", material.UserId.Value.ToString() },
+                { "name", material.Name.Value },
+                { "year", material.Year.Value },
+                { "size", material.Size.Size },
+                { "materialType", material.MaterialType.ToString() },
+                { "filePath", material.FilePath.Value },
+                { "uploadedAt", material.UploadedAt }
+            };
+            
+            await CollectionStudyMaterial.InsertOneAsync(bsonDocument);
             Console.WriteLine($"Материал сохранен в MongoDB!");
             return material;
         }
