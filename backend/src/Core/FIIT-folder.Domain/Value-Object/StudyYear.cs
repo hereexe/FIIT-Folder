@@ -6,7 +6,7 @@ public record StudyYear
 
     public StudyYear(int value)
     {
-        if (value > 2018)
+        if (value < 2018)
             throw new ArgumentException("Value must be greater than 2018");
         
         if (value > DateTime.UtcNow.Year + 2)
