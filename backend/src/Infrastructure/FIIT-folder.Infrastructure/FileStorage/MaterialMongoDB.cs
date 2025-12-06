@@ -52,6 +52,7 @@ public class MaterialMongoDB : IMaterialMongoDB
     //         
     //     }
     // }
+
     public async Task<StudyMaterial> CreateStudyMaterial(StudyMaterial material)
     {
         try
@@ -91,7 +92,7 @@ public class MaterialMongoDB : IMaterialMongoDB
         }
     }
 
-    public async Task<StudyMaterial?> GetByIdMaterial(Guid id)
+    public async Task<StudyMaterial?> GetByIdStudyMaterial(Guid id)
     {
         try
         {
@@ -99,7 +100,31 @@ public class MaterialMongoDB : IMaterialMongoDB
             var document = await CollectionStudyMaterial.Find(filter).FirstOrDefaultAsync();
 
             if (document == null)
+            {
+                Console.WriteLine("гавно");
                 return null;
+            }
+
+            return MapToStudyMaterial(document);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Ошибка при получении материала: {ex.Message}", ex);
+        }
+    }
+    
+    public async Task<StudyMaterial?> GetByNameStudyMaterial(string studyMaterialName)
+    {
+        try
+        {
+            var filter = Builders<BsonDocument>.Filter.Eq("name", studyMaterialName);
+            var document = await CollectionStudyMaterial.Find(filter).FirstOrDefaultAsync();
+
+            if (document == null)
+            {
+                Console.WriteLine("гавно");
+                return null;
+            }
 
             return MapToStudyMaterial(document);
         }
@@ -135,11 +160,6 @@ public class MaterialMongoDB : IMaterialMongoDB
     }
 
     public Task<StudyMaterial> Create(StudyMaterial material)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<StudyMaterial> GetByIdStudyMaterial(string id)
     {
         throw new NotImplementedException();
     }

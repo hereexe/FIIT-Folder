@@ -4,12 +4,11 @@ using FIIT_folder.Domain.Entities;
 
 public interface IMaterialMongoDB
 {
-    Task<StudyMaterial?> GetByIdMaterial(Guid id);
     Task<List<StudyMaterial>> GetBySubjectId(Guid subjectId);
     Task<List<StudyMaterial>> GetAll();
-    Task<StudyMaterial> Create(StudyMaterial material);
+    Task<StudyMaterial> GetByNameStudyMaterial(string nameStudyMaterial);
     Task<bool> DeleteStudyMaterial(Guid id);
-    Task<StudyMaterial> GetByIdStudyMaterial(string id);
+    Task<StudyMaterial> GetByIdStudyMaterial(Guid id);
     Task<StudyMaterial> CreateStudyMaterial(StudyMaterial material);
     
     Task<StudyMaterial> UpdateStudyMaterial(StudyMaterial material);

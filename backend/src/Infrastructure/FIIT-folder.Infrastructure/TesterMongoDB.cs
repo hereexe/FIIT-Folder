@@ -83,9 +83,46 @@ public class TesterMongoDB
         }
     }
     
-    public static async Task GetMaterial()
+    public static async Task GetByIdMaterial(Guid guid)
     {
+        try
+        {
+            Console.WriteLine("Тест на поиск в MongoBD");
+            var repository = GetRepository();
+            Console.WriteLine("Пытаюсь найти StudyMaterial(который ранее создавал) по id");
+            var flag = await repository.GetByIdStudyMaterial(guid);
+
+            if (flag != null)
+                Console.WriteLine("материал нашелся! + в domain получаю его");
+            else
+                Console.WriteLine("материала в базе нет!");
+        }
         
+        catch (ArgumentNullException ex)
+        {
+            Console.WriteLine("Ошибка при поиске");
+        }
+    }
+    
+    public static async Task GetByNameMaterial(string studyMaterialName)
+    {
+        try
+        {
+            Console.WriteLine("Тест на поиск в MongoBD по имени");
+            var repository = GetRepository();
+            Console.WriteLine("Пытаюсь найти StudyMaterial(который ранее создавал) по MaterialName");
+            var flag = await repository.GetByNameStudyMaterial(studyMaterialName);
+
+            if (flag != null)
+                Console.WriteLine("материал нашелся! + в domain получаю его");
+            else
+                Console.WriteLine("материала в базе нет!");
+        }
+        
+        catch (ArgumentNullException ex)
+        {
+            Console.WriteLine("Ошибка при поиске");
+        }
     }
     
     public static async Task IsMaterialInMongoDB()

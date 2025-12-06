@@ -63,6 +63,9 @@ app.MapControllers();
 
 
 //await TesterMongoDB.CreateMaterial();
-await TesterMongoDB.DeleteStudyMaterial();
+//await TesterMongoDB.DeleteStudyMaterial();
+// await TesterMongoDB.GetByIdMaterial(new Guid(
+//     "5cf635fe-7f4e-45a1-89e6-71e30c702dab"));
+await TesterMongoDB.GetByNameMaterial("Матан");
 
 app.Run();
