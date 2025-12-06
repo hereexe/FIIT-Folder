@@ -14,9 +14,8 @@ public class TesterMongoDB
     public static MaterialMongoDB GetRepository(string connectionString = null, string databaseName = null)
     {
         return new MaterialMongoDB(
-            "mongodb+srv://filt_app_user:FIIT2024Secure!" +
-            "@cluster0.dhgee6e.mongodb.net/?appName=Cluster0",
-            "Test-DB"
+            "",
+            ""
         );
     }
     
@@ -27,15 +26,13 @@ public class TesterMongoDB
             Console.WriteLine("Тест на сохранение в MongoBD");
             
             var repository = GetRepository();
-
-            var material = new StudyMaterial(new MaterialName("Матан"), new SubjectId(new Guid()), new UserId(new Guid()), 
-                new StudyYear(2024), new MaterialSize(2000), MaterialType.Colloquium, new ResourceLocation(""));
-                
             
             Console.WriteLine("Создаю новый StudyMaterial");
+            var material = new StudyMaterial(new MaterialName("Матан"), new SubjectId(new Guid()), new UserId(new Guid()), 
+                new StudyYear(2024), new MaterialSize(2000), MaterialType.Colloquium, new ResourceLocation(""));
             
-            var createdMaterial = await repository.CreateStudyMaterial(material);
             Console.WriteLine("Пытаюсь сохранить новый StudyMaterial");
+            var createdMaterial = await repository.CreateStudyMaterial(material);
             
             if (createdMaterial != null)
                 Console.WriteLine($"Материал успешно создан в MongoDB!");

@@ -9,24 +9,24 @@ namespace FIIT_folder.Infrastructure.FileStorage;
 
 public class MaterialMongoDB : IMaterialMongoDB
 {
-    private readonly IMongoCollection<BsonDocument> _collection;
-    public MaterialMongoDB(IConfiguration configuration)
-    {
-        var databaseName = configuration["MongoDbSettings:DatabaseName"];
-
-        var client = new MongoClient(databaseName);
-        var database = client.GetDatabase(databaseName);
-        _collection = database.GetCollection<BsonDocument>("StudyMaterials");
-        Console.WriteLine("MongoDB подключен!");
-        
-        //CreateIndexes();
-    }
+    private readonly IMongoCollection<BsonDocument> CollectionStudyMaterial;
+    // public MaterialMongoDB(IConfiguration configuration)
+    // {
+    //     var databaseName = configuration[""];
+    //
+    //     var client = new MongoClient(databaseName);
+    //     var database = client.GetDatabase(databaseName);
+    //     _collection = database.GetCollection<BsonDocument>("StudyMaterials");
+    //     Console.WriteLine("MongoDB подключен!");
+    //     
+    //     //CreateIndexes();
+    // }
     
     public MaterialMongoDB(string connectionString, string databaseName)
     {
         var client = new MongoClient(connectionString);
         var database = client.GetDatabase(databaseName);
-        _collection = database.GetCollection<BsonDocument>("StudyMaterials");
+        CollectionStudyMaterial = database.GetCollection<BsonDocument>("StudyMaterials");
         Console.WriteLine($"MongoDB подключен: {databaseName}");
         
         //CreateIndexes();
@@ -76,7 +76,7 @@ public class MaterialMongoDB : IMaterialMongoDB
             
             // if (existing != null)
             //     throw new InvalidOperationException("StudyMaterial с таким id уже есть!");
-            await _collection.InsertOneAsync(BsonDocument.Create(material));
+            await CollectionStudyMaterial.InsertOneAsync(BsonDocument.Create(material));
             Console.WriteLine($"Материал сохранен в MongoDB!");
             return material;
         }
@@ -94,7 +94,7 @@ public class MaterialMongoDB : IMaterialMongoDB
         try
         {
             var filter = Builders<BsonDocument>.Filter.Eq("materialId", id.ToString());
-            var document = await _collection.Find(filter).FirstOrDefaultAsync();
+            var document = await CollectionStudyMaterial.Find(filter).FirstOrDefaultAsync();
 
             if (document == null)
                 return null;
@@ -161,7 +161,7 @@ public class MaterialMongoDB : IMaterialMongoDB
         try
         {
             var filter = Builders<BsonDocument>.Filter.Eq("materialId", id.ToString());
-            var result = await _collection.DeleteOneAsync(filter);
+            var result = await CollectionStudyMaterial.DeleteOneAsync(filter);
             return result.DeletedCount > 0;
         }
         catch (Exception ex)
