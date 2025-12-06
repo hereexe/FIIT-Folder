@@ -10,17 +10,6 @@ namespace FIIT_folder.Infrastructure.FileStorage;
 public class MaterialMongoDB : IMaterialMongoDB
 {
     private readonly IMongoCollection<BsonDocument> CollectionStudyMaterial;
-    // public MaterialMongoDB(IConfiguration configuration)
-    // {
-    //     var databaseName = configuration[""];
-    //
-    //     var client = new MongoClient(databaseName);
-    //     var database = client.GetDatabase(databaseName);
-    //     _collection = database.GetCollection<BsonDocument>("StudyMaterials");
-    //     Console.WriteLine("MongoDB подключен!");
-    //     
-    //     //CreateIndexes();
-    // }
     
     public MaterialMongoDB(string connectionString, string databaseName)
     {
@@ -99,7 +88,6 @@ public class MaterialMongoDB : IMaterialMongoDB
             Console.WriteLine(ex.Message);
             Console.WriteLine(ex.GetType().Name);
             throw;
-            throw new Exception($"Ошибка при сохранении материала: {ex.Message}", ex);
         }
     }
 
