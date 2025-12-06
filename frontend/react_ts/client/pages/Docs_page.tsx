@@ -1,6 +1,7 @@
 import { ChevronLeft } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 interface Material {
   id: string;
@@ -8,7 +9,7 @@ interface Material {
   author: string;
   likes: number;
 }
-{/* TODO Автоматическое определение количества объектов*/}
+
 export default function Index() {
   const [materials] = useState<Material[]>([
     { id: "1", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202 },
@@ -20,10 +21,10 @@ export default function Index() {
     { id: "7", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202 },
     { id: "8", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202 },
     { id: "9", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202 },
-    { id: "10", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202 },
-    { id: "11", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202 },
-    { id: "12", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202 },
   ]);
+  const location = useLocation();
+  const { subject } = location.state || {};
+
   const navigate = useNavigate();
   const handleClickBack = () => {
     navigate("/exam_type");
@@ -42,7 +43,7 @@ export default function Index() {
             <ChevronLeft className="w-14 h-14" strokeWidth={1.5} />
           </button>
           <h2 className="text-4xl md:text-5xl font-semibold text-fiit-text tracking-wide leading-tight">
-            Математический анализ
+            {sessionStorage.getItem("selectedSubject")}
           </h2>
         </div>
 
@@ -67,9 +68,13 @@ export default function Index() {
 }
 
 function MaterialCard({ material }: { material: Material }) {
+  const navigate = useNavigate();
+  const handleClickFile = () => {
+    navigate("/fileview_page")
+  }
   return (
     <a
-      href={`#material-${material.id}`}
+      onClick={() => handleClickFile()}
       className="relative w-full aspect-[5/4] rounded-[10px] bg-fiit-card overflow-hidden group cursor-pointer block transition-all duration-300 hover:shadow-lg hover:scale-105 active:scale-100"
     >
       <div className="absolute top-0 left-0 right-0 p-[10px_10px_10px_7px] flex flex-col gap-[7px] z-10">
@@ -86,7 +91,6 @@ function MaterialCard({ material }: { material: Material }) {
       <div className="absolute bottom-0 left-0 right-0 h-[35px] flex items-center justify-between px-[15px] z-10">
         <div className="flex items-center gap-2">
           <button
-            onClick={(e) => e.preventDefault()}
             className="text-fiit-text hover:opacity-80 transition-opacity"
             aria-label="Like"
           >
@@ -100,7 +104,6 @@ function MaterialCard({ material }: { material: Material }) {
         </div>
 
         <button
-          onClick={(e) => e.preventDefault()}
           className="text-fiit-text hover:opacity-80 transition-opacity"
           aria-label="Download"
         >

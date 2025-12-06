@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Search, Filter, X, RefreshCcw } from "lucide-react";
-import { de } from "date-fns/locale";
+import { Search, Filter, X, CheckIcon, RefreshCcw } from "lucide-react";
 
 interface FilterState {
   subjects: string[];
@@ -9,14 +8,7 @@ interface FilterState {
   semesters: string[];
 }
 
-interface SearchMenuProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const SearchMenu: React.FC<SearchMenuProps> = ({ isOpen, onClose }) => {
-  if (!isOpen) return null;
-
+export default function SearchMenu() {
   const [filters, setFilters] = useState<FilterState>({
     subjects: [],
     contentTypes: [],
@@ -79,6 +71,10 @@ const SearchMenu: React.FC<SearchMenuProps> = ({ isOpen, onClose }) => {
     });
   };
 
+  const saveFilters = () => {
+    
+  }
+
   const getButtonStyle = (
     category: keyof FilterState,
     value: string,
@@ -91,27 +87,15 @@ const SearchMenu: React.FC<SearchMenuProps> = ({ isOpen, onClose }) => {
     }
     
     if (isHovered) {
-      return "bg-purple-light/70 text-purple-dark";
+      return "bg-purple-light/77 text-purple-dark";
     }
     
     return "bg-white/50 text-purple-dark";
   };
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchCollapsed, setSearchCollapsed] = useState(false);
 
   return (
-    <>
-    <div 
-    className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"
-    onClick={onClose}
-    aria-hidden="true"
-  />
-    
-    <div
-    className={`translate-x-0 md:translate-x-0 md:relative z-50`}
-    >
-    <div className=" min-h-screen p-4 sm:p-6 md:p-8 lg:p-10 flex items-start justify-center z-50">
-      <div className="w-full max-w-[1300px] bg-white/70 rounded-[30px] p-10">
+    <div className="h-full bg-purple-light p-4 sm:p-6 md:p-8 lg:p-10 flex items-start justify-center">
+      <div className="w-full max-w-[1200px]">
         <div className="flex flex-col lg:flex-row gap-4 mb-6">
           <div className="flex-1 flex items-center gap-2.5 px-4 py-2.5 rounded-[30px] border-2 border-purple-dark bg-white/50">
             <Search className="w-10 h-10 text-purple-dark flex-shrink-0" strokeWidth={2} />
@@ -132,10 +116,10 @@ const SearchMenu: React.FC<SearchMenuProps> = ({ isOpen, onClose }) => {
               </div>
             </div>
             <button 
-              onClick={resetFilters}
+              onClick={saveFilters}
               className="flex-shrink-0 hover:opacity-70 transition-opacity"
             >
-              <X className="w-10 h-10 text-purple-dark" strokeWidth={2} />
+              <CheckIcon className="w-10 h-10 text-purple-dark" strokeWidth={2} />
             </button>
           </div>
         </div>
@@ -253,9 +237,5 @@ const SearchMenu: React.FC<SearchMenuProps> = ({ isOpen, onClose }) => {
         </div>
       </div>
     </div>
-    </div>
-    </>
   );
 }
-
-export default SearchMenu

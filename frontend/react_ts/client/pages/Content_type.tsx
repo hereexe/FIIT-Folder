@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from 'react-router-dom';
-import ExamType from "@/components/Examtype";
-import { ExamTypeProps } from "@/components/Examtype";
+import ExamType from "@/components/ExamType";
+import { ExamTypeProps } from "@/components/ExamType";
 
 import {
   Heart,
@@ -21,8 +21,10 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Index() {
   const content: ExamTypeProps[] = [
-    {examType: "examS", examNames: ["ex1", "ex2"]},
-    {examType: "colloc", examNames: ["colloc1", "colloc2"]}
+    { examType: "Экзамены", examNames: ["Экзамен 1", "Экзамен 2"] },
+    { examType: "Коллоквиумы", examNames: ["Коллоквиум 1", "Коллоквиум 2"] },
+    { examType: "Контрольные работы", examNames: ["КР 1", "КР 2"] },
+    { examType: "Лекции", examNames: ["Лекция 1", "Лекция 2"] }
   ]
   const navigate = useNavigate();
     const location = useLocation();
@@ -53,12 +55,17 @@ export default function Index() {
           {/* Центральная часть - заголовок */}
           <div className="flex-1 flex justify-left">
             <h1 className="text-app-text text-[28px] md:text-[45px] font-semibold tracking-[0.9px] text-center">
-              {subject}
+              {sessionStorage.getItem("selectedSubject")}
             </h1>
           </div>
           {/* Экзамены Section */}
             {content.map((examProps) => (
-              <ExamType examType={examProps.examType} examNames={examProps.examNames}></ExamType>
+              <div>
+                <ExamType 
+                examType={examProps.examType} 
+                examNames={examProps.examNames} 
+                ></ExamType>
+              </div>
             ))}
           </div>
 

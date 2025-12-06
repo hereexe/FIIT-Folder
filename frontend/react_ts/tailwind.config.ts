@@ -13,6 +13,11 @@ export default {
       },
     },
     extend: {
+      maxWidth: {
+        '8xl': '88rem',
+        '9xl': '96rem',
+        '10xl': '104rem',
+      },
       fontFamily: {
         inter: ['Inter', '-apple-system', 'Roboto', 'Helvetica', 'sans-serif'],
       },
@@ -72,6 +77,11 @@ export default {
           header: "#C4B1F1",
           text: "#19024F",
           card: "#C4C4C4",
+        },
+        purple: {
+          light: "#E8E7F9",
+          medium: "#C4B1F1",
+          dark: "#19024F",
         },
       },
       borderRadius: {

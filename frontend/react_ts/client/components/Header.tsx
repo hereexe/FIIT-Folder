@@ -3,11 +3,13 @@ import SideMenu from "./SideMenu.tsx";
 import SearchMenu from "./Search.tsx";
 import useSideMenu from '../hooks/useSideMenu';
 import useSearch from '@/hooks/useSearch.tsx';
+import { useModal } from '@/hooks/useModal.tsx';
+import Modal from './Modal/Modal.tsx';
 
 
 const Header: React.FC = () => {
   const { isSideMenuOpen, openSideMenu, closeSideMenu } = useSideMenu();
-  const { isSearchMenuOpen, toggleSearchMenu, closeSearchMenu} = useSearch();
+  const { isOpen, openModal, closeModal } = useModal();
     return(
       <>
         <header className="w-full h-[81px] bg-app-purple flex items-center justify-between px-6 md:px-[25px] flex-shrink-0">
@@ -46,7 +48,7 @@ const Header: React.FC = () => {
         <button
           className="flex-shrink-0 hover:opacity-30 hover:scale-110 transition-all"
           aria-label="Search"
-          onClick={toggleSearchMenu}
+          onClick={openModal}
         >
           <svg
             width="55"
@@ -71,7 +73,8 @@ const Header: React.FC = () => {
         </button>
       </header>
       <SideMenu isOpen={isSideMenuOpen} onClose={closeSideMenu} />
-      <SearchMenu isOpen={isSearchMenuOpen} onClose={closeSearchMenu} />
+      <Modal isOpen={isOpen}
+        onClose={closeModal}> {SearchMenu()}</Modal>
       </>
     )
 

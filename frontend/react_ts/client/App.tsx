@@ -13,6 +13,7 @@ import Docs_page from "./pages/Docs_page";
 import NotFound from "./pages/NotFound";
 import Main_page from "./pages/Main_page"
 import Exam_type from "./pages/Content_type"
+import Fileview_page from "./pages/FileView_page"
 
 const queryClient = new QueryClient();
 {/*Todo: разобраться как встроить загрузку уже полученного файла*/}
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/main_page" element={<Main_page />} />
             <Route path="/doc_page" element={<Docs_page />} />
             <Route path="/exam_type" element={<Exam_type />} />
+            <Route path="/fileview_page" element={<Fileview_page />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           
           <Route path="*" element={<NotFound />} />
