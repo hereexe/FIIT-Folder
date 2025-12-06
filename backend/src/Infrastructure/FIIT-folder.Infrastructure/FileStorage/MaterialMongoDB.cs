@@ -144,21 +144,21 @@ public class MaterialMongoDB : IMaterialMongoDB
         throw new NotImplementedException();
     }
 
-    public Task<bool> DeleteStudyMaterial(string id)
-    {
-        try
-        {
-            //var documents = await _collection.Find(new BsonDocument()).ToListAsync();
-            //return documents.Select(MapToStudyMaterial).ToList();
-            return null;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Ошибка при получении списка материалов: {ex.Message}", ex);
-        }
-    }
+    // public Task<bool> DeleteStudyMaterial(string id)
+    // {
+    //     try
+    //     {
+    //         //var documents = await _collection.Find(new BsonDocument()).ToListAsync();
+    //         //return documents.Select(MapToStudyMaterial).ToList();
+    //         return null;
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         throw new Exception($"Ошибка при получении списка материалов: {ex.Message}", ex);
+    //     }
+    // }
 
-    public async Task<bool> Delete(Guid id)
+    public async Task<bool> DeleteStudyMaterial(Guid id)
     {
         try
         {

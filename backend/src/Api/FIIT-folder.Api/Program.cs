@@ -62,6 +62,7 @@ app.MapControllers();
 //это мое
 
 
-await TesterMongoDB.CreateMaterial();
+//await TesterMongoDB.CreateMaterial();
+await TesterMongoDB.DeleteStudyMaterial();
 
 app.Run();

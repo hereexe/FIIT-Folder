@@ -59,17 +59,36 @@ public class TesterMongoDB
         }
     }
     
-    public async Task DeleteMaterial()
+    public static async Task DeleteStudyMaterial()
+    {
+        try
+        {
+            Console.WriteLine("Тест на удаление в MongoBD");
+            
+            var repository = GetRepository();
+            
+            
+            Console.WriteLine("Пытаюсь удалить StudyMaterial, который ранее создавал");
+            var flag = await repository.DeleteStudyMaterial(new Guid(
+                "5cf635fe-7f4e-45a1-89e6-71e30c702dab"));
+            
+            if (flag)
+                Console.WriteLine($"Материал успешно удален из MongoDB!");
+            else
+                Console.WriteLine("Error Ошибка удаления");
+        }
+        catch (ArgumentNullException ex)
+        {
+            Console.WriteLine("Какая то фигня");
+        }
+    }
+    
+    public static async Task GetMaterial()
     {
         
     }
     
-    public async Task GetMaterial()
-    {
-        
-    }
-    
-    public async Task IsMaterialInMongoDB()
+    public static async Task IsMaterialInMongoDB()
     {
         
     }

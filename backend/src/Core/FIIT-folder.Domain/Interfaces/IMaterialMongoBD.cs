@@ -8,9 +8,8 @@ public interface IMaterialMongoDB
     Task<List<StudyMaterial>> GetBySubjectId(Guid subjectId);
     Task<List<StudyMaterial>> GetAll();
     Task<StudyMaterial> Create(StudyMaterial material);
-    Task<bool> Delete(Guid id);
+    Task<bool> DeleteStudyMaterial(Guid id);
     Task<StudyMaterial> GetByIdStudyMaterial(string id);
-    Task<bool> DeleteStudyMaterial(string id);
     Task<StudyMaterial> CreateStudyMaterial(StudyMaterial material);
     
     Task<StudyMaterial> UpdateStudyMaterial(StudyMaterial material);
