@@ -12,14 +12,11 @@ public class MaterialMongoDB : IMaterialMongoDB
     private readonly IMongoCollection<BsonDocument> _collection;
     public MaterialMongoDB(IConfiguration configuration)
     {
-        var connectionString = configuration["MongoDbSettings:ConnectionString"];
         var databaseName = configuration["MongoDbSettings:DatabaseName"];
 
-        var client = new MongoClient(connectionString);
+        var client = new MongoClient(databaseName);
         var database = client.GetDatabase(databaseName);
-        _collection = database.GetCollection<BsonDocument>("materials");
-        var database = client.GetDatabase(name);
-        StudyMaterials = database.GetCollection<StudyMaterial>(name);
+        _collection = database.GetCollection<BsonDocument>("StudyMaterials");
         Console.WriteLine("MongoDB подключен!");
         
         //CreateIndexes();
@@ -29,13 +26,13 @@ public class MaterialMongoDB : IMaterialMongoDB
     {
         var client = new MongoClient(connectionString);
         var database = client.GetDatabase(databaseName);
-        StudyMaterials = database.GetCollection<StudyMaterial>("StudyMaterials");
+        _collection = database.GetCollection<BsonDocument>("StudyMaterials");
         Console.WriteLine($"MongoDB подключен: {databaseName}");
         
         //CreateIndexes();
     }
     
-    public async Task<StudyMaterial> CreateMaterial(StudyMaterial material)
+    //public async Task<StudyMaterial> CreateMaterial(StudyMaterial material)
     // private void CreateIndexes()
     // {
     //     try
@@ -79,7 +76,7 @@ public class MaterialMongoDB : IMaterialMongoDB
             
             // if (existing != null)
             //     throw new InvalidOperationException("StudyMaterial с таким id уже есть!");
-            await StudyMaterials.InsertOneAsync(material);
+            await _collection.InsertOneAsync(BsonDocument.Create(material));
             Console.WriteLine($"Материал сохранен в MongoDB!");
             return material;
         }
@@ -111,14 +108,18 @@ public class MaterialMongoDB : IMaterialMongoDB
     }
 
     public async Task<List<StudyMaterial>> GetBySubjectId(Guid subjectId)
+    {
+        return null;
+    }
 
     public Task<StudyMaterial> UpdateStudyMaterial(StudyMaterial material)
     {
         try
         {
-            var filter = Builders<BsonDocument>.Filter.Eq("subjectId", subjectId.ToString());
-            var documents = await _collection.Find(filter).ToListAsync();
-            return documents.Select(MapToStudyMaterial).ToList();
+            //var filter = Builders<BsonDocument>.Filter.Eq("subjectId", subjectId.ToString());
+            //var documents = _collection.Find(filter).ToListAsync();
+            //return documents.Select(MapToStudyMaterial).ToList();
+            return null;
         }
         catch (Exception ex)
         {
@@ -127,6 +128,15 @@ public class MaterialMongoDB : IMaterialMongoDB
     }
 
     public async Task<List<StudyMaterial>> GetAll()
+    {
+        return null;
+    }
+
+    public Task<StudyMaterial> Create(StudyMaterial material)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<StudyMaterial> GetByIdStudyMaterial(string id)
     {
         throw new NotImplementedException();
@@ -136,8 +146,9 @@ public class MaterialMongoDB : IMaterialMongoDB
     {
         try
         {
-            var documents = await _collection.Find(new BsonDocument()).ToListAsync();
-            return documents.Select(MapToStudyMaterial).ToList();
+            //var documents = await _collection.Find(new BsonDocument()).ToListAsync();
+            //return documents.Select(MapToStudyMaterial).ToList();
+            return null;
         }
         catch (Exception ex)
         {

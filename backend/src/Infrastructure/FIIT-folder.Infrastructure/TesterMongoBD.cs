@@ -3,6 +3,7 @@ using FIIT_folder.Infrastructure.FileStorage;
 using Microsoft.Extensions.Configuration;
 using FIIT_folder.Domain.Entities;
 using System.IO;
+using FIIT_folder.Domain.Value_Object;
 
 namespace FIIT_folder.Infrastructure.Test;
 
@@ -26,15 +27,10 @@ public class TesterMongoDB
             Console.WriteLine("Тест на сохранение в MongoBD");
             
             var repository = GetRepository();
-            
-            var material = new StudyMaterial(
-                "Матан",
-                Guid.NewGuid(),
-                Guid.NewGuid(),
-                2024,
-                MaterialType.Exam,
-                "wdcwqqwfwffq"
-            );
+
+            var material = new StudyMaterial(new MaterialName("Матан"), new SubjectId(new Guid()), new UserId(new Guid()), 
+                new StudyYear(2024), new MaterialSize(2000), MaterialType.Colloquium, new ResourceLocation(""));
+                
             
             Console.WriteLine("Создаю новый StudyMaterial");
             
