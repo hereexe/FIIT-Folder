@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using System.Text;
+using FIIT_folder.Domain.Interfaces;
 using FIIT_folder.Infrastructure.FileStorage;
 
 namespace FIIT_folder.Infrastructure.Test
@@ -18,16 +19,15 @@ namespace FIIT_folder.Infrastructure.Test
             );
         }
         
-        public static async Task TestDeleteFile(string name, string folder)
+        public static async Task TestDeleteFile(IFileStorageRepository repository, string name, string folder)
         {
-            var repository = GetRepository();
             var filePath = FileStorageRepository.CreatePathInCloud(name, folder);
             await repository.DeleteFile(filePath);
             
             Console.WriteLine("Файл удален");
         }
 
-        public static async Task TestGetFile(FileStorageRepository repository, string name, string folder)
+        public static async Task TestGetFile(IFileStorageRepository repository, string name, string folder)
         {
             Console.WriteLine("Тест скачивание файл");
             var filePath = FileStorageRepository.CreatePathInCloud(name, folder);
@@ -35,10 +35,14 @@ namespace FIIT_folder.Infrastructure.Test
             {
                 using var downloadedStream = await repository.GetFile(filePath);
             }
+            else
+            {
+                Console.WriteLine("Файла нет в репозитории!");
+            }
         }
         
         public static async Task TestSaveInRepository(
-            FileStorageRepository repository, string testContent, 
+            IFileStorageRepository repository, string testContent, 
             string type, string name, string folder)
         {
             try
