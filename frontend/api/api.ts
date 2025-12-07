@@ -8,7 +8,6 @@ import {
   RegisterResponse,
   SubjectDto,
   UploadResponse,
-  ExamTypeProps
 } from "./types";
 
 const BASE_URL = "http://localhost:5179/api/";
@@ -34,7 +33,7 @@ export const appApi = createApi({
         method: "POST",
         body: data,
       }),
-      async onQueryStarted(arg, { queryFulfilled }) {
+      async QueryStarted(arg, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
           localStorage.setItem("token", data.token);

@@ -20,6 +20,7 @@ export default function Index() {
   const handleClick = (subject) => {
       sessionStorage.setItem('selectedSubject', subject);
       navigate("/exam_type", {state: {subject: subject}});
+
     };
 
   return (
