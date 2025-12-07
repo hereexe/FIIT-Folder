@@ -44,7 +44,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 //это мое
- var name = "Коллоквиум.txt";
+ var name = "Экзамен.txt";
  var folder = "Матан";
  var repository = new FileStorageRepository(
      "YCAJEJjZUAxs4F0iCpajJG4_L",
