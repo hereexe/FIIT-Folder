@@ -143,9 +143,7 @@ public class MaterialMongoDB : IMaterialMongoDB
     {
         try
         {
-            //var filter = Builders<BsonDocument>.Filter.Eq("subjectId", subjectId.ToString());
-            //var documents = _collection.Find(filter).ToListAsync();
-            //return documents.Select(MapToStudyMaterial).ToList();
+            
             return null;
         }
         catch (Exception ex)
