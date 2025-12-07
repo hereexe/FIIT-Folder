@@ -55,15 +55,15 @@ app.MapControllers();
  var testContent = "бебебе";
  var type = "text/plain";
  
- await StorageTester.TestSaveInRepository(repository, testContent, type, name, folder); //Запускать через консоль
+//await StorageTester.TestSaveInRepository(repository, testContent, type, name, folder); //Запускать через консоль
 
 //await StorageTester.TestDeleteFile(repository, name, folder);
-await StorageTester.TestGetFile(repository, name, folder);
+//await StorageTester.TestGetFile(repository, name, folder);
 //Console.WriteLine("================");
 //это мое
 
 
-//await TesterMongoDB.CreateMaterial();
+await TesterMongoDB.CreateMaterial();
 //await TesterMongoDB.DeleteStudyMaterial();
 // await TesterMongoDB.GetByIdMaterial(new Guid(
 //     "5cf635fe-7f4e-45a1-89e6-71e30c702dab"));
