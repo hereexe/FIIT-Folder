@@ -23,6 +23,7 @@ const ExamType: React.FC<ExamTypeProps> = ({ examType, examNames }) => {
   const handleExamClick = (examName: string, e: React.MouseEvent) => {
     e.stopPropagation(); // Останавливаем всплытие
     console.log("Клик по экзамену:", examType, examName);
+    sessionStorage.setItem('examName', examName);
     navigate("/doc_page", {
       state: { examType, examName }
     });

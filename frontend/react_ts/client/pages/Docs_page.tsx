@@ -8,19 +8,20 @@ interface Material {
   title: string;
   author: string;
   likes: number;
+  isliked: boolean;
 }
 
 export default function Index() {
   const [materials] = useState<Material[]>([
-    { id: "1", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202 },
-    { id: "2", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202 },
-    { id: "3", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202 },
-    { id: "4", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202 },
-    { id: "5", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202 },
-    { id: "6", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202 },
-    { id: "7", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202 },
-    { id: "8", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202 },
-    { id: "9", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202 },
+    { id: "1", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202, isliked: true },
+    { id: "2", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202, isliked: true  },
+    { id: "3", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202, isliked: false  },
+    { id: "4", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202, isliked: false  },
+    { id: "5", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202, isliked: false  },
+    { id: "6", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202, isliked: false  },
+    { id: "7", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202, isliked: false  },
+    { id: "8", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202, isliked: true  },
+    { id: "9", title: "2022. Расписанные билеты", author: "Artem Scheglevatov", likes: 202, isliked: true  },
   ]);
   const location = useLocation();
   const { subject } = location.state || {};
@@ -43,7 +44,7 @@ export default function Index() {
             <ChevronLeft className="w-14 h-14" strokeWidth={1.5} />
           </button>
           <h2 className="text-4xl md:text-5xl font-semibold text-fiit-text tracking-wide leading-tight">
-            {sessionStorage.getItem("selectedSubject")}
+            {sessionStorage.getItem("selectedSubject")} / {sessionStorage.getItem("examName")}
           </h2>
         </div>
 
@@ -94,7 +95,9 @@ function MaterialCard({ material }: { material: Material }) {
             className="text-fiit-text hover:opacity-80 transition-opacity"
             aria-label="Like"
           >
-            <svg className="w-[25px] h-[25px]" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg className={`w-[25px] h-[25px] ${
+                material.isliked  ? "fill-red-500" : ""
+              }`} viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path fillRule="evenodd" clipRule="evenodd" d="M12.4929 5.34981C10.4102 2.915 6.93728 2.26004 4.32785 4.4896C1.71842 6.71915 1.35105 10.4469 3.40025 13.0838C5.10402 15.2762 10.2602 19.9001 11.9501 21.3967C12.1392 21.5641 12.2337 21.6479 12.344 21.6807C12.4403 21.7095 12.5456 21.7095 12.6418 21.6807C12.7521 21.6479 12.8466 21.5641 13.0357 21.3967C14.7256 19.9001 19.8818 15.2762 21.5856 13.0838C23.6348 10.4469 23.3122 6.6957 20.658 4.4896C18.0037 2.2835 14.5756 2.915 12.4929 5.34981Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
@@ -102,15 +105,6 @@ function MaterialCard({ material }: { material: Material }) {
             {material.likes}
           </span>
         </div>
-
-        <button
-          className="text-fiit-text hover:opacity-80 transition-opacity"
-          aria-label="Download"
-        >
-          <svg className="w-[25px] h-[25px]" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M21.875 15.625V16.875C21.875 18.6252 21.875 19.5002 21.5344 20.1687C21.2348 20.7567 20.7567 21.2348 20.1687 21.5344C19.5002 21.875 18.6252 21.875 16.875 21.875H8.125C6.37484 21.875 5.49975 21.875 4.83128 21.5344C4.24327 21.2348 3.76521 20.7567 3.4656 20.1687C3.125 19.5002 3.125 18.6252 3.125 16.875V15.625M17.7083 10.4167L12.5 15.625M12.5 15.625L7.29167 10.4167M12.5 15.625V3.125" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </button>
       </div>
     </a>
   );
