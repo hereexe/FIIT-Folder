@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "jd+zxwSMlTk=",
+  "dgSpecHash": "IQTG8khBCt4=",
   "success": true,
-  "projectFilePath": "C:\\FIIT-Folder\\FIIT-Folder\\backend\\FIIT-Folder\\Tests\\Tests.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "D:\\ПРОЕКТ (C#)\\FIIT-Folder\\backend\\FIIT-Folder\\Tests\\Tests.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\yeezy\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.12\\microsoft.netcore.app.ref.8.0.12.nupkg.sha512",
+    "C:\\Users\\yeezy\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.12\\microsoft.windowsdesktop.app.ref.8.0.12.nupkg.sha512",
+    "C:\\Users\\yeezy\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.12\\microsoft.aspnetcore.app.ref.8.0.12.nupkg.sha512",
+    "C:\\Users\\yeezy\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\8.0.12\\microsoft.netcore.app.host.win-x64.8.0.12.nupkg.sha512"
+  ],
   "logs": []
 }
