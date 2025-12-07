@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from 'react-router-dom';
 import ExamType from "@/components/ExamType";
-import { ExamTypeProps } from "@/components/ExamType";
+import { ExamTypeProps } from "../../../api/types.ts";
 
 import {
   Heart,

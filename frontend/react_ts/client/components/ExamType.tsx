@@ -1,15 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ExamTypeProps } from "../../../api/types.ts";
 import {
   ChevronUp,
   ChevronDown,
   
 } from "lucide-react";
-
-export interface ExamTypeProps {
-  examType: string;
-  examNames: string[];
-}
 
 const ExamType: React.FC<ExamTypeProps> = ({ examType, examNames }) => {
   const [examsExpanded, setExamsExpanded] = useState(true);

@@ -6,6 +6,11 @@ export interface RegisterResponse {
   message: string;
 }
 
+export interface ExamTypeProps {
+  examType: string;
+  examNames: string[];
+}
+
 export interface MaterialDto {
   id: string;
   name: string;
