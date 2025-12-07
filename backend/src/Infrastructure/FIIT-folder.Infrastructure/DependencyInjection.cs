@@ -13,7 +13,11 @@ public static class DependencyInjection
     {
         // MongoDB
         services.AddSingleton<ISubjectRepository, SubjectMongoDB>();
-        services.AddSingleton<IMaterialMongoDB, MaterialMongoDB>();
+        services.AddSingleton<IMaterialMongoDB>(sp =>
+            new MaterialMongoDB(
+                configuration["MongoDbSettings:ConnectionString"]!,
+                configuration["MongoDbSettings:DatabaseName"]!
+            ));
 
         // Yandex Cloud S3
         services.AddSingleton<IFileStorageRepository>(sp =>

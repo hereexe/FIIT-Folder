@@ -1,5 +1,6 @@
 using FIIT_folder.Api.Models;
-using FIIT_folder.Domain.Entities;
+using FIIT_folder.Application.Materials.Commands;
+using FIIT_folder.Application.Materials.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,33 +21,22 @@ public class MaterialsController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<MaterialResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetBySubject([FromQuery] Guid? subjectId, [FromQuery] string? materialType)
     {
-        // TODO: заменить на реальное получение из БД
-        var mockMaterials = new List<MaterialResponse>
-        {
-            new()
-            {
-                Id = Guid.NewGuid(),
-                SubjectId = subjectId ?? Guid.NewGuid(),
-                Name = "Экзамен_2024.pdf",
-                Year = 2024,
-                MaterialType = "Exam",
-                Size = "2.5 MB",
-                UploadedAt = DateTime.UtcNow
-            },
-            new()
-            {
-                Id = Guid.NewGuid(),
-                SubjectId = subjectId ?? Guid.NewGuid(),
-                Name = "Коллоквиум_1.docx",
-                Year = 2024,
-                MaterialType = "Colloquium",
-                Size = "1.2 MB",
-                UploadedAt = DateTime.UtcNow
-            }
-        };
+        if (subjectId == null)
+            return BadRequest("subjectId is required");
 
-        var result = mockMaterials.AsEnumerable();
-        
+        var materials = await _mediator.Send(new GetMaterialsBySubjectQuery(subjectId.Value));
+
+        var result = materials.Select(m => new MaterialResponse
+        {
+            Id = m.Id,
+            SubjectId = m.SubjectId,
+            Name = m.Name,
+            Year = m.Year,
+            MaterialType = m.MaterialType,
+            Size = FormatSize(m.Size),
+            UploadedAt = m.UploadedAt
+        }).AsEnumerable();
+
         if (!string.IsNullOrEmpty(materialType))
             result = result.Where(m => m.MaterialType.Equals(materialType, StringComparison.OrdinalIgnoreCase));
 
@@ -58,24 +48,35 @@ public class MaterialsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Upload([FromForm] UploadMaterialRequest request)
     {
-        // Валидация выполняется в ValidationFilter через FluentValidation
-        var materialType = Enum.Parse<MaterialType>(request.MaterialType, ignoreCase: true);
+        if (request.File == null)
+            return BadRequest("File is required");
 
-        // TODO: проверить что materialType разрешён для данного Subject
-        // TODO: заменить на реальное сохранение через сервис/команду
+        using var stream = request.File.OpenReadStream();
+
+        var command = new UploadMaterialCommand(
+            request.SubjectId,
+            Guid.NewGuid(), // TODO: получить UserId из авторизации
+            request.File.FileName,
+            request.Year,
+            request.MaterialType,
+            request.File.Length,
+            request.File.ContentType,
+            stream);
+
+        var result = await _mediator.Send(command);
 
         var response = new MaterialResponse
         {
-            Id = Guid.NewGuid(),
-            SubjectId = request.SubjectId,
-            Name = request.File!.FileName,
-            Year = request.Year,
-            MaterialType = materialType.ToString(),
-            Size = $"{request.File.Length / 1024.0 / 1024.0:F2} MB",
-            UploadedAt = DateTime.UtcNow
+            Id = result.Id,
+            SubjectId = result.SubjectId,
+            Name = result.Name,
+            Year = result.Year,
+            MaterialType = result.MaterialType,
+            Size = FormatSize(result.Size),
+            UploadedAt = result.UploadedAt
         };
 
-        return Created("", response);
+        return Created($"/api/materials/{response.Id}", response);
     }
 
     [HttpGet("{id}")]
@@ -83,29 +84,36 @@ public class MaterialsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(Guid id)
     {
-        // TODO: заменить на реальное получение из БД
-        var mockMaterial = new MaterialResponse
+        var material = await _mediator.Send(new GetMaterialByIdQuery(id));
+
+        if (material == null)
+            return NotFound();
+
+        var response = new MaterialResponse
         {
-            Id = id,
-            SubjectId = Guid.NewGuid(),
-            Name = "Экзамен_2024.pdf",
-            Year = 2024,
-            MaterialType = "Exam",
-            Size = "2.5 MB",
-            UploadedAt = DateTime.UtcNow
+            Id = material.Id,
+            SubjectId = material.SubjectId,
+            Name = material.Name,
+            Year = material.Year,
+            MaterialType = material.MaterialType,
+            Size = FormatSize(material.Size),
+            UploadedAt = material.UploadedAt
         };
 
-        return Ok(mockMaterial);
+        return Ok(response);
     }
 
-    [HttpGet("{id}/download-link")]
-    [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+    [HttpGet("{id}/download")]
+    [ProducesResponseType(typeof(FileStreamResult), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetDownloadLink(Guid id)
+    public async Task<IActionResult> Download(Guid id)
     {
-        // TODO: заменить на реальную генерацию ссылки из файлового хранилища
-        var mockUrl = $"https://storage.example.com/materials/{id}";
-        return Ok(new { downloadUrl = mockUrl, expiresAt = DateTime.UtcNow.AddHours(1) });
+        var result = await _mediator.Send(new DownloadMaterialQuery(id));
+
+        if (result == null)
+            return NotFound();
+
+        return File(result.FileStream, result.ContentType, result.FileName);
     }
 
     [HttpDelete("{id}")]
@@ -113,7 +121,24 @@ public class MaterialsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(Guid id)
     {
-        // TODO: заменить на реальное удаление через сервис/команду
-        return NoContent();
+        try
+        {
+            var deleted = await _mediator.Send(new DeleteMaterialCommand(id));
+            return NoContent();
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+    }
+
+    private static string FormatSize(long bytes)
+    {
+        return bytes switch
+        {
+            >= 1024 * 1024 => $"{bytes / 1024.0 / 1024.0:F2} MB",
+            >= 1024 => $"{bytes / 1024.0:F2} KB",
+            _ => $"{bytes} B"
+        };
     }
 }

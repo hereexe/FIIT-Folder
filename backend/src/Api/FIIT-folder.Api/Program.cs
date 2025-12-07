@@ -1,18 +1,21 @@
 using FluentValidation;
 using FIIT_folder.Api.Middlware;
-using FIIT_folder.Infrastructure.Test;
-using FIIT_folder.Infrastructure.FileStorage;
+using FIIT_folder.Application;
+using FIIT_folder.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<ValidationFilter>();
 });
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+
+// Регистрация Application и Infrastructure слоёв
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -44,7 +47,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 //это мое
- var name = "Экзамен.txt";
+ var name = "Коллоквиум.txt";
  var folder = "Матан";
  var repository = new FileStorageRepository(
      "YCAJEJjZUAxs4F0iCpajJG4_L",
@@ -52,18 +55,17 @@ app.MapControllers();
      "my-fiit",
      "ru-central1"
  );
- var testContent = "бебебе";
+ var testContent = "Паша лох";
  var type = "text/plain";
- 
-//await StorageTester.TestSaveInRepository(repository, testContent, type, name, folder); //Запускать через консоль
 
-//await StorageTester.TestDeleteFile(repository, name, folder);
-//await StorageTester.TestGetFile(repository, name, folder);
+ await StorageTester.TestSaveInRepository(repository, testContent, type, name, folder); //Запускать через консоль
+
+// await StorageTester.TestDeleteFile(name, folder);
 //Console.WriteLine("================");
 //это мое
 
 
-await TesterMongoDB.CreateMaterial();
+//await TesterMongoDB.CreateMaterial();
 //await TesterMongoDB.DeleteStudyMaterial();
 // await TesterMongoDB.GetByIdMaterial(new Guid(
 //     "5cf635fe-7f4e-45a1-89e6-71e30c702dab"));
