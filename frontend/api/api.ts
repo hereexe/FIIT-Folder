@@ -8,6 +8,7 @@ import {
   RegisterResponse,
   SubjectDto,
   UploadResponse,
+  SubjectMaterialsResponse,
 } from "./types";
 
 const BASE_URL = "http://localhost:5179/api/";
@@ -25,7 +26,7 @@ export const appApi = createApi({
     },
   }),
 
-  tagTypes: ["Materials", "Subjects"],
+  tagTypes: ["Materials", "Subjects", "SubjectMaterials"],
   endpoints: (builder) => ({
     login: builder.mutation<AuthResponse, LoginRequest>({
       query: (data) => ({
@@ -96,6 +97,13 @@ export const appApi = createApi({
         response.downloadUrl,
     }),
 
+    getSubjectWithMaterials: builder.query<SubjectMaterialsResponse, string>({
+      query: (subjectId) => `subjects/${subjectId}/materials`,
+      providesTags: (result, error, subjectId) => [
+        { type: "SubjectMaterials", id: subjectId },
+      ],
+    }),
+
     getSubjects: builder.query<SubjectDto[], void>({
       query: () => "Subjects",
       providesTags: ["Subjects"],
@@ -117,4 +125,5 @@ export const {
   useUploadMaterialMutation,
   useGetDownloadLinkQuery,
   useGetSubjectsQuery,
+  useGetSubjectWithMaterialsQuery,
 } = appApi;

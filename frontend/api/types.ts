@@ -20,9 +20,22 @@ export interface DownloadLinkResponse {
   downloadUrl: string;
 }
 
+export interface ExamTypeProps {
+  examType: string;
+  examNames: string[];
+}
+
+export interface SubjectMaterialsResponse {
+  id: string;
+  name: string;
+  semester: number;
+  content: ExamTypeProps[];
+}
+
 export interface SubjectDto {
   id: string;
   name: string;
+  semester?: number;
 }
 
 export interface LoginRequest {
