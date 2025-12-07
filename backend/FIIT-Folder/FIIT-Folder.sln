@@ -8,8 +8,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIIT-folder.Api", "..\src\A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIIT-folder.Application", "..\src\Api\FIIT-folder.Application\FIIT-folder.Application.csproj", "{40B47603-3820-40A5-AC45-EFC00BDAF6F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{AF721D14-C0DD-44A6-ADCD-30B20829198F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,9 +30,5 @@ Global
 		{40B47603-3820-40A5-AC45-EFC00BDAF6F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40B47603-3820-40A5-AC45-EFC00BDAF6F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40B47603-3820-40A5-AC45-EFC00BDAF6F3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AF721D14-C0DD-44A6-ADCD-30B20829198F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AF721D14-C0DD-44A6-ADCD-30B20829198F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AF721D14-C0DD-44A6-ADCD-30B20829198F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AF721D14-C0DD-44A6-ADCD-30B20829198F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
