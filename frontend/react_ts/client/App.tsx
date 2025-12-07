@@ -14,6 +14,7 @@ import NotFound from "./pages/NotFound";
 import Main_page from "./pages/Main_page"
 import Exam_type from "./pages/Content_type"
 import Fileview_page from "./pages/FileView_page"
+import AddFile_page from "./components/AddFile"
 
 const queryClient = new QueryClient();
 {/*Todo: разобраться как встроить загрузку уже полученного файла*/}
