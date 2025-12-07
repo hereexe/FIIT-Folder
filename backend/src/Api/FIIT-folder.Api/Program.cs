@@ -31,6 +31,13 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Инициализация данных при запуске
+using (var scope = app.Services.CreateScope())
+{
+    var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+    await seeder.SeedAsync();
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

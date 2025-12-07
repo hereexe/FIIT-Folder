@@ -37,7 +37,6 @@ public class GetSubjectWithMaterialsQueryHandler : IRequestHandler<GetSubjectWit
                     .OrderBy(name => name)
                     .ToList()
             })
-            .Where(g => g.ExamNames.Count > 0)
             .ToList();
 
         return new SubjectWithMaterialsDto

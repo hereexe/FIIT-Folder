@@ -28,6 +28,9 @@ public static class DependencyInjection
                 configuration["YandexCloud:Region"] ?? "ru-central1"
             ));
 
+        // Data Seeder
+        services.AddScoped<DataSeeder>();
+
         return services;
     }
 }
