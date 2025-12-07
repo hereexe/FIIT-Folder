@@ -35,6 +35,10 @@ namespace FIIT_folder.Infrastructure.Test
             {
                 using var downloadedStream = await repository.GetFile(filePath);
             }
+            else
+            {
+                Console.WriteLine("Файла нет в репозитории!");
+            }
         }
         
         public static async Task TestSaveInRepository(
