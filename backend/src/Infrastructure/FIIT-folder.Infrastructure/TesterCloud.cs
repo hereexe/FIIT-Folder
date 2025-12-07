@@ -18,9 +18,8 @@ namespace FIIT_folder.Infrastructure.Test
             );
         }
         
-        public static async Task TestDeleteFile(string name, string folder)
+        public static async Task TestDeleteFile(FileStorageRepository repository, string name, string folder)
         {
-            var repository = GetRepository();
             var filePath = FileStorageRepository.CreatePathInCloud(name, folder);
             await repository.DeleteFile(filePath);
             

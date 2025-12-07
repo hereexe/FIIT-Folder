@@ -52,12 +52,13 @@ app.MapControllers();
      "my-fiit",
      "ru-central1"
  );
- var testContent = "Паша лох";
+ var testContent = "бебебе";
  var type = "text/plain";
-
+ 
  await StorageTester.TestSaveInRepository(repository, testContent, type, name, folder); //Запускать через консоль
 
-// await StorageTester.TestDeleteFile(name, folder);
+//await StorageTester.TestDeleteFile(repository, name, folder);
+await StorageTester.TestGetFile(repository, name, folder);
 //Console.WriteLine("================");
 //это мое
 
