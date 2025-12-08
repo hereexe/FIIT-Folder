@@ -19,9 +19,9 @@ public class MaterialsController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<MaterialResponse>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetBySubject([FromQuery] Guid? subjectId, [FromQuery] string? materialType)
+    public async Task<IActionResult> GetBySubject([FromQuery] GetMaterialsRequest request)
     {
-        var materials = await _mediator.Send(new GetMaterialsBySubjectQuery(subjectId.Value));
+        var materials = await _mediator.Send(new GetMaterialsBySubjectQuery(request.SubjectId!.Value));
 
         var result = materials.Select(m => new MaterialResponse
         {
@@ -34,8 +34,8 @@ public class MaterialsController : ControllerBase
             UploadedAt = m.UploadedAt
         }).AsEnumerable();
 
-        if (!string.IsNullOrEmpty(materialType))
-            result = result.Where(m => m.MaterialType.Equals(materialType, StringComparison.OrdinalIgnoreCase));
+        if (!string.IsNullOrEmpty(request.MaterialType))
+            result = result.Where(m => m.MaterialType.Equals(request.MaterialType, StringComparison.OrdinalIgnoreCase));
 
         return Ok(result);
     }
@@ -45,7 +45,7 @@ public class MaterialsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Upload([FromForm] UploadMaterialRequest request)
     {
-        using var stream = request.File.OpenReadStream();
+        await using var stream = request.File.OpenReadStream();
 
         var command = new UploadMaterialCommand(
             request.SubjectId,
