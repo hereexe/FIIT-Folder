@@ -21,9 +21,6 @@ public class MaterialsController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<MaterialResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetBySubject([FromQuery] Guid? subjectId, [FromQuery] string? materialType)
     {
-        if (subjectId == null)
-            return BadRequest("subjectId is required");
-
         var materials = await _mediator.Send(new GetMaterialsBySubjectQuery(subjectId.Value));
 
         var result = materials.Select(m => new MaterialResponse
@@ -48,9 +45,6 @@ public class MaterialsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Upload([FromForm] UploadMaterialRequest request)
     {
-        if (request.File == null)
-            return BadRequest("File is required");
-
         using var stream = request.File.OpenReadStream();
 
         var command = new UploadMaterialCommand(
@@ -85,10 +79,6 @@ public class MaterialsController : ControllerBase
     public async Task<IActionResult> GetById(Guid id)
     {
         var material = await _mediator.Send(new GetMaterialByIdQuery(id));
-
-        if (material == null)
-            return NotFound();
-
         var response = new MaterialResponse
         {
             Id = material.Id,
@@ -109,10 +99,6 @@ public class MaterialsController : ControllerBase
     public async Task<IActionResult> Download(Guid id)
     {
         var result = await _mediator.Send(new DownloadMaterialQuery(id));
-
-        if (result == null)
-            return NotFound();
-
         return File(result.FileStream, result.ContentType, result.FileName);
     }
 
@@ -121,15 +107,8 @@ public class MaterialsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(Guid id)
     {
-        try
-        {
-            var deleted = await _mediator.Send(new DeleteMaterialCommand(id));
-            return NoContent();
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound();
-        }
+        await _mediator.Send(new DeleteMaterialCommand(id));
+        return NoContent();
     }
 
     private static string FormatSize(long bytes)

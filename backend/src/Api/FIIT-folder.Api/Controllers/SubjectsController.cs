@@ -68,9 +68,6 @@ public class SubjectsController : ControllerBase
     {
         var subject = await _mediator.Send(new GetSubjectByIdQuery(id));
 
-        if (subject == null)
-            return NotFound();
-
         var response = new SubjectResponse
         {
             Id = subject.Id,
@@ -96,9 +93,6 @@ public class SubjectsController : ControllerBase
     {
         var result = await _mediator.Send(new GetSubjectWithMaterialsQuery(id));
 
-        if (result == null)
-            return NotFound();
-
         var response = new SubjectWithMaterialsResponse
         {
             Id = result.Id,
@@ -119,10 +113,6 @@ public class SubjectsController : ControllerBase
     public async Task<IActionResult> GetMaterialTypes(Guid id)
     {
         var subject = await _mediator.Send(new GetSubjectByIdQuery(id));
-
-        if (subject == null)
-            return NotFound();
-
         var response = subject.MaterialTypes.Select(t => new MaterialTypeResponse
         {
             Value = t.Value,
@@ -138,10 +128,6 @@ public class SubjectsController : ControllerBase
     public async Task<IActionResult> Delete(Guid id)
     {
         var result = await _mediator.Send(new DeleteSubjectCommand(id));
-
-        if (!result)
-            return NotFound();
-
         return NoContent();
     }
 }
