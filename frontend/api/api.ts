@@ -34,7 +34,7 @@ export const appApi = createApi({
         method: "POST",
         body: data,
       }),
-      async QueryStarted(arg, { queryFulfilled }) {
+      async onQueryStarted(arg, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
           localStorage.setItem("token", data.token);

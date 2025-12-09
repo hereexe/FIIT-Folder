@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import ExamType from "@/components/ExamType";
 import { ExamTypeProps } from "@/components/ExamType";
+import { useGetSubjectWithMaterialsQuery } from "../../../api/api.ts";
 
 import {
   Heart,
@@ -17,18 +18,20 @@ import {
   Menu,
   X,
 } from "lucide-react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 export default function Index() {
   const content: ExamTypeProps[] = [
     { examType: "Экзамены", examNames: ["Экзамен 1", "Экзамен 2"] },
     { examType: "Коллоквиумы", examNames: ["Коллоквиум 1", "Коллоквиум 2"] },
     { examType: "Контрольные работы", examNames: ["КР 1", "КР 2"] },
-    { examType: "Лекции", examNames: ["Лекция 1", "Лекция 2"] }
-  ]
+    { examType: "Лекции", examNames: ["Лекция 1", "Лекция 2"] },
+  ];
+
+
   const navigate = useNavigate();
-    const location = useLocation();
-    const { subject } = location.state || {};
+  const location = useLocation();
+  const { subject } = location.state || {};
   const handleClickBack = () => {
     navigate("/main_page");
   };
@@ -41,7 +44,7 @@ export default function Index() {
         <div className="flex items-center justify-between px-5 md:px-[24px] py-[14px]">
           {/* Левая часть - кнопки */}
           <div className="flex items-center gap-2 flex-shrink-0">
-            <button 
+            <button
               onClick={handleClickBack}
               className="hover:opacity-80 transition-opacity"
             >
@@ -59,18 +62,16 @@ export default function Index() {
             </h1>
           </div>
           {/* Экзамены Section */}
-            {content.map((examProps) => (
-              <div>
-                <ExamType 
-                examType={examProps.examType} 
-                examNames={examProps.examNames} 
-                ></ExamType>
-              </div>
-            ))}
-          </div>
-
-
+          {content.map((examProps) => (
+            <div>
+              <ExamType
+                examType={examProps.examType}
+                examNames={examProps.examNames}
+              ></ExamType>
+            </div>
+          ))}
+        </div>
       </main>
-      </div>
+    </div>
   );
 }

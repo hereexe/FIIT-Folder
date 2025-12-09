@@ -15,10 +15,15 @@ import Main_page from "./pages/Main_page"
 import Exam_type from "./pages/Content_type"
 import Fileview_page from "./pages/FileView_page"
 import AddFile_page from "./components/AddFile"
+import { Provider } from 'react-redux';
+import { store } from "../../api/store"
+import React from 'react';
 
 const queryClient = new QueryClient();
 {/*Todo: разобраться как встроить загрузку уже полученного файла*/}
 const App = () => (
+  <React.StrictMode>
+  <Provider store={store}>
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
@@ -38,6 +43,8 @@ const App = () => (
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
+  </Provider>
+  </React.StrictMode>
 );
 
 createRoot(document.getElementById("root")!).render(<App />);
