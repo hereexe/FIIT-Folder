@@ -3,7 +3,6 @@ import "./Main_page.css"
 import "./Exam_type.css"
 
 import { Toaster } from "@/components/ui/toaster";
-import { createRoot } from "react-dom/client";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -26,18 +25,18 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route element={<HeaderLayout />}>
+            <Route path="/" element={<Main_page />} />
             <Route path="/main_page" element={<Main_page />} />
             <Route path="/doc_page" element={<Docs_page />} />
             <Route path="/exam_type" element={<Exam_type />} />
             <Route path="/fileview_page" element={<Fileview_page />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          
-          <Route path="*" element={<NotFound />} />
           </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
 );
 
-createRoot(document.getElementById("root")!).render(<App />);
+export default App;
