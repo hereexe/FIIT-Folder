@@ -24,6 +24,9 @@ backend/tests/**/bin/
 backend/tests/**/obj/
 *.user
 *.suo
+obj/
+bin/
+
 
 # =========================================
 # IDE / Editor specific
