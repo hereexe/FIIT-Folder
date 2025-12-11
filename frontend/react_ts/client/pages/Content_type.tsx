@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import ExamType from "@/components/ExamType";
 import { ExamTypeProps } from "@/components/ExamType";
-import { useGetSubjectWithMaterialsQuery } from "../../../api/api.ts";
+import { useGetSubjectWithMaterialsQuery } from "../../api/api";
 
 import {
   Heart,
@@ -19,6 +19,7 @@ import {
   X,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Console } from "console";
 
 export default function Index() {
   const content: ExamTypeProps[] = [
@@ -27,7 +28,14 @@ export default function Index() {
     { examType: "Контрольные работы", examNames: ["КР 1", "КР 2"] },
     { examType: "Лекции", examNames: ["Лекция 1", "Лекция 2"] },
   ];
-
+  const subjectId = sessionStorage.getItem("selectedSubject"); // Здесь должен быть реальный ID предмета
+  const { 
+    data: subjectMaterials, 
+    isLoading: isLoadingMaterials, 
+    error: materialsError 
+  } = useGetSubjectWithMaterialsQuery(subjectId);
+  const serverContent = subjectMaterials;
+  console.log("serverContent was gone")
 
   const navigate = useNavigate();
   const location = useLocation();
