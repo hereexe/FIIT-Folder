@@ -71,12 +71,11 @@ public class TesterMongoDB
         }
     }
     
-    public static async Task GetByIdMaterial(Guid guid)
+    public static async Task GetByIdMaterial(IMaterialMongoDB repository, Guid guid)
     {
         try
         {
             Console.WriteLine("Тест на поиск в MongoBD");
-            var repository = GetRepository();
             Console.WriteLine("Пытаюсь найти StudyMaterial(который ранее создавал) по id");
             var flag = await repository.GetByIdStudyMaterial(guid);
 
@@ -92,12 +91,11 @@ public class TesterMongoDB
         }
     }
     
-    public static async Task GetByNameMaterial(string studyMaterialName)
+    public static async Task GetByNameMaterial(IMaterialMongoDB repository, string studyMaterialName)
     {
         try
         {
             Console.WriteLine("Тест на поиск в MongoBD по имени");
-            var repository = GetRepository();
             Console.WriteLine("Пытаюсь найти StudyMaterial(который ранее создавал) по MaterialName");
             var flag = await repository.GetByNameStudyMaterial(studyMaterialName);
 

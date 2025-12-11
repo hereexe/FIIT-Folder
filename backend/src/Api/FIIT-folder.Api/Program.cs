@@ -79,11 +79,11 @@ var repositoryMongoDB = new MaterialMongoDB(connectionString, databaseName);
      new ResourceLocation("/путь/к/файлу.pdf")
  );
 
-await TesterMongoDB.CreateMaterial(repositoryMongoDB, material);
+//await TesterMongoDB.CreateMaterial(repositoryMongoDB, material);
 //await TesterMongoDB.DeleteStudyMaterial(repositoryMongoDB, 
 //    new Guid("e73a1768-ebb3-4edc-8766-2a3067be1698"));
-await TesterMongoDB.GetByIdMaterial(new Guid(
-     "e73a1768-ebb3-4edc-8766-2a3067be1698"));
-//await TesterMongoDB.GetByNameMaterial("Матан");
+await TesterMongoDB.GetByIdMaterial(repositoryMongoDB, new Guid(
+     "791cb503-2daf-4a36-8b56-05b201e7bf15"));
+//await TesterMongoDB.GetByNameMaterial(repositoryMongoDB, "Матан");
 
 app.Run();
