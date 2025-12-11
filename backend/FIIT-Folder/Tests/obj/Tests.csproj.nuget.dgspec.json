@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\ПРОЕКТ (C#)\\FIIT-Folder\\backend\\FIIT-Folder\\Tests\\Tests.csproj": {}
+    "D:\\ПРОЕКТ\\FIIT-Folder\\backend\\FIIT-Folder\\Tests\\Tests.csproj": {}
   },
   "projects": {
-    "D:\\ПРОЕКТ (C#)\\FIIT-Folder\\backend\\FIIT-Folder\\Tests\\Tests.csproj": {
+    "D:\\ПРОЕКТ\\FIIT-Folder\\backend\\FIIT-Folder\\Tests\\Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\ПРОЕКТ (C#)\\FIIT-Folder\\backend\\FIIT-Folder\\Tests\\Tests.csproj",
+        "projectUniqueName": "D:\\ПРОЕКТ\\FIIT-Folder\\backend\\FIIT-Folder\\Tests\\Tests.csproj",
         "projectName": "Tests",
-        "projectPath": "D:\\ПРОЕКТ (C#)\\FIIT-Folder\\backend\\FIIT-Folder\\Tests\\Tests.csproj",
+        "projectPath": "D:\\ПРОЕКТ\\FIIT-Folder\\backend\\FIIT-Folder\\Tests\\Tests.csproj",
         "packagesPath": "C:\\Users\\yeezy\\.nuget\\packages\\",
-        "outputPath": "D:\\ПРОЕКТ (C#)\\FIIT-Folder\\backend\\FIIT-Folder\\Tests\\obj\\",
+        "outputPath": "D:\\ПРОЕКТ\\FIIT-Folder\\backend\\FIIT-Folder\\Tests\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\yeezy\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -37,8 +37,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.100"
+        }
       },
       "frameworks": {
         "net8.0": {

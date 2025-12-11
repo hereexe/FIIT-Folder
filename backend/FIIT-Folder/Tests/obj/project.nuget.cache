@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "CgIK3KZKPCo=",
+  "dgSpecHash": "62xkflflRis=",
   "success": true,
-  "projectFilePath": "D:\\ПРОЕКТ (C#)\\FIIT-Folder\\backend\\FIIT-Folder\\Tests\\Tests.csproj",
+  "projectFilePath": "D:\\ПРОЕКТ\\FIIT-Folder\\backend\\FIIT-Folder\\Tests\\Tests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\yeezy\\.nuget\\packages\\microsoft.codecoverage\\17.9.0\\microsoft.codecoverage.17.9.0.nupkg.sha512",
     "C:\\Users\\yeezy\\.nuget\\packages\\microsoft.net.test.sdk\\17.9.0\\microsoft.net.test.sdk.17.9.0.nupkg.sha512",
