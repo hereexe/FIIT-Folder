@@ -1,5 +1,7 @@
 using FluentValidation;
 using FIIT_folder.Api.Middlware;
+using FIIT_folder.Domain.Entities;
+using FIIT_folder.Domain.Value_Object;
 using FIIT_folder.Infrastructure.Test;
 using FIIT_folder.Infrastructure.FileStorage;
 
@@ -44,16 +46,16 @@ app.UseAuthorization();
 app.MapControllers();
 
 //это мое
- var name = "Экзамен.txt";
- var folder = "Матан";
- var repository = new FileStorageRepository(
-     "YCAJEJjZUAxs4F0iCpajJG4_L",
-     "YCNbbq1t3RGwiRuNrNAnCsODmPVgWFM1s6jT201L",  
-     "my-fiit",
-     "ru-central1"
- );
- var testContent = "бебебе";
- var type = "text/plain";
+ // var name = "Экзаме111н.txt";
+ // var folder = "Матан";
+ // var repositoryFileStorage = new FileStorageRepository(
+ //     "YCAJEJjZUAxs4F0iCpajJG4_L",
+ //     "YCNbbq1t3RGwiRuNrNAnCsODmPVgWFM1s6jT201L",  
+ //     "my-fiit",
+ //     "ru-central1"
+ // );
+ // var testContent = "беб11111ебе";
+ // var type = "text/plain";
  
 //await StorageTester.TestSaveInRepository(repository, testContent, type, name, folder); //Запускать через консоль
 
@@ -62,11 +64,26 @@ app.MapControllers();
 //Console.WriteLine("================");
 //это мое
 
+var connectionString = "mongodb://localhost:27017";
+var databaseName = "newbd";
+        
+var repositoryMongoDB = new MaterialMongoDB(connectionString, databaseName);
 
-await TesterMongoDB.CreateMaterial();
-//await TesterMongoDB.DeleteStudyMaterial();
-// await TesterMongoDB.GetByIdMaterial(new Guid(
-//     "5cf635fe-7f4e-45a1-89e6-71e30c702dab"));
+ var material = new StudyMaterial(
+     new MaterialName("Матан"), 
+     new SubjectId(Guid.NewGuid()), 
+     new UserId(Guid.NewGuid()), 
+     new StudyYear(2023), 
+     new MaterialSize(2000), 
+     MaterialType.Colloquium, 
+     new ResourceLocation("/путь/к/файлу.pdf")
+ );
+
+await TesterMongoDB.CreateMaterial(repositoryMongoDB, material);
+//await TesterMongoDB.DeleteStudyMaterial(repositoryMongoDB, 
+//    new Guid("e73a1768-ebb3-4edc-8766-2a3067be1698"));
+await TesterMongoDB.GetByIdMaterial(new Guid(
+     "e73a1768-ebb3-4edc-8766-2a3067be1698"));
 //await TesterMongoDB.GetByNameMaterial("Матан");
 
 app.Run();

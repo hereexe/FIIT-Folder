@@ -22,28 +22,18 @@ public class TesterMongoDB
         );
     }
     
-    public static async Task CreateMaterial()
+    public static async Task CreateMaterial(
+        IMaterialMongoDB repository, 
+        StudyMaterial material
+        )
     {
         try
         {
             Console.WriteLine("Тест на сохранение в MongoBD");
             
-            var repository = GetRepository();
-            
-            Console.WriteLine("Создаю новый StudyMaterial");
-            
             int currentYear = DateTime.Now.Year;
             int validYear = currentYear > 2018 ? currentYear : 2019;
             
-            var material = new StudyMaterial(
-                new MaterialName("Матан"), 
-                new SubjectId(Guid.NewGuid()), 
-                new UserId(Guid.NewGuid()), 
-                new StudyYear(validYear), 
-                new MaterialSize(2000), 
-                MaterialType.Colloquium, 
-                new ResourceLocation("/путь/к/файлу.pdf")
-            );
             
             Console.WriteLine("Пытаюсь сохранить новый StudyMaterial");
             var createdMaterial = await repository.CreateStudyMaterial(material);
@@ -59,18 +49,16 @@ public class TesterMongoDB
         }
     }
     
-    public static async Task DeleteStudyMaterial()
+    public static async Task DeleteStudyMaterial(
+        IMaterialMongoDB repository, 
+        Guid guidStudyMaterial
+        )
     {
         try
         {
             Console.WriteLine("Тест на удаление в MongoBD");
-            
-            var repository = GetRepository();
-            
-            
             Console.WriteLine("Пытаюсь удалить StudyMaterial, который ранее создавал");
-            var flag = await repository.DeleteStudyMaterial(new Guid(
-                "5cf635fe-7f4e-45a1-89e6-71e30c702dab"));
+            var flag = await repository.DeleteStudyMaterial(guidStudyMaterial);
             
             if (flag)
                 Console.WriteLine($"Материал успешно удален из MongoDB!");
