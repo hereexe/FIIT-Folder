@@ -1,0 +1,80 @@
+services:
+  # Backend API
+  api:
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+    container_name: fiit_api
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:8080
+      MongoDbSettings__ConnectionString: "mongodb://mongo:27017"
+      MongoDbSettings__DatabaseName: "FIITFolder"
+    depends_on:
+      mongo:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 40s
+    networks:
+      - fiit-network
+
+  # Frontend React
+  frontend:
+    build:
+      context: ./frontend/react_ts
+      dockerfile: ./Dockerfile
+    container_name: fiit_frontend
+    restart: always
+    ports:
+      - "3001:3000"
+    environment:
+      REACT_APP_API_URL: http://api:8080
+    depends_on:
+      - api
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    networks:
+      - fiit-network
+
+  # MongoDB Database
+  mongo:
+    image: mongo:6.0
+    container_name: fiit_mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+      - mongo-config:/data/configdb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: FIITFolder
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - fiit-network
+
+volumes:
+  mongo-data:
+    driver: local
+  mongo-config:
+    driver: local
+
+networks:
+  fiit-network:
+    driver: bridge
