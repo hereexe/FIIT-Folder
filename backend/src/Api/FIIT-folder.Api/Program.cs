@@ -2,8 +2,14 @@ using FluentValidation;
 using FIIT_folder.Api.Middlware;
 using FIIT_folder.Application;
 using FIIT_folder.Infrastructure;
+using DotNetEnv;
+
+Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
+
+//add env 
+builder.Configuration.AddEnvironmentVariables();
 
 // Add services to the container.
 builder.Services.AddControllers(options =>

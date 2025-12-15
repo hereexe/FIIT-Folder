@@ -1,7 +1,10 @@
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using FIIT_folder.Api.Models;
+using FIIT_folder.Application.Users.Commands;
+using Microsoft.AspNetCore.Identity.Data;
+using RegisterRequest = FIIT_folder.Api.Models.RegisterRequest;
+using LoginRequest = FIIT_folder.Api.Models.LoginRequest;
 
 namespace FIIT_folder.Api.Controllers;
 
@@ -20,18 +23,21 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
-        // TODO: Дописать полноценую логику потом.....
-        return Ok(new { Message = "пользователь зарегался" });
+        var command = new RegisterUserCommand(request.Username, request.Password);
+        var userId = await _mediator.Send(command);
+        
+        return Ok(new {userId = userId});
     }
 
     [HttpPost("login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Login()
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        // TODO: Переписать позже на нормальную логику, пока что просто заглушка для проверки
-        var mockJwt = "asdzxc123qwerty1488";
-        return Ok(new { token = mockJwt });
+        var command = new LoginUserCommand(request.Username, request.Password);
+        var token = await _mediator.Send(command);
+        
+        return Ok(new {token = token});
     }
 
 

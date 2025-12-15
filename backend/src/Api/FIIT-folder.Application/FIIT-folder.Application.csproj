@@ -16,4 +16,8 @@
       <ProjectReference Include="..\..\Core\FIIT-folder.Domain\FIIT-folder.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Users\Queries\" />
+    </ItemGroup>
+
 </Project>
