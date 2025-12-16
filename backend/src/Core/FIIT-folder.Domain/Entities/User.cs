@@ -1,3 +1,4 @@
+using FIIT_folder.Domain.Enums;
 using FIIT_folder.Domain.Value_Object;
 
 namespace FIIT_folder.Domain.Entities;

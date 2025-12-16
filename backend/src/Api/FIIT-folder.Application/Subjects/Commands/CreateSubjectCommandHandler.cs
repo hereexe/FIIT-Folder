@@ -1,6 +1,7 @@
 using MediatR;
 using FIIT_folder.Application.DTOs;
 using FIIT_folder.Domain.Entities;
+using FIIT_folder.Domain.Enums;
 using FIIT_folder.Domain.Extensions;
 using FIIT_folder.Domain.Interfaces;
 using FIIT_folder.Domain.Value_Object;

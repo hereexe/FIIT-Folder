@@ -1,4 +1,4 @@
-namespace FIIT_folder.Domain.Entities;
+namespace FIIT_folder.Domain.Enums;
 
 public enum UserRole
 {

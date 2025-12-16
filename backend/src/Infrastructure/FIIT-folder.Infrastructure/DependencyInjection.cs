@@ -29,6 +29,13 @@
                      Environment.GetEnvironmentVariable("MONGODB_DATABASE_NAME")!
                  ));
 
+             // Material Rating Repository
+             services.AddSingleton<IMaterialRatingRepository>(sp =>
+                 new MaterialRatingMongoDB(
+                     Environment.GetEnvironmentVariable("MONGODB_CONNECTION_STRING")!,
+                     Environment.GetEnvironmentVariable("MONGODB_DATABASE_NAME")!
+                 ));
+
              // Yandex Cloud S3
              services.AddSingleton<IFileStorageRepository>(sp =>
                  new FileStorageRepository(

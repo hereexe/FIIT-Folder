@@ -2,6 +2,7 @@ using FIIT_folder.Application.Interfaces;
 using FIIT_folder.Domain.Entities;
 using FIIT_folder.Domain.Interfaces;
 using FIIT_folder.Domain.Value_Object;
+using FIIT_folder.Domain.Enums;
 using MediatR;
 
 namespace FIIT_folder.Application.Users.Commands;

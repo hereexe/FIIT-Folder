@@ -1,6 +1,7 @@
 using FIIT_folder.Domain.Entities;
 using FIIT_folder.Domain.Interfaces;
 using FIIT_folder.Domain.Value_Object;
+using FIIT_folder.Domain.Enums;
 
 namespace FIIT_folder.Infrastructure;
 
