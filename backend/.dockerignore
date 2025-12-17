@@ -1,0 +1,33 @@
+# Version control
+.git
+.gitignore
+.github
+
+# IDE
+.vscode
+.vs
+.idea
+
+# Build artifacts
+bin/
+obj/
+dist/
+
+# Dependencies
+node_modules/
+
+# Temporary files
+*.tmp
+*.log
+
+# Environment files
+.env
+.env.local
+
+# OS
+.DS_Store
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore

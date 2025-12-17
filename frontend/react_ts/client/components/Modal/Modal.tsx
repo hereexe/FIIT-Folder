@@ -45,9 +45,8 @@ const Modal: React.FC<ModalProps> = ({
         aria-modal="true"
         aria-labelledby={title ? "modal-title" : undefined}
       >
-        <div className= "absolute inset-0 top-16 bottom-16 left-40 right-40 overflow-y-auto rounded-[10px] ">
           {children}
-        </div>
+
       </div>
     </div>,
     document.body

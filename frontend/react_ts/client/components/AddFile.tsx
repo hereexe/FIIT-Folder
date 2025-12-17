@@ -1,15 +1,15 @@
+import { Console } from "console";
+import { ChevronLeft, ChevronDown, FilePlus2 } from "lucide-react";
 import { useState } from "react";
-import { ChevronLeft, ChevronDown, FilePlus } from "lucide-react";
+import { Link } from "react-router-dom";
 
-export default function AddFile() {
-  const [formData, setFormData] = useState({
-    subject: "",
-    year: "",
-    semester: "",
-    contentType: "",
-    description: "",
-  });
+export default function Index() {
   const [dragActive, setDragActive] = useState(false);
+  const [subject, setSubject] = useState("");
+  const [year, setYear] = useState("");
+  const [semester, setSemester] = useState("");
+  const [contentType, setContentType] = useState("");
+  const [description, setDescription] = useState("");
   const [files, setFiles] = useState<File[]>([]);
 
   const handleDrag = (e: React.DragEvent) => {
@@ -26,192 +26,186 @@ export default function AddFile() {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       setFiles(Array.from(e.dataTransfer.files));
     }
   };
 
-  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFiles(Array.from(e.target.files));
     }
   };
 
-  const handleSubmit = () => {
-    console.log("Form submitted:", { formData, files });
+  const handleUpload = async () => {
+    console.log({
+      subject,
+      year,
+      semester,
+      contentType,
+      description,
+      files,
+    });
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 flex items-center justify-center p-4 md:p-6 lg:p-8">
-      <div className="w-full max-w-[1169px] bg-white/95 rounded-[20px] shadow-2xl backdrop-blur-sm p-4 md:p-6 lg:p-8">
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+    <div className="flex items-center justify-center p-4 ">
+      <div className="w-full max-w-7xl bg-white/95 rounded-[20px] shadow-2xl p-6 md:p-8 lg:p-10">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
           {/* Left Section - Form */}
-          <div className="flex-1 flex flex-col gap-12 lg:gap-20">
-            {/* Back Button */}
-            <button 
-              className="w-[55px] h-[55px] flex items-center justify-center hover:bg-purple-50 rounded-full transition-colors"
-              onClick={() => window.history.back()}
-            >
-              <ChevronLeft className="w-[55px] h-[55px] text-[#1E265A]" strokeWidth={2} />
-            </button>
+          <div className="flex-1 space-y-20">
+
 
             {/* Form Fields */}
-            <div className="flex flex-col gap-[15px]">
+            <div className="space-y-6">
               {/* Subject */}
-              <div className="flex flex-col gap-[2px]">
-                <label className="text-[#1E265A] text-[20px] font-normal leading-normal">
-                  Subject
+              <div className="space-y-2">
+                <label className="block text-primary-dark text-xl font-normal">
+                  Предмет
                 </label>
                 <div className="relative">
                   <select
-                    value={formData.subject}
-                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                    className="w-full h-[45px] px-[9px] py-[13px] rounded-[10px] bg-[#E4B7F5]/36 text-[#1E265A]/49 text-[20px] font-normal appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1E265A]/20"
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
                   >
-                    <option value="">e.g. теория вероятности</option>
-                    <option value="theory">Теория вероятности</option>
-                    <option value="algebra">Алгебра</option>
-                    <option value="calculus">Математический анализ</option>
+                    <option value="" className="text-primary-dark/50">
+                      e.g. теория вероятности
+                    </option>
+                    <option value="probability">теория вероятности</option>
+                    <option value="algebra">алгебра</option>
+                    <option value="calculus">математический анализ</option>
                   </select>
-                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-[#1E265A] pointer-events-none" strokeWidth={2} />
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
                 </div>
               </div>
 
               {/* Year */}
-              <div className="flex flex-col gap-[2px]">
-                <label className="text-[#1E265A] text-[20px] font-normal leading-normal">
-                  Year
+              <div className="space-y-2">
+                <label className="block text-primary-dark text-xl font-normal">
+                  Год
                 </label>
                 <div className="relative">
                   <select
-                    value={formData.year}
-                    onChange={(e) => setFormData({ ...formData, year: e.target.value })}
-                    className="w-full h-[45px] px-[9px] py-[13px] rounded-[10px] bg-[#E4B7F5]/36 text-[#1E265A]/49 text-[20px] font-normal appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1E265A]/20"
+                    value={year}
+                    onChange={(e) => setYear(e.target.value)}
+                    className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
                   >
-                    <option value="">e.g. 2024</option>
+                    <option value="" className="text-primary-dark/50">
+                      e.g. 2024
+                    </option>
                     <option value="2024">2024</option>
                     <option value="2023">2023</option>
                     <option value="2022">2022</option>
                   </select>
-                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-[#1E265A] pointer-events-none" strokeWidth={2} />
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
                 </div>
               </div>
 
               {/* Semester */}
-              <div className="flex flex-col gap-[2px]">
-                <label className="text-[#1E265A] text-[20px] font-normal leading-normal">
-                  Semester
+              <div className="space-y-2">
+                <label className="block text-primary-dark text-xl font-normal">
+                  Семестр
                 </label>
                 <div className="relative">
                   <select
-                    value={formData.semester}
-                    onChange={(e) => setFormData({ ...formData, semester: e.target.value })}
-                    className="w-full h-[45px] px-[9px] py-[13px] rounded-[10px] bg-[#E4B7F5]/36 text-[#1E265A]/49 text-[20px] font-normal appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1E265A]/20"
+                    value={semester}
+                    onChange={(e) => setSemester(e.target.value)}
+                    className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
                   >
-                    <option value="">e.g. 3 семестр</option>
+                    <option value="" className="text-primary-dark/50">
+                      e.g. 3 семестр
+                    </option>
                     <option value="1">1 семестр</option>
                     <option value="2">2 семестр</option>
                     <option value="3">3 семестр</option>
                     <option value="4">4 семестр</option>
                   </select>
-                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-[#1E265A] pointer-events-none" strokeWidth={2} />
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
                 </div>
               </div>
 
               {/* Type of content */}
-              <div className="flex flex-col gap-[2px]">
-                <label className="text-[#1E265A] text-[20px] font-normal leading-normal">
-                  Type of content
+              <div className="space-y-2">
+                <label className="block text-primary-dark text-xl font-normal">
+                  Тип контента
                 </label>
                 <div className="relative">
                   <select
-                    value={formData.contentType}
-                    onChange={(e) => setFormData({ ...formData, contentType: e.target.value })}
-                    className="w-full h-[45px] px-[9px] py-[13px] rounded-[10px] bg-[#E4B7F5]/36 text-[#1E265A]/49 text-[20px] font-normal appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1E265A]/20"
+                    value={contentType}
+                    onChange={(e) => setContentType(e.target.value)}
+                    className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
                   >
-                    <option value="">e.g. коллоквиум</option>
-                    <option value="colloquium">Коллоквиум</option>
-                    <option value="exam">Экзамен</option>
-                    <option value="lecture">Лекция</option>
+                    <option value="" className="text-primary-dark/50">
+                      e.g. коллоквиум
+                    </option>
+                    <option value="colloquium">коллоквиум</option>
+                    <option value="exam">экзамен</option>
+                    <option value="test">контрольная</option>
+                    <option value="lecture">лекция</option>
                   </select>
-                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-[#1E265A] pointer-events-none" strokeWidth={2} />
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
                 </div>
               </div>
 
               {/* Description */}
-              <div className="flex flex-col gap-[2px]">
-                <label className="text-[#1E265A] text-[20px] font-normal leading-normal">
-                  Description
+              <div className="space-y-2">
+                <label className="block text-primary-dark text-xl font-normal">
+                  Описание
                 </label>
                 <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                   placeholder="type down additional information about file"
-                  className="w-full h-[128px] px-[9px] py-[13px] rounded-[10px] bg-[#E4B7F5]/36 text-[#1E265A] placeholder:text-[#1E265A]/49 text-[20px] font-normal resize-none focus:outline-none focus:ring-2 focus:ring-[#1E265A]/20"
+                  className="w-full h-32 px-4 py-3 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-xl placeholder:text-primary-dark/50 resize-none focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
                 />
               </div>
             </div>
 
             {/* Upload Button */}
-            <button
-              onClick={handleSubmit}
-              className="w-fit px-[22px] py-2 rounded-[20px] border-2 border-[#E4B7F5]/36 bg-white/[0.02] shadow-[inset_-2px_-2px_4px_rgba(255,255,255,0.3),inset_5px_5px_25px_rgba(255,255,255,0.4),0_10px_20px_rgba(42,42,42,0.36),inset_2px_2px_4px_#FFF] hover:shadow-[inset_-2px_-2px_4px_rgba(255,255,255,0.4),inset_5px_5px_25px_rgba(255,255,255,0.5),0_12px_24px_rgba(42,42,42,0.4),inset_2px_2px_4px_#FFF] transition-all active:scale-95"
-            >
-              <span className="text-[#1E265A] text-[25px] font-medium tracking-[0.25px]">
-                Upload
-              </span>
-            </button>
+            <div className="flex justify-center">
+              <button
+                onClick={handleUpload}
+                className="px-8 h-[45px] rounded-[20px] border-2 border-primary-light/36 bg-white/5 text-primary-dark text-2xl font-medium shadow-[inset_-2px_-2px_4px_rgba(255,255,255,0.3),inset_5px_5px_25px_rgba(255,255,255,0.4),0_10px_20px_rgba(42,42,42,0.36),inset_2px_2px_4px_#fff] hover:bg-white/10 transition-colors"
+              >
+                Загрузить
+              </button>
+            </div>
           </div>
 
           {/* Right Section - File Drop Zone */}
-          <div className="flex-1 lg:max-w-[512px]">
+          <div className="flex-1 flex items-center justify-center lg:min-h-[700px]">
             <div
               onDragEnter={handleDrag}
               onDragLeave={handleDrag}
               onDragOver={handleDrag}
               onDrop={handleDrop}
-              className={`relative w-full h-full min-h-[400px] lg:min-h-[699px] flex flex-col items-center justify-center px-8 md:px-12 lg:px-[100px] py-12 rounded-[15px] border border-dashed border-[#1E265A] bg-[#E4B7F5]/36 shadow-[inset_-2px_-2px_4px_rgba(0,0,0,0.25),inset_5px_5px_25px_rgba(228,183,245,0.6),inset_2px_2px_4px_#E4B7F5,0_4px_20px_#E4B7F5] transition-all ${
-                dragActive ? "border-[#1E265A] bg-[#E4B7F5]/50 scale-[1.02]" : ""
+              className={`w-full max-w-xl h-full min-h-[400px] lg:min-h-[700px] flex flex-col items-center justify-center gap-8 px-8 md:px-24 rounded-[15px] border-2 border-dashed border-primary-dark bg-primary-light/36 shadow-[inset_-2px_-2px_4px_rgba(0,0,0,0.25),inset_5px_5px_25px_rgba(228,183,245,0.6),inset_2px_2px_4px_#E4B7F5,0_4px_20px_#E4B7F5] transition-all ${
+                dragActive ? "scale-[1.02] border-primary-dark/80" : ""
               }`}
             >
-              <div className="flex flex-col items-center gap-[30px]">
-                <FilePlus className="w-20 h-20 text-[#1E265A]" strokeWidth={2} />
-                
-                <div className="flex flex-col items-center gap-[7px] px-[5px]">
-                  <p className="text-[#1E265A] text-center text-[20px] md:text-[25px] font-medium tracking-[0.25px]">
-                    Drop your files here or
-                  </p>
-                  <label className="cursor-pointer">
-                    <input
-                      type="file"
-                      multiple
-                      onChange={handleFileInput}
-                      className="hidden"
-                    />
-                    <div className="px-[10px] py-[5px] rounded-[3px] bg-[#1E265A] hover:bg-[#2A3470] transition-colors">
-                      <span className="text-white text-center text-[20px] md:text-[25px] font-medium tracking-[0.25px]">
-                        choose files
-                      </span>
-                    </div>
-                  </label>
-                </div>
+              <FilePlus2 className="w-20 h-20 text-primary-dark stroke-[2]" />
 
-                {files.length > 0 && (
-                  <div className="mt-4 w-full">
-                    <p className="text-[#1E265A] text-[18px] font-medium mb-2">
-                      Selected files:
-                    </p>
-                    <ul className="text-[#1E265A]/70 text-[16px] space-y-1">
-                      {files.map((file, index) => (
-                        <li key={index} className="truncate">
-                          {file.name}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+              <div className="flex flex-col items-center gap-7">
+                <p className="text-primary-dark text-center text-2xl font-medium tracking-[0.25px]">
+                  Кидай сюда или
+                </p>
+                <label className="px-4 py-2 rounded-[3px] bg-primary-dark text-white text-2xl font-medium tracking-[0.25px] cursor-pointer hover:bg-primary-dark/90 transition-colors">
+                  выбрать файл
+                  <input
+                    type="file"
+                    multiple
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
+                </label>
               </div>
+
+              {files.length > 0 && (
+                <div className="mt-4 text-primary-dark text-lg">
+                  {files.length} file(s) selected
+                </div>
+              )}
             </div>
           </div>
         </div>
