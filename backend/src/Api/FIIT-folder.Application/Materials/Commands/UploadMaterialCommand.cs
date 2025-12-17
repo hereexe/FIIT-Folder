@@ -8,6 +8,8 @@ public record UploadMaterialCommand(
     Guid UserId,
     string FileName,
     int Year,
+    int Semester,
+    string Description,
     string MaterialType,
     long Size,
     string ContentType,

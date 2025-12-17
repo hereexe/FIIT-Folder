@@ -26,4 +26,10 @@ public class UserMongoDB : IUserRepository
     {
         await _usersCollection.InsertOneAsync(user, cancellationToken: cancellationToken);
     }
+
+    public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var filter = Builders<User>.Filter.Eq("Id.Value", id);
+        return await _usersCollection.Find(filter).FirstOrDefaultAsync(cancellationToken);
+    }
 }

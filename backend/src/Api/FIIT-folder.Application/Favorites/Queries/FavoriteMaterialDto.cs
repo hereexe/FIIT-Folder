@@ -9,6 +9,9 @@ public class FavoriteMaterialDto
     public string? MaterialType { get; set; }
     public long? Size { get; set; }
     public int? Year { get; set; }
+    public int? Semester { get; set; }
+    public string? Description { get; set; }
+    public string? AuthorName { get; set; }
     public Guid? SubjectId { get; set; }
     public DateTime AddedAt { get; set; }
 }

@@ -61,13 +61,6 @@ public class MaterialMongoDB : IMaterialMongoDB
             if (material == null)
                 throw new ArgumentNullException(nameof(material), "StudyMaterial не должен быть null");
             
-            // var existing = await StudyMaterials
-            //     .Find(m => m.Id == material.Id)
-            //     .FirstOrDefaultAsync();
-            
-            // if (existing != null)
-            //     throw new InvalidOperationException("StudyMaterial с таким id уже есть!");
-            
             var bsonDocument = new BsonDocument
             {
                 { "materialId", material.Id.Value.ToString() },
@@ -75,6 +68,8 @@ public class MaterialMongoDB : IMaterialMongoDB
                 { "userId", material.UserId.Value.ToString() },
                 { "name", material.Name.Value },
                 { "year", material.Year.Value },
+                { "semester", material.Semester },
+                { "description", material.Description },
                 { "size", material.Size.Size },
                 { "materialType", material.MaterialType.ToString() },
                 { "filePath", material.FilePath.Value },
@@ -102,7 +97,6 @@ public class MaterialMongoDB : IMaterialMongoDB
 
             if (document == null)
             {
-                Console.WriteLine("гавно");
                 return null;
             }
 
@@ -123,7 +117,6 @@ public class MaterialMongoDB : IMaterialMongoDB
 
             if (document == null)
             {
-                Console.WriteLine("гавно");
                 return null;
             }
 
@@ -137,14 +130,23 @@ public class MaterialMongoDB : IMaterialMongoDB
 
     public async Task<List<StudyMaterial>> GetBySubjectId(Guid subjectId)
     {
-        return null;
+        try
+        {
+            var filter = Builders<BsonDocument>.Filter.Eq("subjectId", subjectId.ToString());
+            var documents = await CollectionStudyMaterial.Find(filter).ToListAsync();
+            return documents.Select(MapToStudyMaterial).ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка при получении материалов по subjectId: {ex.Message}");
+            return new List<StudyMaterial>();
+        }
     }
 
     public Task<StudyMaterial> UpdateStudyMaterial(StudyMaterial material)
     {
         try
         {
-            
             return null;
         }
         catch (Exception ex)
@@ -163,20 +165,6 @@ public class MaterialMongoDB : IMaterialMongoDB
         throw new NotImplementedException();
     }
 
-    // public Task<bool> DeleteStudyMaterial(string id)
-    // {
-    //     try
-    //     {
-    //         //var documents = await _collection.Find(new BsonDocument()).ToListAsync();
-    //         //return documents.Select(MapToStudyMaterial).ToList();
-    //         return null;
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         throw new Exception($"Ошибка при получении списка материалов: {ex.Message}", ex);
-    //     }
-    // }
-
     public async Task<bool> DeleteStudyMaterial(Guid id)
     {
         try
@@ -191,7 +179,6 @@ public class MaterialMongoDB : IMaterialMongoDB
         }
     }
 
-    //TODO: сделать норм мапинг потом 
     private static StudyMaterial MapToStudyMaterial(BsonDocument document)
     {
         var name = new MaterialName(document["name"].AsString);
@@ -201,8 +188,11 @@ public class MaterialMongoDB : IMaterialMongoDB
         var size = new MaterialSize(document["size"].AsInt64);
         var materialType = Enum.Parse<MaterialType>(document["materialType"].AsString, ignoreCase: true);
         var filePath = new ResourceLocation(document["filePath"].AsString);
+        
+        var semester = document.Contains("semester") ? document["semester"].AsInt32 : 0;
+        var description = document.Contains("description") ? document["description"].AsString : string.Empty;
 
-        var material = new StudyMaterial(name, subjectId, userId, year, size, materialType, filePath);
+        var material = new StudyMaterial(name, subjectId, userId, year, semester, description, size, materialType, filePath);
         
         var idProperty = typeof(StudyMaterial).GetProperty("Id");
         var uploadedAtProperty = typeof(StudyMaterial).GetProperty("UploadedAt");

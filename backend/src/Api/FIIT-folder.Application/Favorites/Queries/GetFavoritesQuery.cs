@@ -10,11 +10,16 @@ public class GetFavoritesHandler : IRequestHandler<GetFavoritesQuery, List<Favor
 {
     private readonly IFavoriteRepository _favoriteRepository;
     private readonly IMaterialMongoDB _materialRepository;
+    private readonly IUserRepository _userRepository;
 
-    public GetFavoritesHandler(IFavoriteRepository favoriteRepository, IMaterialMongoDB materialRepository)
+    public GetFavoritesHandler(
+        IFavoriteRepository favoriteRepository, 
+        IMaterialMongoDB materialRepository,
+        IUserRepository userRepository)
     {
         _favoriteRepository = favoriteRepository;
         _materialRepository = materialRepository;
+        _userRepository = userRepository;
     }
 
     public async Task<List<FavoriteMaterialDto>> Handle(GetFavoritesQuery request, CancellationToken cancellationToken)
@@ -45,7 +50,15 @@ public class GetFavoritesHandler : IRequestHandler<GetFavoritesQuery, List<Favor
                     matDto.MaterialType = mat.MaterialType.ToString();
                     matDto.Size = mat.Size.Size;
                     matDto.Year = mat.Year.Value;
+                    matDto.Semester = mat.Semester;
+                    matDto.Description = mat.Description;
                     matDto.SubjectId = mat.SubjectId.Value;
+
+                    var user = await _userRepository.GetByIdAsync(mat.UserId.Value, cancellationToken);
+                    if (user != null)
+                    {
+                        matDto.AuthorName = user.Login.Value;
+                    }
                 }
                 else
                 {

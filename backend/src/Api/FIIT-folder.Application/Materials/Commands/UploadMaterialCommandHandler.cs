@@ -54,6 +54,8 @@ public class UploadMaterialCommandHandler : IRequestHandler<UploadMaterialComman
             new SubjectId(request.SubjectId),
             new UserId(request.UserId),
             new StudyYear(request.Year),
+            request.Semester,
+            request.Description,
             new MaterialSize(request.Size),
             materialType,
             new ResourceLocation(filePath));
@@ -67,6 +69,8 @@ public class UploadMaterialCommandHandler : IRequestHandler<UploadMaterialComman
             SubjectId = created.SubjectId.Value,
             Name = created.Name.Value,
             Year = created.Year.Value,
+            Semester = created.Semester,
+            Description = created.Description,
             MaterialType = created.MaterialType.ToString(),
             Size = created.Size.Size,
             FilePath = created.FilePath.Value,
