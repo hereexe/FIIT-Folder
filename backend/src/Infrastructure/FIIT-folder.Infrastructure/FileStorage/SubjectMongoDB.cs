@@ -12,11 +12,8 @@ public class SubjectMongoDB : ISubjectRepository
 {
     private readonly IMongoCollection<BsonDocument> _collection;
 
-    public SubjectMongoDB(IConfiguration configuration)
+    public SubjectMongoDB(string connectionString, string databaseName)
     {
-        var connectionString = configuration["MongoDbSettings:ConnectionString"];
-        var databaseName = configuration["MongoDbSettings:DatabaseName"];
-
         var client = new MongoClient(connectionString);
         var database = client.GetDatabase(databaseName);
         _collection = database.GetCollection<BsonDocument>("subjects");

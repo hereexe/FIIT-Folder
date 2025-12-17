@@ -15,7 +15,11 @@
              IConfiguration configuration)
          {
              // MongoDB
-             services.AddSingleton<ISubjectRepository, SubjectMongoDB>();
+             services.AddSingleton<ISubjectRepository>(sp =>
+                new SubjectMongoDB(
+                    Environment.GetEnvironmentVariable("MONGODB_CONNECTION_STRING")!,
+                    Environment.GetEnvironmentVariable("MONGODB_DATABASE_NAME")!
+                ));
              services.AddSingleton<IMaterialMongoDB>(sp =>
                  new MaterialMongoDB(
                      Environment.GetEnvironmentVariable("MONGODB_CONNECTION_STRING")!,
