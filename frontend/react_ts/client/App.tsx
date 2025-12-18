@@ -16,7 +16,7 @@ import Exam_type from "./pages/Content_type"
 import Fileview_page from "./pages/FileView_page"
 import AddFile_page from "./components/AddFile"
 import { Provider } from 'react-redux';
-import { store } from "../../api/store"
+import { store } from "../api/store"
 import React from 'react';
 
 const queryClient = new QueryClient();

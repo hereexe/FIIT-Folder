@@ -84,7 +84,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
             <button className="flex items-center gap-5 text-app-text hover:opacity-80 transition-opacity">
               <Heart className="w-[38px] h-[38px] stroke-[2]" />
               <span className="text-[23px] font-medium tracking-[0.23px] max-w-[220px] truncate">
-                Любимое
+                Избранное
               </span>
             </button>
 

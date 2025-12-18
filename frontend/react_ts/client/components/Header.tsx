@@ -1,18 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import SideMenu from "./SideMenu.tsx";
-import SearchMenu from "./Search.tsx";
-import useSideMenu from '../hooks/useSideMenu';
-import useSearch from '@/hooks/useSearch.tsx';
-import { useModal } from '@/hooks/useModal.tsx';
-import Modal from './Modal/Modal.tsx';
-
+import SearchMenu from "./Search/Search.tsx";
+import useSideMenu from "../hooks/useSideMenu";
+import { useModal } from "@/hooks/useModal.tsx";
+import Modal from "./Modal/Modal.tsx";
+import { useNavigate } from "react-router-dom";
 
 const Header: React.FC = () => {
   const { isSideMenuOpen, openSideMenu, closeSideMenu } = useSideMenu();
   const { isOpen, openModal, closeModal } = useModal();
-    return(
-      <>
-        <header className="w-full h-[81px] bg-app-purple flex items-center justify-between px-6 md:px-[25px] flex-shrink-0">
+  const navigate = useNavigate();
+  
+  const handleClick = () => {
+      navigate("/main_page");
+
+    };
+  return (
+    <>
+      <header className="w-full h-[81px] bg-app-purple flex items-center justify-between px-6 md:px-[25px] flex-shrink-0">
         {/* User Icon */}
 
         <button
@@ -40,9 +45,11 @@ const Header: React.FC = () => {
         </button>
 
         {/* Title */}
-        <h1 className="text-app-text text-2xl md:text-[45px] font-semibold tracking-[0.9px] leading-normal">
-          FIIT Folder
-        </h1>
+        <button onClick={() => handleClick()}>
+          <h1 className="text-app-text text-2xl md:text-[45px] font-semibold tracking-[0.9px] leading-normal">
+            FIIT Folder
+          </h1>
+        </button>
 
         {/* Search Icon */}
         <button
@@ -73,11 +80,12 @@ const Header: React.FC = () => {
         </button>
       </header>
       <SideMenu isOpen={isSideMenuOpen} onClose={closeSideMenu} />
-      <Modal isOpen={isOpen}
-        onClose={closeModal}> {SearchMenu()}</Modal>
-      </>
-    )
-
-}
+      <Modal isOpen={isOpen} onClose={closeModal}>
+        {" "}
+        {SearchMenu()}
+      </Modal>
+    </>
+  );
+};
 
 export default Header;

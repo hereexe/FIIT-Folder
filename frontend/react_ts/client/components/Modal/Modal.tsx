@@ -45,8 +45,9 @@ const Modal: React.FC<ModalProps> = ({
         aria-modal="true"
         aria-labelledby={title ? "modal-title" : undefined}
       >
+        <div className= "">
           {children}
-
+        </div>
       </div>
     </div>,
     document.body
