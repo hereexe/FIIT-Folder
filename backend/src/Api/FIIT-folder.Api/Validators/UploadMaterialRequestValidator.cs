@@ -1,6 +1,7 @@
 using FIIT_folder.Api.Models;
 using FIIT_folder.Domain.Entities;
 using FluentValidation;
+using FIIT_folder.Domain.Enums;
 
 namespace FIIT_folder.Api.Validators;
 

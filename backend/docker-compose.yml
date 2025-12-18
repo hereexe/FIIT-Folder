@@ -1,0 +1,37 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:8080"
+    environment:
+      # Pass credentials in the connection string
+      - MONGODB_CONNECTION_STRING=mongodb://admin:password@mongo:27017
+      - MONGODB_DATABASE_NAME=fiit_folder_db
+    env_file:
+      - src/Api/FIIT-folder.Api/.env
+    depends_on:
+      - mongo
+    networks:
+      - fiit-network
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    environment:
+      # Explicitly set root credentials
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - fiit-network
+
+networks:
+  fiit-network:
+    driver: bridge
+
+volumes:
+  mongo_data:

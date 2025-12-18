@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { configureStore } from '@reduxjs/toolkit';
 import { useNavigate } from "react-router-dom";
 import {
   ChevronUp,
   ChevronDown,
   
 } from "lucide-react";
+
 
 export interface ExamTypeProps {
   examType: string;

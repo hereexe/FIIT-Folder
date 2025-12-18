@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using FIIT_folder.Domain.Entities;
 using System.IO;
 using FIIT_folder.Domain.Value_Object;
+using FIIT_folder.Domain.Enums;
 
 namespace FIIT_folder.Infrastructure.Test;
 
@@ -39,7 +40,9 @@ public class TesterMongoDB
                 new MaterialName("Матан"), 
                 new SubjectId(Guid.NewGuid()), 
                 new UserId(Guid.NewGuid()), 
-                new StudyYear(validYear), 
+                new StudyYear(validYear),
+                1, // Semester
+                "Тестовое описание", // Description
                 new MaterialSize(2000), 
                 MaterialType.Colloquium, 
                 new ResourceLocation("/путь/к/файлу.pdf")

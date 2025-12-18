@@ -16,8 +16,10 @@
   .modal-container {
     background: white;
     border-radius: 8px;
-    max-width: 100%;
-    max-height: 100%;
+    width: auto; /* Автоматическая ширина */
+    min-width: 60%;
+
+    max-height: 120vh; /* Ограничиваем максимальную высоту */
     overflow: auto;
     animation: slideIn 0.3s ease-out;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
