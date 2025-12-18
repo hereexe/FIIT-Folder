@@ -11,48 +11,16 @@ namespace FIIT_folder.Infrastructure.FileStorage;
 public class MaterialMongoDB : IMaterialMongoDB
 {
     private readonly IMongoCollection<BsonDocument> CollectionStudyMaterial;
+    private readonly IMongoCollection<BsonDocument> CollectionSubject;
     
     public MaterialMongoDB(string connectionString, string databaseName)
     {
         var client = new MongoClient(connectionString);
         var database = client.GetDatabase(databaseName);
         CollectionStudyMaterial = database.GetCollection<BsonDocument>("StudyMaterials");
+        CollectionSubject = database.GetCollection<BsonDocument>("Subjects");
         Console.WriteLine($"MongoDB подключен: {databaseName}");
-        
-        //CreateIndexes();
     }
-    
-    //public async Task<StudyMaterial> CreateMaterial(StudyMaterial material)
-    // private void CreateIndexes()
-    // {
-    //     try
-    //     {
-    //         var idIndex = Builders<StudyMaterial>.IndexKeys.Ascending(m => m.Id);
-    //         StudyMaterials.Indexes.CreateOne(new CreateIndexModel<StudyMaterial>
-    //             (idIndex, new CreateIndexOptions { Unique = true })
-    //         );
-    //         Console.WriteLine("Создан уникальный индекс по Id");
-    //         
-    //         var subjectIdIndex = Builders<StudyMaterial>.IndexKeys.Ascending(m => m.SubjectId);
-    //         StudyMaterials.Indexes.CreateOne(
-    //             new CreateIndexModel<StudyMaterial>(subjectIdIndex)
-    //         );
-    //         Console.WriteLine("Создан индекс по SubjectId");
-    //         
-    //         var userIdIndex = Builders<StudyMaterial>.IndexKeys.Ascending(m => m.UserId);
-    //         StudyMaterials.Indexes.CreateOne(
-    //             new CreateIndexModel<StudyMaterial>(userIdIndex)
-    //         );
-    //         Console.WriteLine("Создан индекс по UserId");
-    //     }
-    //     
-    //     catch (Exception ex)
-    //     {
-    //         Console.WriteLine($"Ошибка создания индексов");
-    //         Console.WriteLine($"Тип ошибки: {ex.GetType().Name}");
-    //         
-    //     }
-    // }
 
     public async Task<StudyMaterial> CreateStudyMaterial(StudyMaterial material)
     {
@@ -87,6 +55,35 @@ public class MaterialMongoDB : IMaterialMongoDB
             throw;
         }
     }
+    
+    public async Task<Subject> CreateSubject(Subject subject)
+    {
+        try
+        {
+            if (subject == null)
+                throw new ArgumentNullException(nameof(subject), "Subject не должен быть null");
+            
+            var bsonDocument = new BsonDocument
+            {
+                { "subjectId", subject.Id.Value.ToString() },
+                { "name", subject.Name.Value },
+                { "semester", subject.Semester.Value },
+                { "availableMaterialTypes", subject.AvailableMaterialTypes.ToString() },
+                { "materialTypes", "Здесь хранитса нормальный лист" },
+            };
+            
+            await CollectionSubject.InsertOneAsync(bsonDocument);
+            Console.WriteLine($"Subject сохранен в MongoDB!");
+            return subject;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            Console.WriteLine(ex.GetType().Name);
+            throw;
+        }
+    }
+    
 
     public async Task<StudyMaterial?> GetByIdStudyMaterial(Guid id)
     {
