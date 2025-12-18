@@ -25,7 +25,7 @@ RUN pnpm run build
 FROM nginx:alpine
 
 # Копируем собранный React из предыдущего этапа в папку Nginx
-COPY --from=build /usr/src/app/dist /usr/share/nginx/html
+COPY --from=build /usr/src/app/dist/spa /usr/share/nginx/html
 
 # Настройка для SPA (чтобы при обновлении страницы не было 404)
 RUN echo 'server { listen 80; root /usr/share/nginx/html; index index.html; location / { try_files $uri $uri/ /index.html; } }' > /etc/nginx/conf.d/default.conf
