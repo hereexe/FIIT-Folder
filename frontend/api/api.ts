@@ -1,14 +1,19 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
   AuthResponse,
-  DownloadLinkResponse,
   LoginRequest,
-  MaterialDto,
   RegisterRequest,
   RegisterResponse,
+  SubjectResponse,
+  SubjectWithMaterialsResponse,
+  MaterialDto,
+  UploadMaterialRequest,
+  GetMaterialsParams,
+  RatingResponse,
+  RateRequest,
+  CreateSubjectRequest,
   SubjectDto,
-  UploadResponse,
-  SubjectMaterialsResponse,
+  AddFavoriteRequest,
 } from "./types";
 
 const BASE_URL = "http://localhost:5179/api/";
@@ -26,7 +31,15 @@ export const appApi = createApi({
     },
   }),
 
-  tagTypes: ["Materials", "Subjects", "SubjectMaterials"],
+  tagTypes: [
+    "Materials",
+    "MaterialDetail",
+    "Subjects",
+    "SubjectMaterials",
+    "Favorites",
+    "Rating",
+  ],
+
   endpoints: (builder) => ({
     login: builder.mutation<AuthResponse, LoginRequest>({
       query: (data) => ({
@@ -34,7 +47,7 @@ export const appApi = createApi({
         method: "POST",
         body: data,
       }),
-      async QueryStarted(arg, { queryFulfilled }) {
+      async onQueryStarted(arg, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
           localStorage.setItem("token", data.token);
@@ -59,10 +72,16 @@ export const appApi = createApi({
       },
     }),
 
-    getMaterials: builder.query<MaterialDto[], string | undefined>({
-      query: (subjectId) => ({
+    getMaterials: builder.query<MaterialDto[], GetMaterialsParams>({
+      query: (params) => ({
         url: "Materials",
-        params: subjectId ? { subjectId } : undefined,
+        params: {
+          SubjectId: params.subjectId,
+          MaterialType: params.materialType,
+          Semester: params.semester,
+          Year: params.year,
+          Search: params.searchQuery,
+        },
       }),
       providesTags: (result) =>
         result
@@ -73,14 +92,34 @@ export const appApi = createApi({
           : [{ type: "Materials", id: "LIST" }],
     }),
 
-    uploadMaterial: builder.mutation<
-      UploadResponse,
-      { file: File; subject: string }
-    >({
-      query: ({ file, subject }) => {
+    getMaterialById: builder.query<MaterialDto, string>({
+      query: (id) => `Materials/${id}`,
+      providesTags: (result, error, id) => [{ type: "MaterialDetail", id }],
+      transformResponse: (response: MaterialDto) => {
+        return {
+          ...response,
+          downloadUrl: `${BASE_URL}Materials/${response.id}/download`,
+        };
+      },
+    }),
+
+    uploadMaterial: builder.mutation<MaterialDto, UploadMaterialRequest>({
+      query: ({
+        file,
+        subjectId,
+        year,
+        materialType,
+        description,
+        semester,
+      }) => {
         const formData = new FormData();
-        formData.append("file", file);
-        formData.append("subject", subject);
+        formData.append("File", file);
+        formData.append("SubjectId", subjectId);
+        formData.append("Year", year.toString());
+        formData.append("MaterialType", materialType);
+
+        if (description) formData.append("Description", description);
+        if (semester) formData.append("Semester", semester.toString());
 
         return {
           url: "Materials",
@@ -88,31 +127,95 @@ export const appApi = createApi({
           body: formData,
         };
       },
-      invalidatesTags: [{ type: "Materials", id: "LIST" }],
-    }),
-
-    getDownloadLink: builder.query<string, string>({
-      query: (id) => `Materials/${id}/download-link`,
-      transformResponse: (response: DownloadLinkResponse) =>
-        response.downloadUrl,
-    }),
-
-    getSubjectWithMaterials: builder.query<SubjectMaterialsResponse, string>({
-      query: (subjectId) => `subjects/${subjectId}/materials`,
-      providesTags: (result, error, subjectId) => [
-        { type: "SubjectMaterials", id: subjectId },
+      invalidatesTags: [
+        { type: "Materials", id: "LIST" },
+        { type: "SubjectMaterials" },
       ],
+    }),
+
+    deleteMaterial: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `Materials/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Materials", "SubjectMaterials", "Favorites"],
+    }),
+
+    rateMaterial: builder.mutation<
+      RatingResponse,
+      { id: string; rating: RateRequest }
+    >({
+      query: ({ id, rating }) => ({
+        url: `materials/${id}/rate`,
+        method: "POST",
+        body: rating,
+      }),
+      invalidatesTags: (result, error, { id }) => [{ type: "Rating", id }],
+    }),
+
+    getMaterialRating: builder.query<RatingResponse, string>({
+      query: (id) => `materials/${id}/rating`,
+      providesTags: (result, error, id) => [{ type: "Rating", id }],
+    }),
+
+    addFavoriteMaterial: builder.mutation<string, AddFavoriteRequest>({
+      query: (body) => ({
+        url: "Favorites/materials",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: (result, error, { materialId }) => [
+        { type: "Favorites" },
+        { type: "Materials", id: materialId },
+        { type: "MaterialDetail", id: materialId },
+      ],
+    }),
+
+    removeFavoriteMaterial: builder.mutation<void, string>({
+      query: (materialId) => ({
+        url: `Favorites/${materialId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (result, error, materialId) => [
+        { type: "Favorites" },
+        { type: "Materials", id: materialId },
+        { type: "MaterialDetail", id: materialId },
+      ],
+    }),
+
+    getFavorites: builder.query<MaterialDto[], void>({
+      query: () => "Favorites",
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ id }) => ({ type: "Favorites" as const, id })),
+              { type: "Favorites", id: "LIST" },
+            ]
+          : [{ type: "Favorites", id: "LIST" }],
     }),
 
     getSubjects: builder.query<SubjectDto[], void>({
       query: () => "Subjects",
       providesTags: ["Subjects"],
-      transformResponse: (response: string[]) => {
-        return response.map((name, index) => ({
-          id: name,
-          name: name,
-        }));
-      },
+    }),
+
+    getSubjectWithMaterials: builder.query<
+      SubjectWithMaterialsResponse,
+      string
+    >({
+      query: (subjectId) => `Subjects/${subjectId}/materials`,
+      providesTags: (result, error, subjectId) => [
+        { type: "SubjectMaterials", id: subjectId },
+      ],
+    }),
+
+    createSubject: builder.mutation<SubjectResponse, CreateSubjectRequest>({
+      query: (data) => ({
+        url: "Subjects",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Subjects"],
     }),
   }),
 });
@@ -122,8 +225,15 @@ export const {
   useRegisterMutation,
   useLogoutMutation,
   useGetMaterialsQuery,
+  useGetMaterialByIdQuery,
   useUploadMaterialMutation,
-  useGetDownloadLinkQuery,
+  useDeleteMaterialMutation,
+  useRateMaterialMutation,
+  useGetMaterialRatingQuery,
   useGetSubjectsQuery,
   useGetSubjectWithMaterialsQuery,
+  useCreateSubjectMutation,
+  useAddFavoriteMaterialMutation,
+  useRemoveFavoriteMaterialMutation,
+  useGetFavoritesQuery,
 } = appApi;
