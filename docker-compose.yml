@@ -1,5 +1,7 @@
+version: '3.8'
+
 services:
-  # Backend API
+  # 1. Backend API (C#)
   api:
     build:
       context: ./backend
@@ -7,25 +9,20 @@ services:
     container_name: fiit_api
     restart: always
     ports:
-      - "8080:8080"
+      - "8080:8080"  # API доступно по адресу http://IP:8080
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+:8080
+      # Внутри сети Docker мы обращаемся к базе по имени сервиса 'mongo'
       MONGODB_CONNECTION_STRING: "mongodb://root:password@mongo:27017/?authSource=admin"
       MONGODB_DATABASE_NAME: "FIITFolder"
     depends_on:
       mongo:
         condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
-      interval: 30s
-      timeout: 3s
-      retries: 3
-      start_period: 40s
     networks:
       - fiit-network
 
-  # Frontend React
+  # 2. Frontend (React + Nginx)
   frontend:
     build:
       context: ./frontend/react_ts
@@ -33,21 +30,18 @@ services:
     container_name: fiit_frontend
     restart: always
     ports:
-      - "3001:3000"
+      # Внешний порт 80 (стандарт WEB) -> Внутренний порт 80 (Nginx)
+      - "80:80"
     environment:
-      REACT_APP_API_URL: http://api:8080
+      # 🛑 ВАЖНО: Замени YOUR_SERVER_IP на реальный IP, который выдаст Яндекс
+      # Пример: http://158.160.XX.XX:8080
+      REACT_APP_API_URL: "http://158.160.99.237:8080"
     depends_on:
       - api
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000"]
-      interval: 30s
-      timeout: 3s
-      retries: 3
-      start_period: 10s
     networks:
       - fiit-network
 
-  # MongoDB Database
+  # 3. MongoDB Database
   mongo:
     image: mongo:6.0
     container_name: fiit_mongo
