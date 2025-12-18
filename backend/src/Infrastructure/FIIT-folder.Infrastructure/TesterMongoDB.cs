@@ -62,6 +62,37 @@ public class TesterMongoDB
         }
     }
     
+    public static async Task CreateSubject()
+    {
+        try
+        {
+            Console.WriteLine("Тест на сохранение в MongoBD");
+            
+            var repository = GetRepository();
+            
+            Console.WriteLine("Создаю новый Subject");
+            
+            var subject = new Subject(
+                new SubjectId(Guid.NewGuid()),
+                new SubjectName("Матанализ"), 
+                new SubjectSemester(3), 
+                new List<MaterialType>()
+            );
+            
+            Console.WriteLine("Пытаюсь сохранить новый Subject");
+            var createdSubject = await repository.CreateSubject(subject);
+            
+            if (createdSubject != null)
+                Console.WriteLine($"Subject успешно создан в MongoDB!");
+            else
+                Console.WriteLine("Error Subject не был создан");
+        }
+        catch (ArgumentNullException ex)
+        {
+            Console.WriteLine("Ошибка создания");
+        }
+    }
+    
     public static async Task DeleteStudyMaterial()
     {
         try
