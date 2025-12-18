@@ -4,6 +4,13 @@ using FIIT_folder.Application;
 using FIIT_folder.Infrastructure;
 using DotNetEnv;
 
+//потом удалить
+using FIIT_folder.Infrastructure.FileStorage;
+using FIIT_folder.Infrastructure;
+using FIIT_folder.Infrastructure.Test;
+
+//до сюда
+
 Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
@@ -66,3 +73,32 @@ app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = Dat
 app.MapControllers();
 
 app.Run();
+
+//потом удалить
+var name = "Экзамен.txt";
+var folder = "Матан";
+var repository = new FileStorageRepository(
+    "YCAJEJjZUAxs4F0iCpajJG4_L",
+    "YCNbbq1t3RGwiRuNrNAnCsODmPVgWFM1s6jT201L",  
+    "my-fiit",
+    "ru-central1"
+);
+var testContent = "бебебе";
+var type = "text/plain";
+ 
+//await StorageTester.TestSaveInRepository(repository, testContent, type, name, folder); //Запускать через консоль
+
+//await StorageTester.TestDeleteFile(repository, name, folder);
+//await StorageTester.TestGetFile(repository, name, folder);
+//Console.WriteLine("================");
+//это мое
+
+
+await TesterMongoDB.CreateMaterial();
+//await TesterMongoDB.DeleteStudyMaterial();
+// await TesterMongoDB.GetByIdMaterial(new Guid(
+//     "5cf635fe-7f4e-45a1-89e6-71e30c702dab"));
+//await TesterMongoDB.GetByNameMaterial("Матан");
+
+
+//до сюда
