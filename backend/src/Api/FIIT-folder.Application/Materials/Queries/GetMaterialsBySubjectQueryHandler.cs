@@ -33,6 +33,22 @@ public class GetMaterialsBySubjectQueryHandler : IRequestHandler<GetMaterialsByS
             materials = materials.Where(m => m.Semester == request.Semester.Value).ToList();
         }
 
+        // Filter by year if provided
+        if (request.Year.HasValue)
+        {
+            materials = materials.Where(m => m.Year.Value == request.Year.Value).ToList();
+        }
+
+        // Filter by text (Name or Description) if provided
+        if (!string.IsNullOrWhiteSpace(request.SearchText))
+        {
+            var searchText = request.SearchText.ToLower();
+            materials = materials.Where(m => 
+                (m.Name.Value?.ToLower().Contains(searchText) ?? false) || 
+                (m.Description?.ToLower().Contains(searchText) ?? false)
+            ).ToList();
+        }
+
         // Get favorites for current user to check IsFavorite status in bulk logic if possible
         var favoriteMaterialIds = new HashSet<Guid>();
         if (request.UserId.HasValue)

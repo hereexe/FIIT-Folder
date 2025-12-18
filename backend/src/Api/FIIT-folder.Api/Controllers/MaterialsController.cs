@@ -24,7 +24,12 @@ public class MaterialsController : ControllerBase
     public async Task<IActionResult> GetBySubject([FromQuery] GetMaterialsRequest request)
     {
         var userId = GetUserIdOrNull();
-        var materials = await _mediator.Send(new GetMaterialsBySubjectQuery(request.SubjectId!.Value, userId, request.Semester));
+        var materials = await _mediator.Send(new GetMaterialsBySubjectQuery(
+            request.SubjectId!.Value, 
+            userId, 
+            request.Semester, 
+            request.Year, 
+            request.SearchText));
 
         var result = materials.Select(m => new MaterialResponse
         {
