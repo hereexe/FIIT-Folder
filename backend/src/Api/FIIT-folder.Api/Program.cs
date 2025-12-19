@@ -3,6 +3,9 @@ using FIIT_folder.Api.Middlware;
 using FIIT_folder.Application;
 using FIIT_folder.Infrastructure;
 using DotNetEnv;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 Env.Load();
 
@@ -21,6 +24,26 @@ builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 // Регистрация Application и Infrastructure слоёв
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+
+// JWT Authentication
+var jwtSecretKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY") ?? "super-secret-jwt-key-for-fiit-folder-app-2024";
+var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? "fiit-folder-api";
+var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? "fiit-folder-client";
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtIssuer,
+            ValidAudience = jwtAudience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey))
+        };
+    });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -83,6 +106,7 @@ app.UseSwaggerUI();
 
 app.UseCors("AllowAll");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }))
