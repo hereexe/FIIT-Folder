@@ -21,28 +21,14 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, string>
 
     public async Task<string> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
-        Console.WriteLine($"[LOGIN] Attempting login for: '{request.Username}'");
-        
         var user = await _userRepository.GetByLoginAsync(request.Username, cancellationToken);
 
-        if (user == null)
-        {
-            Console.WriteLine($"[LOGIN] User NOT FOUND for login: '{request.Username}'");
-            throw new Exception("Неверный логин или пароль");
-        }
-        
-        Console.WriteLine($"[LOGIN] User found: Id={user.Id.Value}, Login='{user.Login.Value}'");
-        
-        var passwordValid = _passwordHasher.Verify(request.Password, user.PasswordHash.Value);
-        Console.WriteLine($"[LOGIN] Password verification result: {passwordValid}");
-        
-        if (!passwordValid)
+        if (user == null || !_passwordHasher.Verify(request.Password, user.PasswordHash.Value))
         {
             throw new Exception("Неверный логин или пароль");
         }
 
         var token = _jwtProvider.GenerateToken(user);
-        Console.WriteLine($"[LOGIN] Token generated successfully");
         return token;
     }
 }

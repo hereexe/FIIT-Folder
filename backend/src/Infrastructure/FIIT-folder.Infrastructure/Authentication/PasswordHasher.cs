@@ -15,10 +15,6 @@ public class PasswordHasher : IPasswordHasher
 
     public bool Verify(string password, string hashedPassword)
     {
-        var computedHash = Hash(password);
-        Console.WriteLine($"[PasswordHasher] Computed hash: '{computedHash}'");
-        Console.WriteLine($"[PasswordHasher] Stored hash:   '{hashedPassword}'");
-        Console.WriteLine($"[PasswordHasher] Match: {computedHash == hashedPassword}");
-        return computedHash == hashedPassword;
+        return Hash(password) == hashedPassword;
     }
 }
