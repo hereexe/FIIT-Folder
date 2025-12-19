@@ -23,7 +23,7 @@ services:
       # Yandex Cloud S3
       YANDEX_ACCESS_KEY: "${YANDEX_ACCESS_KEY:-}"
       YANDEX_SECRET_KEY: "${YANDEX_SECRET_KEY:-}"
-      YANDEX_BUCKET_NAME: "${YANDEX_BUCKET_NAME:-my-fiit}"
+      YANDEX_BUCKET_NAME: "${YANDEX_BUCKET_NAME:-fiit-folder}"
       YANDEX_REGION: "${YANDEX_REGION:-ru-central1}"
     depends_on:
       mongo:
