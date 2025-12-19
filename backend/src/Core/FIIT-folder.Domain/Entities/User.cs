@@ -25,5 +25,10 @@ public class User
         PasswordHash = newPasswordHash;
     }
 
-    private User() {}
+    private User() 
+    {
+        Id = null!;
+        Login = null!;
+        PasswordHash = null!;
+    }
 }

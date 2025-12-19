@@ -18,10 +18,6 @@
              IConfiguration configuration)
          {
              // MongoDB GUID fix
-             #pragma warning disable CS0618 // Type or member is obsolete
-             BsonDefaults.GuidRepresentation = GuidRepresentation.Standard;
-             #pragma warning restore CS0618
-             
              try 
              {
                  BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
