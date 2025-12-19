@@ -18,7 +18,8 @@ public class UserMongoDB : IUserRepository
     public async Task<User?> GetByLoginAsync(string login, CancellationToken cancellationToken =
         default)
     {
-        var filter = Builders<User>.Filter.Eq("Login.Value", login);
+        var normalizedLogin = login.Trim().ToLowerInvariant();
+        var filter = Builders<User>.Filter.Eq("Login.Value", normalizedLogin);
         return await _usersCollection.Find(filter).FirstOrDefaultAsync(cancellationToken);
     }
 
