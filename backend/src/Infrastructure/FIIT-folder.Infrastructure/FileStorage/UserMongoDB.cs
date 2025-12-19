@@ -19,7 +19,7 @@ public class UserMongoDB : IUserRepository
         default)
     {
         var normalizedLogin = login.Trim().ToLowerInvariant();
-        var filter = Builders<User>.Filter.Eq("Login.Value", normalizedLogin);
+        var filter = Builders<User>.Filter.Eq("login.value", normalizedLogin);
         return await _usersCollection.Find(filter).FirstOrDefaultAsync(cancellationToken);
     }
 
@@ -30,7 +30,7 @@ public class UserMongoDB : IUserRepository
 
     public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var filter = Builders<User>.Filter.Eq("Id.Value", id);
+        var filter = Builders<User>.Filter.Eq("id.value", id);
         return await _usersCollection.Find(filter).FirstOrDefaultAsync(cancellationToken);
     }
 }
