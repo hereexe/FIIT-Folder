@@ -2,7 +2,13 @@ namespace FIIT_folder.Domain.Value_Object;
 
 public record UserId
 {
-    public Guid Value { get; }
+    public Guid Value { get; private set; }
+
+    // Private parameterless constructor for MongoDB deserialization
+    private UserId()
+    {
+        Value = Guid.Empty;
+    }
 
     public UserId(Guid value)
     {

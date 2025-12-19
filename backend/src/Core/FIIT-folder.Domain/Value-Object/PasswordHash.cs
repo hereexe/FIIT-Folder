@@ -2,7 +2,13 @@ namespace FIIT_folder.Domain.Value_Object;
 
 public record PasswordHash
 {
-    public string Value { get; }
+    public string Value { get; private set; }
+
+    // Private parameterless constructor for MongoDB deserialization
+    private PasswordHash() 
+    {
+        Value = string.Empty;
+    }
 
     public PasswordHash(string hash)
     {
