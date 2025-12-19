@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "80:8080" # Maps port 80 on server to 8080 in container
+      - "5000:8080" # Changed from 80 to 5000 because port 80 is already in use on the server.
     env_file:
       - production.env
     depends_on:
@@ -15,8 +15,8 @@ services:
 
   mongo:
     image: mongo:latest
-    ports:
-      - "27017:27017" # Optional: Expose 27017 if you want to connect from outside (use firewall!)
+    # ports:
+    #   - "27017:27017" # Removed to avoid conflict with host and for security. API still connects internally.
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=mongodbfolder # Make sure this matches the connection string in production.env
