@@ -11,10 +11,11 @@ public class FileStorageRepository : IFileStorageRepository
     private readonly string BucketName; //имя создаваемого бакета(нового контейнера)
     private readonly string ServiceUrl; //ссылка соответственно
     
-    public FileStorageRepository(string accessKey, string secretKey, string bucketName, string region = "ru-central1")
+    public FileStorageRepository(string accessKey, string secretKey, string bucketName)
     {
         BucketName = bucketName;
-        ServiceUrl = "https://storage.yandexcloud.net";
+        ServiceUrl = "https://storage.yandexcloud.net"; //потом тоже надо получать из пространства
+        var region = Environment.GetEnvironmentVariable("YANDEX_REGION");
         
         var config = new AmazonS3Config
         {
@@ -24,7 +25,6 @@ public class FileStorageRepository : IFileStorageRepository
         };
 
         Client = new AmazonS3Client(accessKey, secretKey, config);
-        
         InitializeBucketAsync().Wait();
     }
     
@@ -73,6 +73,7 @@ public class FileStorageRepository : IFileStorageRepository
             
             return pathInCloud; //возвращаем путь к файлику для MobgoBD
         }
+        
         catch (Exception ex)
         {
             throw new InvalidOperationException($"Ошибка загрузки файла '{name}' в облако плаки плаки");
