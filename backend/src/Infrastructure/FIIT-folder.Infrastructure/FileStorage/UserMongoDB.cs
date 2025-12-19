@@ -19,8 +19,13 @@ public class UserMongoDB : IUserRepository
         default)
     {
         var normalizedLogin = login.Trim().ToLowerInvariant();
+        Console.WriteLine($"[UserMongoDB] Searching for login: '{normalizedLogin}'");
+        
         var filter = Builders<User>.Filter.Eq(u => u.Login.Value, normalizedLogin);
-        return await _usersCollection.Find(filter).FirstOrDefaultAsync(cancellationToken);
+        var user = await _usersCollection.Find(filter).FirstOrDefaultAsync(cancellationToken);
+        
+        Console.WriteLine($"[UserMongoDB] Query result: {(user != null ? $"Found user '{user.Login.Value}'" : "User NOT found")}");
+        return user;
     }
 
     public async Task AddAsync(User user, CancellationToken cancellationToken = default)
