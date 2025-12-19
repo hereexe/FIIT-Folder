@@ -4,7 +4,7 @@ public record PasswordHash
 {
     public string Value { get; }
 
-    private PasswordHash(string hash)
+    public PasswordHash(string hash)
     {
         Value = hash;
     }
