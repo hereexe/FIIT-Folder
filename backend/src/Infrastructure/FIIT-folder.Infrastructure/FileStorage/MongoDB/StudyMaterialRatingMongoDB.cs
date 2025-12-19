@@ -7,11 +7,11 @@ using MongoDB.Driver;
 
 namespace FIIT_folder.Infrastructure.FileStorage;
 
-public class MaterialRatingMongoDB : IMaterialRatingRepository
+public class StudyMaterialRatingMongoDB : IMaterialRatingRepository
 {
     private readonly IMongoCollection<BsonDocument> _collection;
 
-    public MaterialRatingMongoDB(string connectionString, string databaseName)
+    public StudyMaterialRatingMongoDB(string connectionString, string databaseName)
     {
         var client = new MongoClient(connectionString);
         var database = client.GetDatabase(databaseName);

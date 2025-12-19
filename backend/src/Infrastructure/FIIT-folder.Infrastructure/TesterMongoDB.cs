@@ -12,12 +12,12 @@ public class TesterMongoDB
 {
     //private readonly IMaterialMongoDB Repository;
     
-    public static MaterialMongoDB GetRepository(string connectionString = null, string databaseName = null)
+    public static StudyMaterialMongoDB GetRepository(string connectionString = null, string databaseName = null)
     {
         connectionString ??= "mongodb://localhost:27017";
         databaseName ??= "newbd";
         
-        return new MaterialMongoDB(
+        return new StudyMaterialMongoDB(
             connectionString,
             databaseName
         );

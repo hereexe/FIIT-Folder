@@ -21,7 +21,7 @@
                     Environment.GetEnvironmentVariable("MONGODB_DATABASE_NAME")!
                 ));
              services.AddSingleton<IMaterialMongoDB>(sp =>
-                 new MaterialMongoDB(
+                 new StudyMaterialMongoDB(
                      Environment.GetEnvironmentVariable("MONGODB_CONNECTION_STRING")!,
                      Environment.GetEnvironmentVariable("MONGODB_DATABASE_NAME")!
                  ));
@@ -35,7 +35,7 @@
 
              // Material Rating Repository
              services.AddSingleton<IMaterialRatingRepository>(sp =>
-                 new MaterialRatingMongoDB(
+                 new StudyMaterialRatingMongoDB(
                      Environment.GetEnvironmentVariable("MONGODB_CONNECTION_STRING")!,
                      Environment.GetEnvironmentVariable("MONGODB_DATABASE_NAME")!
                  ));
