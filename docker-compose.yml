@@ -18,6 +18,8 @@ services:
       MONGODB_DATABASE_NAME: "${MONGO_DB_NAME:-FIITFolder}"
       # JWT Authentication
       JWT_SECRET_KEY: "${JWT_SECRET_KEY:-super-secret-jwt-key-for-fiit-folder-app-2024}"
+      JWT_ISSUER: "${JWT_ISSUER:-fiit-folder-api}"
+      JWT_AUDIENCE: "${JWT_AUDIENCE:-fiit-folder-client}"
       # Yandex Cloud S3
       YANDEX_ACCESS_KEY: "${YANDEX_ACCESS_KEY:-}"
       YANDEX_SECRET_KEY: "${YANDEX_SECRET_KEY:-}"
