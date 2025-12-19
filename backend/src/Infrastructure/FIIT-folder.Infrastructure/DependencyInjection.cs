@@ -5,6 +5,9 @@
      using FIIT_folder.Infrastructure.Persistence;
      using Microsoft.Extensions.Configuration;
      using Microsoft.Extensions.DependencyInjection;
+     using MongoDB.Bson;
+     using MongoDB.Bson.Serialization;
+     using MongoDB.Bson.Serialization.Serializers;
 
      namespace FIIT_folder.Infrastructure;
 
@@ -14,6 +17,20 @@
              this IServiceCollection services,
              IConfiguration configuration)
          {
+             // MongoDB GUID fix
+             #pragma warning disable CS0618 // Type or member is obsolete
+             BsonDefaults.GuidRepresentation = GuidRepresentation.Standard;
+             #pragma warning restore CS0618
+             
+             try 
+             {
+                 BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
+             }
+             catch (BsonSerializationException) 
+             {
+                 // Serializer might already be registered
+             }
+
              // MongoDB
              services.AddSingleton<ISubjectRepository>(sp =>
                 new SubjectMongoDB(
