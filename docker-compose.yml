@@ -9,13 +9,13 @@ services:
     container_name: fiit_api
     restart: always
     ports:
-      - "8080:8080"  # API доступно по адресу http://IP:8080
+      - "${API_EXTERNAL_PORT:-8080}:8080"
     environment:
-      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Production}
       ASPNETCORE_URLS: http://+:8080
       # Внутри сети Docker мы обращаемся к базе по имени сервиса 'mongo'
-      MONGODB_CONNECTION_STRING: "mongodb://root:password@mongo:27017/?authSource=admin"
-      MONGODB_DATABASE_NAME: "FIITFolder"
+      MONGODB_CONNECTION_STRING: "mongodb://${MONGO_ROOT_USER:-root}:${MONGO_ROOT_PASSWORD:-password}@mongo:27017/?authSource=admin"
+      MONGODB_DATABASE_NAME: "${MONGO_DB_NAME:-FIITFolder}"
     depends_on:
       mongo:
         condition: service_healthy
@@ -31,11 +31,11 @@ services:
     restart: always
     ports:
       # Внешний порт 80 (стандарт WEB) -> Внутренний порт 80 (Nginx)
-      - "80:80"
+      - "${FRONTEND_EXTERNAL_PORT:-80}:80"
     environment:
       # 🛑 ВАЖНО: Замени YOUR_SERVER_IP на реальный IP, который выдаст Яндекс
       # Пример: http://158.160.XX.XX:8080
-      REACT_APP_API_URL: "http://158.160.99.237:8080"
+      REACT_APP_API_URL: "http://${SERVER_IP:-localhost}:${API_EXTERNAL_PORT:-8080}"
     depends_on:
       - api
     networks:
@@ -46,15 +46,17 @@ services:
     image: mongo:6.0
     container_name: fiit_mongo
     restart: always
-    ports:
-      - "27017:27017"
+    # Порт БД обычно не нужно открывать наружу на сервере для безопасности.
+    # Если вам нужно подключаться к БД извне (например, через Compass), раскомментируйте нижнюю строку:
+    # ports:
+    #   - "${MONGO_PORT:-27017}:27017"
     volumes:
       - mongo-data:/data/db
       - mongo-config:/data/configdb
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password
-      MONGO_INITDB_DATABASE: FIITFolder
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:-password}
+      MONGO_INITDB_DATABASE: ${MONGO_DB_NAME:-FIITFolder}
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
       interval: 10s
