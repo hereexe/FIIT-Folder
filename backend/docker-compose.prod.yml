@@ -1,0 +1,34 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:8080" # Maps port 80 on server to 8080 in container
+    env_file:
+      - production.env
+    depends_on:
+      - mongo
+    networks:
+      - fiit-network
+    restart: always
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017" # Optional: Expose 27017 if you want to connect from outside (use firewall!)
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=mongodbfolder # Make sure this matches the connection string in production.env
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - fiit-network
+    restart: always
+
+networks:
+  fiit-network:
+    driver: bridge
+
+volumes:
+  mongo_data:
