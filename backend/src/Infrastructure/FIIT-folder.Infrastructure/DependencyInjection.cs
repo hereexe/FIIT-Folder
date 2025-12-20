@@ -53,6 +53,13 @@
                      Environment.GetEnvironmentVariable("MONGODB_DATABASE_NAME")!
                  ));
 
+             // Favorite Repository
+             services.AddSingleton<IFavoriteRepository>(sp =>
+                 new FavoriteMongoDB(
+                     Environment.GetEnvironmentVariable("MONGODB_CONNECTION_STRING")!,
+                     Environment.GetEnvironmentVariable("MONGODB_DATABASE_NAME")!
+                 ));
+
              // Yandex Cloud S3
              services.AddSingleton<IFileStorageRepository>(sp =>
                  new FileStorageRepository(
