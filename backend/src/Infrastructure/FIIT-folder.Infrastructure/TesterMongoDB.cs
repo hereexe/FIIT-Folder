@@ -41,7 +41,7 @@ public class TesterMongoDB
                 new SubjectId(Guid.NewGuid()), 
                 new UserId(Guid.NewGuid()), 
                 new StudyYear(validYear),
-                1, // Semester
+                new Semester(1), // Semester
                 "Тестовое описание", // Description
                 new MaterialSize(2000), 
                 MaterialType.Colloquium, 

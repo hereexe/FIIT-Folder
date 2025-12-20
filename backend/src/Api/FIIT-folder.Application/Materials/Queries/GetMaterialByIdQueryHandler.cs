@@ -47,7 +47,7 @@ public class GetMaterialByIdQueryHandler : IRequestHandler<GetMaterialByIdQuery,
             SubjectId = material.SubjectId.Value,
             Name = material.Name.Value,
             Year = material.Year.Value,
-            Semester = material.Semester,
+            Semester = material.Semester.Value,
             Description = material.Description, // Assuming this property is added to StudyMaterial
             AuthorName = authorName,
             IsFavorite = isFavorite,

@@ -30,7 +30,7 @@ public class GetMaterialsBySubjectQueryHandler : IRequestHandler<GetMaterialsByS
         // Filter by semester if provided
         if (request.Semester.HasValue)
         {
-            materials = materials.Where(m => m.Semester == request.Semester.Value).ToList();
+            materials = materials.Where(m => m.Semester.Value == request.Semester.Value).ToList();
         }
 
         // Filter by year if provided
@@ -75,7 +75,7 @@ public class GetMaterialsBySubjectQueryHandler : IRequestHandler<GetMaterialsByS
                 SubjectId = m.SubjectId.Value,
                 Name = m.Name.Value,
                 Year = m.Year.Value,
-                Semester = m.Semester,
+                Semester = m.Semester.Value,
                 Description = m.Description,
                 AuthorName = authorName,
                 IsFavorite = favoriteMaterialIds.Contains(m.Id.Value),

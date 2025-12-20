@@ -68,7 +68,7 @@ public class MaterialMongoDB : IMaterialMongoDB
                 { "userId", material.UserId.Value.ToString() },
                 { "name", material.Name.Value },
                 { "year", material.Year.Value },
-                { "semester", material.Semester },
+                { "semester", material.Semester.Value },
                 { "description", material.Description },
                 { "size", material.Size.Size },
                 { "materialType", material.MaterialType.ToString() },
@@ -189,7 +189,7 @@ public class MaterialMongoDB : IMaterialMongoDB
         var materialType = Enum.Parse<MaterialType>(document["materialType"].AsString, ignoreCase: true);
         var filePath = new ResourceLocation(document["filePath"].AsString);
         
-        var semester = document.Contains("semester") ? document["semester"].AsInt32 : 0;
+        var semester = new Semester(document.Contains("semester") ? document["semester"].AsInt32 : 1);
         var description = document.Contains("description") ? document["description"].AsString : string.Empty;
 
         var material = new StudyMaterial(name, subjectId, userId, year, semester, description, size, materialType, filePath);
