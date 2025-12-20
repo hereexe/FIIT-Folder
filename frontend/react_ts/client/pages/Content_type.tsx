@@ -22,29 +22,31 @@ import { useNavigate } from "react-router-dom";
 import { Console } from "console";
 
 export default function Index() {
-  const location = useLocation();
-  const { subjectId: stateSubjectId, subjectName: stateSubjectName } = location.state || {};
-
-  const subjectId = stateSubjectId || sessionStorage.getItem("selectedSubjectId");
-  const subjectName = stateSubjectName || sessionStorage.getItem("selectedSubject");
-
+  const content: ExamTypeProps[] = [
+    { examType: "Экзамены", examNames: ["Экзамен 1", "Экзамен 2"] },
+    { examType: "Коллоквиумы", examNames: ["Коллоквиум 1", "Коллоквиум 2"] },
+    { examType: "Контрольные работы", examNames: ["КР 1", "КР 2"] },
+    { examType: "Лекции", examNames: ["Лекция 1", "Лекция 2"] },
+  ];
+  const subjectName = sessionStorage.getItem("selectedSubject"); // Здесь должен быть реальный ID предмета
   const {
     data: subjectMaterials,
     isLoading: isLoadingMaterials,
     error: materialsError
-  } = useGetSubjectWithMaterialsQuery(subjectId || "");
-
-  var serverContent: ExamTypeProps[] = subjectMaterials.content
-  if (subjectMaterials == null) {
-    if (!isLoadingMaterials && !subjectId) {
-      console.log("no subjectId found")
-    } else if (materialsError) {
-      console.error("error fetching materials", materialsError)
-    }
+  } = useGetSubjectWithMaterialsQuery(subjectName);
+  var serverContent: ExamTypeProps[] = []
+  if (subjectMaterials != null) {
+    serverContent = subjectMaterials.content;
+  }
+  else {
+    serverContent = content
+    console.log("no data from api")
   }
 
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const { subject } = location.state || {};
   const handleClickBack = () => {
     navigate("/main_page");
   };
@@ -71,7 +73,7 @@ export default function Index() {
           {/* Центральная часть - заголовок */}
           <div className="flex-1 flex justify-left">
             <h1 className="text-app-text text-[28px] md:text-[45px] font-semibold tracking-[0.9px] text-center">
-              {subjectName}
+              {sessionStorage.getItem("selectedSubject")}
             </h1>
           </div>
           {/* Экзамены Section */}
