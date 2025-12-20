@@ -31,7 +31,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Tests\FIIT-folder.Infrastructure.Tests\MongoDB\" />
+      <Folder Include="Tests\" />
     </ItemGroup>
 
 </Project>
