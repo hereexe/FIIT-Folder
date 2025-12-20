@@ -14,14 +14,16 @@ interface FileViewerProps {
   description: string;
   likes: number;
   dislikes: number;
+  pdfUrl?: string;
 }
 
 export default function FileViewer({
-    title,
-    author,
-    description,
-    likes: initialLikes,
-    dislikes: initialDislikes,
+  title,
+  author,
+  description,
+  likes: initialLikes,
+  dislikes: initialDislikes,
+  pdfUrl,
 }: FileViewerProps) {
   const navigate = useNavigate();
   const handleBackClick = (e: React.MouseEvent) => {
@@ -71,14 +73,13 @@ export default function FileViewer({
   const handleFavorite = () => {
     setIsFavorited(!isFavorited);
   };
-  const pdfUrl = "Тервер ДЗ 12.pdf";
   return (
     <div className="flex flex-col items-center gap-4 w-full max-w-[1280px] mx-auto px-4 md:px-6 py-6">
       {/* Header section */}
       <div className="flex items-center justify-between w-full py-3">
-        <button 
-        onClick={handleBackClick}
-        className="p-2 hover:bg-white/20 rounded-lg transition-colors">
+        <button
+          onClick={handleBackClick}
+          className="p-2 hover:bg-white/20 rounded-lg transition-colors">
           <ChevronLeft
             className="w-10 h-10 md:w-11 md:h-11 text-folder-navy"
             strokeWidth={2}
@@ -95,13 +96,12 @@ export default function FileViewer({
         </div>
 
         <div className="flex items-center gap-2 md:gap-3">
-          <button 
-          onClick={handleFavorite}
-          className="p-2 hover:bg-white/20 rounded-lg transition-colors">
+          <button
+            onClick={handleFavorite}
+            className="p-2 hover:bg-white/20 rounded-lg transition-colors">
             <Heart
-              className={`w-9 h-9 md:w-10 md:h-10 stroke-folder-navy transition-all ${
-                isFavorited ? "fill-red-500" : ""
-              }`}
+              className={`w-9 h-9 md:w-10 md:h-10 stroke-folder-navy transition-all ${isFavorited ? "fill-red-500" : ""
+                }`}
               strokeWidth={2}
             />
           </button>
@@ -122,14 +122,12 @@ export default function FileViewer({
           className="flex items-center gap-2 md:gap-3 hover:opacity-70 transition-opacity"
         >
           <ThumbsUp
-            className={`w-5 h-5 md:w-6 md:h-6 transition-all ${
-              isLiked ? "fill-blue-500 text-folder-navy" : "text-folder-navy"
-            }`}
+            className={`w-5 h-5 md:w-6 md:h-6 transition-all ${isLiked ? "fill-blue-500 text-folder-navy" : "text-folder-navy"
+              }`}
             strokeWidth={2}
           />
-          <span className={`text-lg md:text-xl font-normal transition-colors ${
-            isLiked ? "text-folder-navy font-semibold" : "text-folder-navy"
-          }`}>
+          <span className={`text-lg md:text-xl font-normal transition-colors ${isLiked ? "text-folder-navy font-semibold" : "text-folder-navy"
+            }`}>
             {likes}
           </span>
         </button>
@@ -138,14 +136,12 @@ export default function FileViewer({
           className="flex items-center gap-2 md:gap-3 hover:opacity-70 transition-opacity"
         >
           <ThumbsDown
-            className={`w-5 h-5 md:w-6 md:h-6 transition-all ${
-              isDisliked ? "fill-blue-500 text-folder-navy" : "text-folder-navy"
-            }`}
+            className={`w-5 h-5 md:w-6 md:h-6 transition-all ${isDisliked ? "fill-blue-500 text-folder-navy" : "text-folder-navy"
+              }`}
             strokeWidth={2}
           />
-          <span className={`text-lg md:text-xl font-normal transition-colors ${
-            isDisliked ? "text-folder-navy font-semibold" : "text-folder-navy"
-          }`}>
+          <span className={`text-lg md:text-xl font-normal transition-colors ${isDisliked ? "text-folder-navy font-semibold" : "text-folder-navy"
+            }`}>
             {dislikes}
           </span>
         </button>
@@ -155,7 +151,7 @@ export default function FileViewer({
       <div className="relative w-full mt-4 flex gap-3">
         <div className="flex-1 aspect-[16/10] md:aspect-[16/9] bg-[#C4C4C4] rounded-2xl shadow-lg" />
         <iframe
-          src={`${pdfUrl}#view=FitH`}
+          src={pdfUrl ? `${pdfUrl}#view=FitH` : ""}
           title="PDF Viewer"
           className="w-full h-[1000px] rounded border"
           frameBorder="0"

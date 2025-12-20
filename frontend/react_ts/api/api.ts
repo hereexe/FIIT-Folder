@@ -16,7 +16,7 @@ import {
   AddFavoriteRequest,
 } from "./types";
 
-const BASE_URL = "https://158.160.99.237";
+const BASE_URL = "http://158.160.99.237:8080";
 
 export const appApi = createApi({
   reducerPath: "appApi",
@@ -86,9 +86,9 @@ export const appApi = createApi({
       providesTags: (result) =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: "Materials" as const, id })),
-              { type: "Materials", id: "LIST" },
-            ]
+            ...result.map(({ id }) => ({ type: "Materials" as const, id })),
+            { type: "Materials", id: "LIST" },
+          ]
           : [{ type: "Materials", id: "LIST" }],
     }),
 
@@ -98,7 +98,7 @@ export const appApi = createApi({
       transformResponse: (response: MaterialDto) => {
         return {
           ...response,
-          downloadUrl: `${BASE_URL}Materials/${response.id}/download`,
+          downloadUrl: `${BASE_URL}/Materials/${response.id}/download`,
         };
       },
     }),
@@ -188,9 +188,9 @@ export const appApi = createApi({
       providesTags: (result) =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: "Favorites" as const, id })),
-              { type: "Favorites", id: "LIST" },
-            ]
+            ...result.map(({ id }) => ({ type: "Favorites" as const, id })),
+            { type: "Favorites", id: "LIST" },
+          ]
           : [{ type: "Favorites", id: "LIST" }],
     }),
 
