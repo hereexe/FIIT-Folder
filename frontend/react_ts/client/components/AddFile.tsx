@@ -38,10 +38,9 @@ export default function Index() {
     }
   };
 
+  const [uploadMaterial, { isLoading, error, data }] = useUploadMaterialMutation();
   const handleUpload = async () => {
     try {
-      const [uploadMaterial, { isLoading, error, data }] =
-        useUploadMaterialMutation();
       const request: UploadMaterialRequest = {
         file: files,
         subjectId: "some-subject-id",
