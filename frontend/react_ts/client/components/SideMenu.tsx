@@ -1,6 +1,6 @@
 // SideMenu.tsx
 import React, { useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 import {
   Heart,
   Download,
@@ -16,8 +16,6 @@ import {
   X,
 } from "lucide-react";
 
-import { useNavigate } from 'react-router-dom';
-
 interface SideMenuProps {
   isOpen: boolean;
   onClose: () => void;
@@ -25,13 +23,16 @@ interface SideMenuProps {
 
 const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
-  if (!isOpen) return null;
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+  if (!isOpen) return null;
 
   const handleLoginClick = () => {
     navigate("/login");
     onClose();
   };
+
+  const token = localStorage.getItem("token");
 
   return (
     <div className="fixed inset-0 z-50">
@@ -43,8 +44,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
 
       {/* Sidebar */}
       <aside
-        className={`${sidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } md:translate-x-0 fixed md:relative ${sidebarCollapsed ? "md:w-[100px]" : "md:w-[400px]"
+        className={`fixed md:relative ${sidebarCollapsed ? "md:w-[100px]" : "md:w-[400px]"
           } w-[338px] bg-app-sidebar flex flex-col h-screen z-50 transition-all duration-300`}
       >
         {/* Sidebar Header */}
@@ -86,6 +86,16 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
         {/* Sidebar Menu */}
         {!sidebarCollapsed && (
           <div className="flex flex-col gap-5 px-5 py-[30px] pt-5">
+            <button
+              onClick={() => { navigate("/main_page"); onClose(); }}
+              className="flex items-center gap-5 text-app-text hover:opacity-80 transition-opacity"
+            >
+              <LayoutGrid className="w-[38px] h-[38px] stroke-[2]" />
+              <span className="text-[23px] font-medium tracking-[0.23px] max-w-[220px] truncate">
+                Главная
+              </span>
+            </button>
+
             <button className="flex items-center gap-5 text-app-text hover:opacity-80 transition-opacity">
               <Heart className="w-[38px] h-[38px] stroke-[2]" />
               <span className="text-[23px] font-medium tracking-[0.23px] max-w-[220px] truncate">
@@ -93,26 +103,37 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
               </span>
             </button>
 
-            <button className="flex items-center gap-5 text-app-text hover:opacity-80 transition-opacity">
-              <Download className="w-[38px] h-[38px] stroke-[2]" />
-              <span className="text-[23px] font-medium tracking-[0.23px] max-w-[220px] truncate">
-                Загрузки
-              </span>
-            </button>
-
-            <button className="flex items-center gap-5 text-app-text hover:opacity-80 transition-opacity">
+            <button
+              onClick={() => { navigate("/add_file"); onClose(); }}
+              className="flex items-center gap-5 text-app-text hover:opacity-80 transition-opacity"
+            >
               <PlusCircle className="w-[38px] h-[38px] stroke-[2]" />
               <span className="text-[23px] font-medium tracking-[0.23px] max-w-[220px] truncate">
                 Добавить файл
               </span>
             </button>
 
-            <button className="flex items-center gap-5 text-app-text hover:opacity-80 transition-opacity">
-              <Settings className="w-[38px] h-[38px] stroke-[2]" />
-              <span className="text-[23px] font-medium tracking-[0.23px] max-w-[190px] truncate">
-                Настройки
-              </span>
-            </button>
+            {token ? (
+              <button
+                onClick={() => { localStorage.removeItem("token"); onClose(); navigate("/main_page"); window.location.reload(); }}
+                className="flex items-center gap-5 text-red-500 hover:opacity-80 transition-opacity"
+              >
+                <X className="w-[38px] h-[38px] stroke-[2]" />
+                <span className="text-[23px] font-medium tracking-[0.23px] max-w-[190px] truncate">
+                  Выйти
+                </span>
+              </button>
+            ) : (
+              <button
+                onClick={handleLoginClick}
+                className="flex items-center gap-5 text-app-text hover:opacity-80 transition-opacity"
+              >
+                <UserCircle className="w-[38px] h-[38px] stroke-[2]" />
+                <span className="text-[23px] font-medium tracking-[0.23px] max-w-[190px] truncate">
+                  Войти
+                </span>
+              </button>
+            )}
           </div>
         )}
       </aside>
