@@ -16,6 +16,7 @@ import Exam_type from "./pages/Content_type"
 import Fileview_page from "./pages/FileView_page"
 import AddFile_page from "./components/AddFile"
 import Login_page from "./pages/Login_page"
+import Register_page from "./pages/Register_page"
 import { Provider } from 'react-redux';
 import { store } from "../api/store"
 import React from 'react';
@@ -38,6 +39,7 @@ const App = () => (
                 <Route path="/exam_type" element={<Exam_type />} />
                 <Route path="/fileview_page" element={<Fileview_page />} />
                 <Route path="/login" element={<Login_page />} />
+                <Route path="/register" element={<Register_page />} />
                 <Route path="/add_file" element={<AddFile_page />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
 
