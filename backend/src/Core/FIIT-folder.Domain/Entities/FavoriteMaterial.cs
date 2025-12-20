@@ -5,8 +5,8 @@ namespace FIIT_folder.Domain.Entities;
 public class FavoriteMaterial
 {
     public Guid Id { get; private set; }
-    public UserId UserId { get; private set; }
-    public StudyMaterialId MaterialId { get; private set; }
+    public UserId UserId { get; private set; } = default!;
+    public StudyMaterialId MaterialId { get; private set; } = default!;
     public DateTime AddedAt { get; private set; }
 
     public FavoriteMaterial(UserId userId, StudyMaterialId materialId)

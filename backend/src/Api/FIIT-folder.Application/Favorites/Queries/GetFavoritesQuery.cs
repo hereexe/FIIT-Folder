@@ -50,7 +50,7 @@ public class GetFavoritesHandler : IRequestHandler<GetFavoritesQuery, List<Favor
                     matDto.MaterialType = mat.MaterialType.ToString();
                     matDto.Size = mat.Size.Size;
                     matDto.Year = mat.Year.Value;
-                    matDto.Semester = mat.Semester;
+                    matDto.Semester = mat.Semester.Value;
                     matDto.Description = mat.Description;
                     matDto.SubjectId = mat.SubjectId.Value;
 

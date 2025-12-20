@@ -5,9 +5,9 @@ namespace FIIT_folder.Domain.Entities;
 
 public class Subject
 {
-    public SubjectId Id { get; private set; }
-    public SubjectName Name { get; private set; }
-    public SubjectSemester Semester { get; private set; }
+    public SubjectId Id { get; private set; } = default!;
+    public SubjectName Name { get; private set; } = default!;
+    public SubjectSemester Semester { get; private set; } = default!;
     public IReadOnlyCollection<MaterialType> AvailableMaterialTypes => _materialTypes.AsReadOnly();
     
     private List<MaterialType> _materialTypes = new();
