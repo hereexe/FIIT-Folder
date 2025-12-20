@@ -1,7 +1,8 @@
 import { Console } from "console";
 import { ChevronLeft, ChevronDown, FilePlus2 } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useUploadMaterialMutation } from "../../api/api";
+import { UploadMaterialRequest } from "api/types";
 
 export default function Index() {
   const [dragActive, setDragActive] = useState(false);
@@ -10,7 +11,7 @@ export default function Index() {
   const [semester, setSemester] = useState("");
   const [contentType, setContentType] = useState("");
   const [description, setDescription] = useState("");
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<File>();
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -26,18 +27,34 @@ export default function Index() {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      setFiles(Array.from(e.dataTransfer.files));
+    if (files) {
+      setFiles(files);
     }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFiles(Array.from(e.target.files));
+      setFiles(files);
     }
   };
 
   const handleUpload = async () => {
+    try {
+      const [uploadMaterial, { isLoading, error, data }] =
+        useUploadMaterialMutation();
+      const request: UploadMaterialRequest = {
+        file: files,
+        subjectId: "some-subject-id",
+        year: parseInt(year, 10),
+        materialType: contentType,
+        description: description,
+        semester: parseInt(semester, 10),
+      };
+      const result = await uploadMaterial(request).unwrap();
+    } catch (err) {
+      console.error("Upload failed:", err);
+    }
+
     console.log({
       subject,
       year,
@@ -92,9 +109,9 @@ export default function Index() {
                     <option value="" className="text-primary-dark/50">
                       e.g. 2024
                     </option>
-                    <option value="2024">2024</option>
-                    <option value="2023">2023</option>
-                    <option value="2022">2022</option>
+                    <option value={2024}>2024</option>
+                    <option value={2023}>2023</option>
+                    <option value={2022}>2022</option>
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
                 </div>
@@ -114,10 +131,10 @@ export default function Index() {
                     <option value="" className="text-primary-dark/50">
                       e.g. 3 семестр
                     </option>
-                    <option value="1">1 семестр</option>
-                    <option value="2">2 семестр</option>
-                    <option value="3">3 семестр</option>
-                    <option value="4">4 семестр</option>
+                    <option value={1}>1 семестр</option>
+                    <option value={2}>2 семестр</option>
+                    <option value={3}>3 семестр</option>
+                    <option value={4}>4 семестр</option>
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
                 </div>
@@ -199,9 +216,9 @@ export default function Index() {
                 </label>
               </div>
 
-              {files.length > 0 && (
+              {files && (
                 <div className="mt-4 text-primary-dark text-lg">
-                  {files.length} file(s) selected
+                  {files != null} file selected
                 </div>
               )}
             </div>

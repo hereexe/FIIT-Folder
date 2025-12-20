@@ -22,13 +22,6 @@ import { useNavigate } from "react-router-dom";
 import { Console } from "console";
 
 export default function Index() {
-  const content: ExamTypeProps[] = [
-    { examType: "Экзамены", examNames: ["Экзамен 1", "Экзамен 2"] },
-    { examType: "Коллоквиумы", examNames: ["Коллоквиум 1", "Коллоквиум 2"] },
-    { examType: "Контрольные работы", examNames: ["КР 1", "КР 2"] },
-    { examType: "Лекции", examNames: ["Лекция 1", "Лекция 2"] },
-  ];
-
   const location = useLocation();
   const { subjectId: stateSubjectId, subjectName: stateSubjectName } = location.state || {};
 
@@ -41,12 +34,8 @@ export default function Index() {
     error: materialsError
   } = useGetSubjectWithMaterialsQuery(subjectId || "");
 
-  var serverContent: ExamTypeProps[] = []
-  if (subjectMaterials != null) {
-    serverContent = subjectMaterials.content;
-  }
-  else {
-    serverContent = content
+  var serverContent: ExamTypeProps[] = subjectMaterials.content
+  if (subjectMaterials == null) {
     if (!isLoadingMaterials && !subjectId) {
       console.log("no subjectId found")
     } else if (materialsError) {
