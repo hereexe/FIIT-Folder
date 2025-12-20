@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronDown, FilePlus2 } from "lucide-react";
 import { useState } from "react";
-import { useUploadMaterialMutation } from "../../api/api";
+import { useUploadMaterialMutation, useGetSubjectsQuery } from "../../api/api";
 import { UploadMaterialRequest } from "../../api/types";
 import { useNavigate } from "react-router-dom";
 
@@ -13,6 +13,8 @@ export default function Index() {
   const [contentType, setContentType] = useState("");
   const [description, setDescription] = useState("");
   const [files, setFiles] = useState<File | null>(null);
+
+  const { data: subjects = [] } = useGetSubjectsQuery();
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -48,27 +50,27 @@ export default function Index() {
     try {
       const request: UploadMaterialRequest = {
         file: files,
-        subjectId: subject, // assuming subject state now holds the ID from a real list if we implement it, or we use the old logic for now
+        subjectId: subject,
         year: parseInt(year, 10),
         materialType: contentType,
         description: description,
-        semester: semester ? parseInt(semester, 10) : undefined,
+        semester: semester ? parseInt(semester, 10) : 1, // Providing default 1 if not selected, as backend might require it
       };
       await uploadMaterial(request).unwrap();
       alert("Успешно загружено!");
       navigate(-1);
     } catch (err) {
       console.error("Upload failed:", err);
-      alert("Ошибка при загрузке. Проверьте авторизацию.");
+      alert("Ошибка при загрузке. Проверьте заполнение всех полей.");
     }
   };
 
   return (
-    <div className="flex items-center justify-center p-4 min-h-screen bg-app-bg">
+    <div className="flex items-center justify-center p-4 min-h-screen bg-app-bg font-[Inter]">
       <div className="w-full bg-white/100 rounded-[20px] shadow-2xl p-6 md:p-8 lg:p-10 max-w-7xl">
         <button
           onClick={() => navigate(-1)}
-          className="mb-6 flex items-center text-primary-dark hover:opacity-70"
+          className="mb-6 flex items-center text-primary-dark hover:opacity-70 transition-opacity"
         >
           <ChevronLeft className="w-6 h-6" />
           Назад
@@ -92,9 +94,11 @@ export default function Index() {
                     <option value="" className="text-primary-dark/50">
                       Выберите предмет
                     </option>
-                    <option value="96924d67-6cd8-4720-942f-87034c29cf46">теория вероятности</option>
-                    <option value="algebra">алгебра</option>
-                    <option value="calculus">математический анализ</option>
+                    {subjects.map((sub: any) => (
+                      <option key={sub.id} value={sub.id}>
+                        {sub.name}
+                      </option>
+                    ))}
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
                 </div>
@@ -114,6 +118,7 @@ export default function Index() {
                     <option value="" className="text-primary-dark/50">
                       Выберите год
                     </option>
+                    <option value="2025">2025</option>
                     <option value="2024">2024</option>
                     <option value="2023">2023</option>
                     <option value="2022">2022</option>
@@ -140,6 +145,10 @@ export default function Index() {
                     <option value="2">2 семестр</option>
                     <option value="3">3 семестр</option>
                     <option value="4">4 семестр</option>
+                    <option value="5">5 семестр</option>
+                    <option value="6">6 семестр</option>
+                    <option value="7">7 семестр</option>
+                    <option value="8">8 семестр</option>
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
                 </div>
@@ -177,7 +186,7 @@ export default function Index() {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Дополнительная информация"
-                  className="w-full h-32 px-4 py-3 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-xl placeholder:text-primary-dark/50 resize-none focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
+                  className="w-full h-32 px-4 py-3 rounded-[10px] bg-[rgba(228,183,245,0.3)] text-primary-dark text-xl placeholder:text-primary-dark/50 resize-none focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
                 />
               </div>
             </div>
@@ -187,7 +196,7 @@ export default function Index() {
               <button
                 onClick={handleUpload}
                 disabled={isLoading}
-                className="px-8 h-[45px] rounded-[20px] border-2 border-primary-light/36 bg-white/5 text-primary-dark text-2xl font-medium shadow-[inset_-2px_-2px_4px_rgba(255,255,255,0.3),inset_5px_5px_25px_rgba(255,255,255,0.4),0_10px_20px_rgba(42,42,42,0.36),inset_2px_2px_4px_#fff] hover:bg-white/10 transition-colors disabled:opacity-50"
+                className="px-8 h-[55px] min-w-[200px] rounded-[20px] bg-primary-dark text-white text-2xl font-bold shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
               >
                 {isLoading ? "Загрузка..." : "Загрузить"}
               </button>
@@ -201,16 +210,16 @@ export default function Index() {
               onDragLeave={handleDrag}
               onDragOver={handleDrag}
               onDrop={handleDrop}
-              className={`w-full max-w-xl h-full min-h-[400px] lg:min-h-[700px] flex flex-col items-center justify-center gap-8 px-8 md:px-24 rounded-[15px] border-2 border-dashed border-primary-dark bg-primary-light/36 shadow-[inset_-2px_-2px_4px_rgba(0,0,0,0.25),inset_5px_5px_25px_rgba(228,183,245,0.6),inset_2px_2px_4px_#E4B7F5,0_4px_20px_#E4B7F5] transition-all ${dragActive ? "scale-[1.02] border-primary-dark/80" : ""
+              className={`w-full max-w-xl h-full min-h-[400px] lg:min-h-[700px] flex flex-col items-center justify-center gap-8 px-8 md:px-24 rounded-[25px] border-2 border-dashed border-primary-dark bg-primary-dark/[0.04] transition-all ${dragActive ? "scale-[1.02] border-primary-dark/80 bg-primary-dark/[0.08]" : ""
                 }`}
             >
-              <FilePlus2 className="w-20 h-20 text-primary-dark stroke-[2]" />
+              <FilePlus2 className="w-20 h-20 text-primary-dark stroke-[1.5]" />
 
               <div className="flex flex-col items-center gap-7">
                 <p className="text-primary-dark text-center text-2xl font-medium tracking-[0.25px]">
                   Кидай сюда или
                 </p>
-                <label className="px-4 py-2 rounded-[3px] bg-primary-dark text-white text-2xl font-medium tracking-[0.25px] cursor-pointer hover:bg-primary-dark/90 transition-colors">
+                <label className="px-6 py-3 rounded-[15px] bg-primary-dark text-white text-2xl font-bold tracking-[0.25px] cursor-pointer hover:bg-primary-dark/90 transition-all active:scale-[0.95]">
                   выбрать файл
                   <input
                     type="file"
@@ -221,8 +230,8 @@ export default function Index() {
               </div>
 
               {files && (
-                <div className="mt-4 text-primary-dark text-lg font-medium bg-white/50 px-4 py-2 rounded">
-                  {files.name} selected
+                <div className="mt-4 text-primary-dark text-lg font-medium bg-primary-dark/10 px-6 py-3 rounded-[12px] animate-in fade-in zoom-in duration-300">
+                  {files.name}
                 </div>
               )}
             </div>
