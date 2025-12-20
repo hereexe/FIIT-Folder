@@ -16,7 +16,7 @@ import {
   AddFavoriteRequest,
 } from "./types";
 
-const BASE_URL = "http://158.160.99.237:8080";
+const BASE_URL = "http://158.160.99.237:8080/api";
 
 export const appApi = createApi({
   reducerPath: "appApi",
