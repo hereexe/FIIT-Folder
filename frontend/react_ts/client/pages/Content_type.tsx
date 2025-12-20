@@ -34,7 +34,7 @@ export default function Index() {
     error: materialsError
   } = useGetSubjectWithMaterialsQuery(subjectId || "");
 
-  var serverContent: ExamTypeProps[] = subjectMaterials.content
+  var serverContent: ExamTypeProps[] = subjectMaterials?.content || [];
   if (subjectMaterials == null) {
     if (!isLoadingMaterials && !subjectId) {
       console.log("no subjectId found")
