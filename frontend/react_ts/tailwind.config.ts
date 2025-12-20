@@ -18,6 +18,9 @@ export default {
         '9xl': '96rem',
         '10xl': '104rem',
       },
+      maxHeight: {
+        '8xl' : '60rem'
+      },
       fontFamily: {
         inter: ['Inter', '-apple-system', 'Roboto', 'Helvetica', 'sans-serif'],
       },

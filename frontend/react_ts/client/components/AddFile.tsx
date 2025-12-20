@@ -50,12 +50,10 @@ export default function Index() {
 
   return (
     <div className="flex items-center justify-center p-4 ">
-      <div className="w-full max-w-7xl bg-white/95 rounded-[20px] shadow-2xl p-6 md:p-8 lg:p-10">
+      <div className="w-full bg-white/100 rounded-[20px] shadow-2xl p-6 md:p-8 lg:p-10">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
           {/* Left Section - Form */}
           <div className="flex-1 space-y-20">
-
-
             {/* Form Fields */}
             <div className="space-y-6">
               {/* Subject */}
