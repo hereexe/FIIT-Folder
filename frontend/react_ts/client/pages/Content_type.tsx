@@ -34,8 +34,15 @@ export default function Index() {
     isLoading: isLoadingMaterials, 
     error: materialsError 
   } = useGetSubjectWithMaterialsQuery(subjectName);
-  const serverContent = subjectMaterials;
-  console.log("serverContent was gone")
+  var serverContent: ExamTypeProps[] = []
+  if (subjectMaterials != null){
+    serverContent = subjectMaterials.content;
+  }
+  else{
+    serverContent = content
+    console.log("no data from api")
+  }
+
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -70,7 +77,7 @@ export default function Index() {
             </h1>
           </div>
           {/* Экзамены Section */}
-          {content.map((examProps) => (
+          {serverContent.map((examProps) => (
             <div>
               <ExamType
                 examType={examProps.examType}
