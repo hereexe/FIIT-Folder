@@ -28,12 +28,12 @@ export default function Index() {
     { examType: "Контрольные работы", examNames: ["КР 1", "КР 2"] },
     { examType: "Лекции", examNames: ["Лекция 1", "Лекция 2"] },
   ];
-  const subjectId = sessionStorage.getItem("selectedSubject"); // Здесь должен быть реальный ID предмета
+  const subjectName = sessionStorage.getItem("selectedSubject"); // Здесь должен быть реальный ID предмета
   const { 
     data: subjectMaterials, 
     isLoading: isLoadingMaterials, 
     error: materialsError 
-  } = useGetSubjectWithMaterialsQuery(subjectId);
+  } = useGetSubjectWithMaterialsQuery(subjectName);
   const serverContent = subjectMaterials;
   console.log("serverContent was gone")
 

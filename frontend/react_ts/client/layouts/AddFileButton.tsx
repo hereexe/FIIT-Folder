@@ -8,7 +8,7 @@ const AddFileButton: React.FC = () => {
   return (
     <>
       <button
-        className="fixed bottom-8 right-8 text-fiit-text hover:opacity-80 transition-opacity"
+        className="fixed bottom-8 right-8 text-fiit-text hover:opacity-80 transition-opacity z-index-100"
         aria-label="Add new material"
         onClick={openModal}
       >
