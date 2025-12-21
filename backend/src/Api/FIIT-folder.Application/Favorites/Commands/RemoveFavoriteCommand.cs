@@ -16,6 +16,7 @@ public class RemoveFavoriteHandler : IRequestHandler<RemoveFavoriteCommand>
 
     public async Task Handle(RemoveFavoriteCommand request, CancellationToken cancellationToken)
     {
-        await _favoriteRepository.RemoveMaterialAsync(request.ItemId, cancellationToken);
+        var userId = new FIIT_folder.Domain.Value_Object.UserId(request.UserId);
+        await _favoriteRepository.RemoveMaterialAsync(userId, request.ItemId, cancellationToken);
     }
 }

@@ -26,8 +26,9 @@ public class FavoriteMongoDB : IFavoriteRepository
         return await _materials.Find(m => m.UserId == userId).ToListAsync(cancellationToken);
     }
 
-    public async Task RemoveMaterialAsync(Guid id, CancellationToken cancellationToken)
+    public async Task RemoveMaterialAsync(UserId userId, Guid materialId, CancellationToken cancellationToken)
     {
-        await _materials.DeleteOneAsync(m => m.Id == id, cancellationToken);
+        var matId = new MaterialId(materialId);
+        await _materials.DeleteOneAsync(m => m.UserId == userId && m.MaterialId == matId, cancellationToken);
     }
 }
