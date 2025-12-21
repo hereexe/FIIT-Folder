@@ -59,4 +59,72 @@ public class StudyMaterialMongoDB
         CollectionMock.Verify(c => c.DeleteOneAsync(
             It.Is<FilterDefinition<BsonDocument>> (f => true), default), Times.Once);
     }
+    
+    // [Test]
+    // public async Task GetBySubjectId_Should_Return_Materials_List()
+    // {
+    //     // Arrange
+    //     var subjectId = Guid.NewGuid();
+    //     var materialId1 = Guid.NewGuid();
+    //     var materialId2 = Guid.NewGuid();
+    //     
+    //     var bsonDocument1 = new BsonDocument
+    //     {
+    //         { "materialId", materialId1.ToString() },
+    //         { "subjectId", subjectId.ToString() },
+    //         { "userId", Guid.NewGuid().ToString() },
+    //         { "name", "Матан 1" },
+    //         { "year", 2024 },
+    //         { "semester", 1 },
+    //         { "description", "Тест 1" },
+    //         { "size", 1000 },
+    //         { "materialType", "Exam" },
+    //         { "filePath", "path/test1.pdf" },
+    //         { "uploadedAt", DateTime.UtcNow }
+    //     };
+    //
+    //     var bsonDocument2 = new BsonDocument
+    //     {
+    //         { "materialId", materialId2.ToString() },
+    //         { "subjectId", subjectId.ToString() },
+    //         { "userId", Guid.NewGuid().ToString() },
+    //         { "name", "Матан 2" },
+    //         { "year", 2024 },
+    //         { "semester", 2 },
+    //         { "description", "Тест 2" },
+    //         { "size", 2000 },
+    //         { "materialType", "Colloquium" },
+    //         { "filePath", "path/test2.pdf" },
+    //         { "uploadedAt", DateTime.UtcNow }
+    //     };
+    //
+    //     CollectionMock
+    //         .Setup(c => c.FindAsync(
+    //             It.Is<FilterDefinition<BsonDocument>>(f => true),
+    //             null,
+    //             default))
+    //         .ReturnsAsync(() => 
+    //         {
+    //             var mockCursor = new Mock<IAsyncCursor<BsonDocument>>();
+    //             mockCursor.Setup(_ => _.Current).Returns(new[] { bsonDocument1, bsonDocument2 });
+    //             mockCursor.SetupSequence(_ => _.MoveNext(default))
+    //                      .Returns(true)
+    //                      .Returns(false);
+    //             return mockCursor.Object;
+    //         });
+    //
+    //     // Act
+    //     var result = await Repository.GetBySubjectId(subjectId);
+    //     
+    //     // Assert
+    //     Assert.That(result, Is.Not.Null);
+    //     Assert.That(result.Count, Is.EqualTo(2));
+    //     Assert.That(result[0].SubjectId.Value, Is.EqualTo(subjectId));
+    //     Assert.That(result[1].SubjectId.Value, Is.EqualTo(subjectId));
+    //     
+    //     CollectionMock.Verify(c => c.FindAsync(
+    //         It.Is<FilterDefinition<BsonDocument>>(f => true),
+    //         null,
+    //         default), Times.Once);
+    // }
 }
