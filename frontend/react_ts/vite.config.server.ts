@@ -42,10 +42,18 @@ export default defineConfig({
     sourcemap: true,
   },
   resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./client"),
-      "@shared": path.resolve(__dirname, "./shared"),
-    },
+    alias: [
+      { find: "@/components", replacement: path.resolve(__dirname, "./src/shared") },
+      { find: "@/hooks", replacement: path.resolve(__dirname, "./src/shared/hooks") },
+      { find: "@/lib", replacement: path.resolve(__dirname, "./src/shared/lib") },
+      { find: "@app", replacement: path.resolve(__dirname, "./src/app") },
+      { find: "@pages", replacement: path.resolve(__dirname, "./src/pages") },
+      { find: "@features", replacement: path.resolve(__dirname, "./src/features") },
+      { find: "@entities", replacement: path.resolve(__dirname, "./src/entities") },
+      { find: "@widgets", replacement: path.resolve(__dirname, "./src/widgets") },
+      { find: "@shared", replacement: path.resolve(__dirname, "./src/shared") },
+      { find: "@", replacement: path.resolve(__dirname, "./src") },
+    ],
   },
   define: {
     "process.env.NODE_ENV": '"production"',
