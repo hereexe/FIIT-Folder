@@ -136,4 +136,56 @@ public class SubjectsController : ControllerBase
         var result = await _mediator.Send(new DeleteSubjectCommand(id));
         return NoContent();
     }
+    [HttpPost("seed")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> Seed()
+    {
+        var subjects = new List<(string Name, int Semester, List<string> Types)>
+        {
+            ("Математический анализ", 1, new List<string> { "Exam", "Colloquium", "Pass" }),
+            ("Алгебра и геометрия", 1, new List<string> { "Exam", "ControlWork", "ComputerPractice" }),
+            ("Дискретная математика", 1, new List<string> { "Exam", "ControlWork", "ComputerPractice" }),
+            ("Введение в математику", 1, new List<string> { "ControlWork" }),
+            ("Языки и технологии программирования", 1, new List<string> { "Exam" }),
+            ("Основы российской государственности", 1, new List<string> { "Pass" }),
+            ("Основы проектной деятельности", 1, new List<string> { "Pass" }),
+            ("Теория вероятности", 1, new List<string> { "Exam", "ControlWork" }),
+            ("Философия", 1, new List<string> { "Pass" }),
+            ("Nand to Tetris", 1, new List<string> { "Exam" }),
+            ("Сети и протоколы интернета", 1, new List<string> { "Pass" }),
+            ("Python", 1, new List<string> { "Exam" }),
+            ("ПЭК", 1, new List<string> { "Pass" })
+        };
+
+        var createdCount = 0;
+        var skippedCount = 0;
+        var errors = new List<string>();
+
+        foreach (var sub in subjects)
+        {
+            try
+            {
+                // CreateSubjectCommand expects Name, Semester, MaterialTypes
+                await _mediator.Send(new CreateSubjectCommand(sub.Name, sub.Semester, sub.Types));
+                createdCount++;
+            }
+            catch (InvalidOperationException) 
+            {
+                // Already exists (handled by handler)
+                skippedCount++;
+            }
+            catch (Exception ex)
+            {
+                errors.Add($"Error creating {sub.Name}: {ex.Message}");
+            }
+        }
+
+        return Ok(new 
+        { 
+            Message = "Seeding completed", 
+            Created = createdCount, 
+            Skipped = skippedCount, 
+            Errors = errors 
+        });
+    }
 }
