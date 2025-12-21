@@ -23,6 +23,11 @@ public class MaterialResponse
     public string AuthorName { get; set; } = string.Empty;
     public bool IsFavorite { get; set; }
     public string MaterialType { get; set; } = string.Empty;
-    public string Size { get; set; } = string.Empty;
+    public long Size { get; set; }
+    public string SizeFormatted { get; set; } = string.Empty;
     public DateTime UploadedAt { get; set; }
+    
+    public int LikesCount { get; set; }
+    public int DislikesCount { get; set; }
+    public string? CurrentUserRating { get; set; }
 }

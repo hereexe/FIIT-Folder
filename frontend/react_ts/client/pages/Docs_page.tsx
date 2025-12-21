@@ -111,7 +111,7 @@ function MaterialCard({ material }: { material: MaterialDto }) {
             <span className="text-lg text-fiit-text">{material.likesCount || 0}</span>
           </div>
         </div>
-        <span className="text-lg text-fiit-text">{material.size}</span>
+        <span className="text-lg text-fiit-text">{material.sizeFormatted}</span>
       </div>
     </div>
   );

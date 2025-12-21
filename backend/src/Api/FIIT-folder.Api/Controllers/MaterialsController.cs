@@ -42,8 +42,12 @@ public class MaterialsController : ControllerBase
             AuthorName = m.AuthorName,
             IsFavorite = m.IsFavorite,
             MaterialType = m.MaterialType,
-            Size = FormatSize(m.Size),
-            UploadedAt = m.UploadedAt
+            Size = m.Size,
+            SizeFormatted = FormatSize(m.Size),
+            UploadedAt = m.UploadedAt,
+            LikesCount = m.LikesCount,
+            DislikesCount = m.DislikesCount,
+            CurrentUserRating = m.CurrentUserRating
         }).AsEnumerable();
 
         if (!string.IsNullOrEmpty(request.MaterialType))
@@ -87,12 +91,14 @@ public class MaterialsController : ControllerBase
             Semester = result.Semester,
             Description = result.Description,
             MaterialType = result.MaterialType,
-            Size = FormatSize(result.Size),
+            Size = result.Size,
+            SizeFormatted = FormatSize(result.Size),
             UploadedAt = result.UploadedAt,
-            // AuthorName and IsFavorite might be empty/false initially or we can fetch them if needed. 
-            // Since it's just uploaded, Author is current user, IsFavorite is false.
-            AuthorName = User.Identity?.Name ?? "Me", // Or fetch user login if available in token properly
-            IsFavorite = false
+            AuthorName = User.Identity?.Name ?? "Me",
+            IsFavorite = false,
+            LikesCount = 0,
+            DislikesCount = 0,
+            CurrentUserRating = null
         };
 
         return Created($"/api/materials/{response.Id}", response);
@@ -120,8 +126,12 @@ public class MaterialsController : ControllerBase
             AuthorName = material.AuthorName,
             IsFavorite = material.IsFavorite,
             MaterialType = material.MaterialType,
-            Size = FormatSize(material.Size),
-            UploadedAt = material.UploadedAt
+            Size = material.Size,
+            SizeFormatted = FormatSize(material.Size),
+            UploadedAt = material.UploadedAt,
+            LikesCount = material.LikesCount,
+            DislikesCount = material.DislikesCount,
+            CurrentUserRating = material.CurrentUserRating
         };
 
         return Ok(response);

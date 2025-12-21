@@ -39,7 +39,8 @@ export interface MaterialDto {
   authorName?: string;
   isFavorite: boolean;
   materialType: string;
-  size: string;
+  size: number;
+  sizeFormatted: string;
   uploadedAt: string;
   downloadUrl?: string;
   likesCount: number;
