@@ -144,6 +144,16 @@ export default function FileViewer({
         </div>
 
         <div className="flex items-center gap-2 md:gap-3">
+          <a
+            href={pdfUrl}
+            download
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+            title="Скачать файл"
+          >
+            <Download className="w-9 h-9 md:w-10 md:h-10 text-folder-navy" strokeWidth={2} />
+          </a>
           <button
             onClick={handleFavorite}
             className="p-2 hover:bg-white/20 rounded-lg transition-colors">
@@ -196,14 +206,31 @@ export default function FileViewer({
       </div>
 
       {/* File content area */}
-      <div className="relative w-full mt-4 flex gap-3">
-        <div className="flex-1 aspect-[16/10] md:aspect-[16/9] bg-[#C4C4C4] rounded-2xl shadow-lg" />
-        <iframe
-          src={pdfUrl ? `${pdfUrl}#view=FitH` : ""}
-          title="PDF Viewer"
-          className="w-full h-[1000px] rounded border"
-          frameBorder="0"
-        />
+      <div className="relative w-full mt-4 flex flex-col items-center">
+        {title.toLowerCase().endsWith(".pdf") ? (
+          <iframe
+            src={pdfUrl ? `${pdfUrl}#view=FitH` : ""}
+            title="PDF Viewer"
+            className="w-full h-[800px] md:h-[1000px] rounded-2xl border-none shadow-xl bg-white"
+          />
+        ) : (
+          <div className="w-full aspect-[16/10] md:aspect-[16/9] bg-white/10 backdrop-blur-md rounded-2xl shadow-xl flex flex-col items-center justify-center gap-6 border border-white/20">
+            <div className="p-8 rounded-full bg-folder-navy/10">
+              <Download className="w-20 h-20 text-folder-navy" strokeWidth={1.5} />
+            </div>
+            <div className="text-center space-y-2">
+              <h3 className="text-folder-navy text-2xl font-semibold">Просмотр недоступен</h3>
+              <p className="text-folder-navy/70 text-lg">Этот тип файла ({title.split('.').pop()?.toUpperCase()}) нельзя просмотреть в браузере</p>
+            </div>
+            <a
+              href={pdfUrl}
+              download
+              className="mt-4 px-10 h-[60px] flex items-center justify-center rounded-2xl bg-folder-navy text-white text-xl font-bold shadow-lg hocus:scale-[1.02] active:scale-[0.98] transition-all"
+            >
+              Скачать материал
+            </a>
+          </div>
+        )}
       </div>
     </div>
   );
