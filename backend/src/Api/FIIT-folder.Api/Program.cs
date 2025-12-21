@@ -18,6 +18,9 @@ builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<ValidationFilter>();
+}).AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
 });
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
