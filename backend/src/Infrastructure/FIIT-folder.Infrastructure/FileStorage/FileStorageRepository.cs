@@ -91,7 +91,7 @@ public class FileStorageRepository : IFileStorageRepository
             
             return pathInCloud; //возвращаем путь к файлику для MobgoBD
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             throw new InvalidOperationException($"Ошибка загрузки файла '{name}' в облако плаки плаки");
         }
@@ -156,7 +156,7 @@ public class FileStorageRepository : IFileStorageRepository
             await Client.DeleteObjectAsync(request);
             Console.WriteLine("Файл удален из облака");
         }
-        catch (AmazonS3Exception ex)
+        catch (AmazonS3Exception)
         {
             throw new InvalidOperationException($"Ошибка удаления файла");
         }
@@ -177,9 +177,9 @@ public class FileStorageRepository : IFileStorageRepository
             await Client.GetObjectMetadataAsync(BucketName, fullPathFile);
             return true;
         }
-        catch
+        catch (Exception)
         {
-            Console.WriteLine("Файл не найден!");
+            Console.WriteLine("Error");
             return false;
         }
     }

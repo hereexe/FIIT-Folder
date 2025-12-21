@@ -143,7 +143,7 @@ public class MaterialMongoDB : IMaterialMongoDB
         }
     }
 
-    public Task<StudyMaterial> UpdateStudyMaterial(StudyMaterial material)
+    public async Task<StudyMaterial?> UpdateStudyMaterial(StudyMaterial material)
     {
         try
         {
@@ -157,7 +157,7 @@ public class MaterialMongoDB : IMaterialMongoDB
 
     public async Task<List<StudyMaterial>> GetAll()
     {
-        return null;
+        return new List<StudyMaterial>();
     }
 
     public Task<StudyMaterial> Create(StudyMaterial material)

@@ -12,7 +12,7 @@ public class TesterMongoDB
 {
     //private readonly IMaterialMongoDB Repository;
     
-    public static MaterialMongoDB GetRepository(string connectionString = null, string databaseName = null)
+    public static MaterialMongoDB GetRepository(string? connectionString = null, string? databaseName = null)
     {
         connectionString ??= "mongodb://localhost:27017";
         databaseName ??= "newbd";
@@ -56,7 +56,7 @@ public class TesterMongoDB
             else
                 Console.WriteLine("Error Материал не был создан");
         }
-        catch (ArgumentNullException ex)
+        catch (ArgumentNullException)
         {
             Console.WriteLine("Ошибка создания");
         }
@@ -80,7 +80,7 @@ public class TesterMongoDB
             else
                 Console.WriteLine("Error Ошибка удаления");
         }
-        catch (ArgumentNullException ex)
+        catch (ArgumentNullException)
         {
             Console.WriteLine("Какая то фигня");
         }
@@ -101,7 +101,7 @@ public class TesterMongoDB
                 Console.WriteLine("материала в базе нет!");
         }
         
-        catch (ArgumentNullException ex)
+        catch (ArgumentNullException)
         {
             Console.WriteLine("Ошибка при поиске");
         }
@@ -122,7 +122,7 @@ public class TesterMongoDB
                 Console.WriteLine("материала в базе нет!");
         }
         
-        catch (ArgumentNullException ex)
+        catch (ArgumentNullException)
         {
             Console.WriteLine("Ошибка при поиске");
         }
