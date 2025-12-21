@@ -1,4 +1,5 @@
 ﻿using Xunit;
+using FIIT_folder.Infrastructure.FileStorage;
 
 namespace FIIT_folder.Tests
 {
