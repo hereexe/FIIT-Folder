@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Search, Filter, CheckIcon, RefreshCcw } from "lucide-react";
 import SearchResult from "./SearchResult";
 import { useGetMaterialsQuery, useGetSubjectsQuery } from "../../../api/api";
@@ -13,6 +13,18 @@ interface FilterState {
 
 export default function SearchMenu() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery]);
+
   const [filters, setFilters] = useState<FilterState>({
     subjects: [],
     contentTypes: [],
@@ -29,7 +41,7 @@ export default function SearchMenu() {
   // Strategy: If single value selected, pass to backend for optimization.
   // Otherwise pass null and filter on client.
   const queryParams: GetMaterialsParams = {
-    searchQuery: searchQuery || undefined,
+    searchQuery: debouncedSearchQuery || undefined,
     subjectId: filters.subjects.length === 1 ? filters.subjects[0] : undefined,
     year: filters.years.length === 1 ? parseInt(filters.years[0]) : undefined,
     semester: filters.semesters.length === 1 ? parseInt(filters.semesters[0]) : undefined,
