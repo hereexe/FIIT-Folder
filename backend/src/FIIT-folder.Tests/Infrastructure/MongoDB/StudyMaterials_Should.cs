@@ -10,14 +10,14 @@ using FIIT_folder.Domain.Enums;
 [TestFixture]
 public class StudyMaterialMongoDB
 {
-    private Mock<IMongoCollection<BsonDocument>> _collectionMock = null;
-    private MaterialMongoDB _repository = null;
+    private Mock<IMongoCollection<BsonDocument>> CollectionMock = null;
+    private MaterialMongoDB Repository = null;
 
     [SetUp]
     public void SetUp()
     {
-        _collectionMock = new Mock<IMongoCollection<BsonDocument>>();
-        _repository = new MaterialMongoDB(_collectionMock.Object);
+        CollectionMock = new Mock<IMongoCollection<BsonDocument>>();
+        Repository = new MaterialMongoDB(CollectionMock.Object);
     }
 
     [Test]
@@ -34,14 +34,29 @@ public class StudyMaterialMongoDB
             MaterialType.Exam,
             new ResourceLocation("path/test.pdf")
         );
-        _collectionMock
+        CollectionMock
             .Setup(c => c.InsertOneAsync(It.IsAny<BsonDocument>(), null, default))
             .Returns(Task.CompletedTask);
-        var result = await _repository.CreateStudyMaterial(material);
+        var result = await Repository.CreateStudyMaterial(material);
         
         Assert.That(result, Is.Not.Null);
 
-        _collectionMock.Verify(c => c.InsertOneAsync(It.IsAny<BsonDocument>(),
+        CollectionMock.Verify(c => c.InsertOneAsync(It.IsAny<BsonDocument>(),
             null, default), Times.Once);
+    }
+    
+    [Test]
+    public async Task DeleteStudyMaterial_Should()
+    {
+        var materialId = Guid.NewGuid();
+        var deleteResult = new Mock<DeleteResult>();
+        deleteResult.Setup(d => d.DeletedCount).Returns(0);
+        
+        CollectionMock.Setup(c => c.DeleteOneAsync(It.Is<FilterDefinition<BsonDocument>>
+                (f => true), default)).ReturnsAsync(deleteResult.Object);
+        var result = await Repository.DeleteStudyMaterial(materialId);
+        Assert.That(result, Is.False);
+        CollectionMock.Verify(c => c.DeleteOneAsync(
+            It.Is<FilterDefinition<BsonDocument>> (f => true), default), Times.Once);
     }
 }
