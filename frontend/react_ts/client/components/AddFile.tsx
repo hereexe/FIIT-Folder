@@ -1,20 +1,79 @@
-import { ChevronLeft, ChevronDown, FilePlus2 } from "lucide-react";
-import { useState } from "react";
+import { ChevronDown, FilePlus2 } from "lucide-react";
+import { useState, useMemo } from "react";
 import { useUploadMaterialMutation, useGetSubjectsQuery } from "../../api/api";
 import { UploadMaterialRequest } from "../../api/types";
 import { useNavigate } from "react-router-dom";
 
+interface SubjectDto {
+  id: string;
+  name: string;
+  semester: number;
+  materialTypes: { value: string; displayName: string }[];
+}
+
 export default function Index() {
   const navigate = useNavigate();
   const [dragActive, setDragActive] = useState(false);
-  const [subject, setSubject] = useState("");
+  const [selectedSubjectName, setSelectedSubjectName] = useState("");
+  const [subject, setSubject] = useState(""); // This will be the actual subjectId
   const [year, setYear] = useState("");
   const [semester, setSemester] = useState("");
   const [contentType, setContentType] = useState("");
   const [description, setDescription] = useState("");
   const [files, setFiles] = useState<File | null>(null);
 
-  const { data: subjects = [] } = useGetSubjectsQuery();
+  const { data: subjects = [] } = useGetSubjectsQuery() as { data: SubjectDto[] };
+
+  // Get unique subject names (no duplicates)
+  const uniqueSubjectNames = useMemo(() => {
+    const names = subjects.map((s) => s.name);
+    return [...new Set(names)];
+  }, [subjects]);
+
+  // Get all subjects with the selected name (for material types)
+  const selectedSubjects = useMemo(() => {
+    return subjects.filter((s) => s.name === selectedSubjectName);
+  }, [subjects, selectedSubjectName]);
+
+  // Get unique material types for the selected subject name (merged from all semesters)
+  const availableMaterialTypes = useMemo(() => {
+    const typeMap = new Map<string, string>();
+    selectedSubjects.forEach((s) => {
+      s.materialTypes.forEach((t) => {
+        if (!typeMap.has(t.value)) {
+          typeMap.set(t.value, t.displayName);
+        }
+      });
+    });
+    return Array.from(typeMap.entries()).map(([value, displayName]) => ({
+      value,
+      displayName,
+    }));
+  }, [selectedSubjects]);
+
+  // Get available semesters for the selected subject name
+  const availableSemesters = useMemo(() => {
+    return selectedSubjects.map((s) => s.semester).sort((a, b) => a - b);
+  }, [selectedSubjects]);
+
+  // Handle subject name selection
+  const handleSubjectNameChange = (name: string) => {
+    setSelectedSubjectName(name);
+    setContentType(""); // Reset content type
+    setSemester(""); // Reset semester
+    setSubject(""); // Reset subject ID
+  };
+
+  // Handle semester selection - set the actual subject ID
+  const handleSemesterChange = (sem: string) => {
+    setSemester(sem);
+    const matchingSubject = subjects.find(
+      (s) => s.name === selectedSubjectName && s.semester === parseInt(sem, 10)
+    );
+    if (matchingSubject) {
+      setSubject(matchingSubject.id);
+    }
+  };
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -88,16 +147,16 @@ export default function Index() {
                 </label>
                 <div className="relative">
                   <select
-                    value={subject}
-                    onChange={(e) => setSubject(e.target.value)}
+                    value={selectedSubjectName}
+                    onChange={(e) => handleSubjectNameChange(e.target.value)}
                     className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
                   >
                     <option value="" className="text-primary-dark/50">
                       Выберите предмет
                     </option>
-                    {subjects.map((sub: any) => (
-                      <option key={sub.id} value={sub.id}>
-                        {sub.name}
+                    {uniqueSubjectNames.map((name) => (
+                      <option key={name} value={name}>
+                        {name}
                       </option>
                     ))}
                   </select>
@@ -136,20 +195,18 @@ export default function Index() {
                 <div className="relative">
                   <select
                     value={semester}
-                    onChange={(e) => setSemester(e.target.value)}
-                    className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
+                    onChange={(e) => handleSemesterChange(e.target.value)}
+                    disabled={!selectedSubjectName}
+                    className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <option value="" className="text-primary-dark/50">
-                      Выберите семестр
+                      {selectedSubjectName ? "Выберите семестр" : "Сначала выберите предмет"}
                     </option>
-                    <option value="1">1 семестр</option>
-                    <option value="2">2 семестр</option>
-                    <option value="3">3 семестр</option>
-                    <option value="4">4 семестр</option>
-                    <option value="5">5 семестр</option>
-                    <option value="6">6 семестр</option>
-                    <option value="7">7 семестр</option>
-                    <option value="8">8 семестр</option>
+                    {availableSemesters.map((sem) => (
+                      <option key={sem} value={sem.toString()}>
+                        {sem} семестр
+                      </option>
+                    ))}
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
                 </div>
@@ -164,15 +221,17 @@ export default function Index() {
                   <select
                     value={contentType}
                     onChange={(e) => setContentType(e.target.value)}
-                    className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
+                    disabled={!selectedSubjectName}
+                    className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <option value="" className="text-primary-dark/50">
-                      Выберите тип
+                      {selectedSubjectName ? "Выберите тип" : "Сначала выберите предмет"}
                     </option>
-                    <option value="Colloquium">коллоквиум</option>
-                    <option value="Exam">экзамен</option>
-                    <option value="ControlWork">контрольная</option>
-                    <option value="ComputerPractice">практикум</option>
+                    {availableMaterialTypes.map((type) => (
+                      <option key={type.value} value={type.value}>
+                        {type.displayName}
+                      </option>
+                    ))}
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
                 </div>
