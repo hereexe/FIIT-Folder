@@ -143,10 +143,18 @@ public class MaterialsController : ControllerBase
     [HttpGet("{id}/download")]
     [ProducesResponseType(typeof(FileStreamResult), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Download(Guid id)
+    public async Task<IActionResult> Download(Guid id, [FromQuery] bool download = false)
     {
         var result = await _mediator.Send(new DownloadMaterialQuery(id));
-        return File(result.FileStream, result.ContentType, result.FileName);
+        if (result == null) return NotFound();
+
+        if (download)
+        {
+            return File(result.FileStream, result.ContentType, result.FileName);
+        }
+        
+        // Inline display (for PDF viewer etc.)
+        return File(result.FileStream, result.ContentType);
     }
 
     [HttpDelete("{id}")]

@@ -145,7 +145,7 @@ export default function FileViewer({
 
         <div className="flex items-center gap-2 md:gap-3">
           <a
-            href={pdfUrl}
+            href={`${pdfUrl}${pdfUrl?.includes('?') ? '&' : '?'}download=true`}
             download
             target="_blank"
             rel="noopener noreferrer"
@@ -223,7 +223,7 @@ export default function FileViewer({
               <p className="text-folder-navy/70 text-lg">Этот тип файла ({title.split('.').pop()?.toUpperCase()}) нельзя просмотреть в браузере</p>
             </div>
             <a
-              href={pdfUrl}
+              href={`${pdfUrl}${pdfUrl?.includes('?') ? '&' : '?'}download=true`}
               download
               className="mt-4 px-10 h-[60px] flex items-center justify-center rounded-2xl bg-folder-navy text-white text-xl font-bold shadow-lg hocus:scale-[1.02] active:scale-[0.98] transition-all"
             >
