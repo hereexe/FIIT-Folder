@@ -14,13 +14,15 @@ export default function Index() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { examType, examName } = location.state || {};
-  const subjectId = sessionStorage.getItem("selectedSubjectId");
+  const { examType, examName, semester, subjectId: stateSubjectId } = location.state || {};
+  const sessionSubjectId = sessionStorage.getItem("selectedSubjectId");
+  const subjectId = stateSubjectId || sessionSubjectId;
   const subjectName = sessionStorage.getItem("selectedSubject");
 
   const { data: materialsData, isLoading, error } = useGetMaterialsQuery({
     subjectId: subjectId || undefined,
-    searchQuery: examName, // Using the name as a search query to filter grouped materials
+    materialType: examType,
+    semester: semester,
   });
 
   const handleClickBack = () => {
@@ -77,8 +79,8 @@ function MaterialCard({ material }: { material: MaterialDto }) {
   const navigate = useNavigate();
   const handleClickFile = () => {
     console.log(material)
-    navigate("/fileview_page", { 
-      state: { 
+    navigate("/fileview_page", {
+      state: {
         material: material  // Передаем весь объект material
       }
     });

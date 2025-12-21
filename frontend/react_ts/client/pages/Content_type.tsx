@@ -74,14 +74,15 @@ export default function Index() {
 
         {/* Content Sections */}
         <div className="px-5 md:px-[24px] py-0 flex flex-col gap-[15px] max-w-[780px] md:mr-auto md:ml-20 md:top-20">
-          
+
           {/* Экзамены Section */}
-          {serverContent.map((examProps) => (
-            <div>
+          {serverContent.map((examProps, index) => (
+            <div key={index}>
               <ExamType
                 examType={examProps.examType}
-                examNames={examProps.examNames}
-              ></ExamType>
+                rawType={examProps.rawType}
+                items={examProps.items}
+              />
             </div>
           ))}
         </div>

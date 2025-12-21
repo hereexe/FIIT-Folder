@@ -16,6 +16,14 @@ export default function Index() {
 
   const subjects = subjectsData || [];
 
+  // Group subjects by name to show only one card for "Math Analysis"
+  const uniqueSubjects = subjects.reduce((acc: typeof subjects, current) => {
+    if (!acc.find(s => s.name === current.name)) {
+      acc.push(current);
+    }
+    return acc;
+  }, []);
+
   return (
     <div className="min-h-screen bg-app-background flex flex-col">
       {/* Main Content */}
@@ -23,7 +31,7 @@ export default function Index() {
         <div className="max-w-[1280px] mx-auto">
           {/* Grid of Subject Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-x-[66px] md:gap-y-[50px]">
-            {subjects.map((subject, index) => (
+            {uniqueSubjects.map((subject, index) => (
               <Link
                 to={"/exam_type"}
                 onClick={() => handleClick(subject.id, subject.name)}
