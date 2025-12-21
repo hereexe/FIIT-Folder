@@ -58,6 +58,9 @@ public class MaterialsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Upload([FromForm] UploadMaterialRequest request)
     {
+        if (request.File == null)
+            return BadRequest(new { message = "Файл не выбран" });
+
         await using var stream = request.File.OpenReadStream();
         var userId = GetUserId();
 

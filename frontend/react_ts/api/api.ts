@@ -80,7 +80,7 @@ export const appApi = createApi({
           MaterialType: params.materialType,
           Semester: params.semester,
           Year: params.year,
-          Search: params.searchQuery,
+          SearchText: params.searchQuery,
         },
       }),
       providesTags: (result) =>

@@ -59,9 +59,17 @@ export default function Index() {
       await uploadMaterial(request).unwrap();
       alert("Успешно загружено!");
       navigate(-1);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Upload failed:", err);
-      alert("Ошибка при загрузке. Проверьте заполнение всех полей.");
+      let errorMessage = "Ошибка при загрузке. Проверьте заполнение всех полей.";
+
+      if (err.data && Array.isArray(err.data)) {
+        errorMessage = err.data.map((e: any) => e.errorMessage).join("\n");
+      } else if (err.data?.message) {
+        errorMessage = err.data.message;
+      }
+
+      alert(errorMessage);
     }
   };
 
