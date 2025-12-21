@@ -157,16 +157,27 @@ public class MaterialMongoDB : IMaterialMongoDB
 
     public async Task<List<StudyMaterial>> GetAll()
     {
+        var result = new List<StudyMaterial>();
         try
         {
             var documents = await CollectionStudyMaterial.Find(new BsonDocument()).ToListAsync();
-            return documents.Select(MapToStudyMaterial).ToList();
+            foreach (var doc in documents)
+            {
+                try
+                {
+                    result.Add(MapToStudyMaterial(doc));
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка маппинга документа {doc.GetValue("_id", "unknown")}: {ex.Message}");
+                }
+            }
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Ошибка при получении всех материалов: {ex.Message}");
-            return new List<StudyMaterial>();
         }
+        return result;
     }
 
     public Task<StudyMaterial> Create(StudyMaterial material)
