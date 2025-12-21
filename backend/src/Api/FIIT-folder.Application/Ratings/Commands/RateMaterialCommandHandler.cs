@@ -58,8 +58,8 @@ public class RateMaterialCommandHandler : IRequestHandler<RateMaterialCommand, R
 
         return new RatingResultDto
         {
-            LikeCount = likes,
-            DislikeCount = dislikes,
+            LikesCount = likes,
+            DislikesCount = dislikes,
             UserRating = currentRating?.Rating
         };
     }

@@ -22,8 +22,8 @@ export interface RateRequest {
 }
 
 export interface RatingResponse {
-  likes: number;
-  dislikes: number;
+  likesCount: number;
+  dislikesCount: number;
   userRating: RatingType | null;
 }
 export interface AddFavoriteRequest {

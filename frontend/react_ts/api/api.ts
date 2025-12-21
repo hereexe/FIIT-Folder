@@ -150,7 +150,11 @@ export const appApi = createApi({
         method: "POST",
         body: rating,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: "Rating", id }],
+      invalidatesTags: (result, error, { id }) => [
+        { type: "Materials", id: "LIST" },
+        { type: "MaterialDetail", id },
+        { type: "Favorites", id: "LIST" },
+      ],
     }),
 
     getMaterialRating: builder.query<RatingResponse, string>({

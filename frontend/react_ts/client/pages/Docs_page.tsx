@@ -108,7 +108,7 @@ function MaterialCard({ material }: { material: MaterialDto }) {
           </div>
           <div className="flex items-center gap-1">
             <ThumbsUp className={`w-[20px] h-[20px] ${material.currentUserRating === "Like" ? "fill-blue-500 text-blue-500" : "text-fiit-text"}`} />
-            <span className="text-lg text-fiit-text">{material.likesCount}</span>
+            <span className="text-lg text-fiit-text">{material.likesCount || 0}</span>
           </div>
         </div>
         <span className="text-lg text-fiit-text">{material.size}</span>

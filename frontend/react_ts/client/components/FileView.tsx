@@ -49,8 +49,8 @@ export default function FileViewer({
   const [isLiked, setIsLiked] = useState(initialUserRating === "Like");
   const [isDisliked, setIsDisliked] = useState(initialUserRating === "Dislike");
   const [isFavorited, setIsFavorited] = useState(isFavorite);
-  const [likes, setLikes] = useState(initialLikes);
-  const [dislikes, setDislikes] = useState(initialDislikes);
+  const [likes, setLikes] = useState(initialLikes || 0);
+  const [dislikes, setDislikes] = useState(initialDislikes || 0);
 
   const handleLike = async () => {
     const newRating = isLiked ? null : "Like";
