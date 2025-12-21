@@ -1,5 +1,7 @@
 import { ChevronRight } from "lucide-react";
 import { MaterialDto } from "../../../api/types";
+import { useNavigate } from "react-router-dom";
+import { useGetSubjectsQuery } from "../../../api/api";
 
 interface ListItemProps {
   title: string;
@@ -33,12 +35,38 @@ interface SearchResultProps {
   items: MaterialDto[];
 }
 
+const materialTypeLabels: Record<string, string> = {
+  "Exam": "Экзамен",
+  "Colloquium": "Коллоквиум",
+  "Pass": "Зачёт",
+  "ControlWork": "Контрольная работа",
+  "ComputerPractice": "Компьютерный практикум"
+};
+
 export default function SearchResult({ items }: SearchResultProps) {
-  const handleItemClick = (item: MaterialDto) => {
-    if (item.downloadUrl) {
-      window.open(item.downloadUrl, '_blank');
-    }
-  };
+  const navigate = useNavigate();
+  const { data: subjects = [] } = useGetSubjectsQuery();
+
+  const handleItemClick = (material: MaterialDto) => {
+    const subject = subjects.find(s => s.id === material.subjectId);
+    const subjectName = subject?.name || "Предмет";
+    const typeLabel = materialTypeLabels[material.materialType] || material.materialType;
+    const examName = `${typeLabel}, ${material.semester} семестр`;
+
+    // Сохраняем в sessionStorage для корректного отображения на странице Docs_page
+    sessionStorage.setItem("selectedSubjectId", material.subjectId);
+    sessionStorage.setItem("selectedSubject", subjectName);
+    sessionStorage.setItem("examName", examName);
+
+    navigate("/doc_page", {
+      state: {
+        examType: material.materialType,
+        examName: examName,
+        semester: material.semester,
+        subjectId: material.subjectId
+      }
+    });
+  }
 
   return (
     <div className="max-w-6xl mx-auto ">
