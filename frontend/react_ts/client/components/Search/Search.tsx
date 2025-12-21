@@ -25,6 +25,13 @@ export default function SearchMenu() {
     };
   }, [searchQuery]);
 
+  // Auto-switch to results when search query is present
+  useEffect(() => {
+    if (debouncedSearchQuery.trim().length > 0) {
+      setShowFilters(false);
+    }
+  }, [debouncedSearchQuery]);
+
   const [filters, setFilters] = useState<FilterState>({
     subjects: [],
     contentTypes: [],
