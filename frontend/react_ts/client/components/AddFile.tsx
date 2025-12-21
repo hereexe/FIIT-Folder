@@ -66,15 +66,8 @@ export default function Index() {
   };
 
   return (
-    <div className="flex items-center justify-center p-4 min-h-screen bg-app-bg font-[Inter]">
-      <div className="w-full bg-white/100 rounded-[20px] shadow-2xl p-6 md:p-8 lg:p-10 max-w-7xl">
-        <button
-          onClick={() => navigate(-1)}
-          className="mb-6 flex items-center text-primary-dark hover:opacity-70 transition-opacity"
-        >
-          <ChevronLeft className="w-6 h-6" />
-          Назад
-        </button>
+    <div className="flex items-center justify-center p-4 ">
+      <div className="w-full rounded-[20px] p-6 md:p-8 lg:p-10">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
           {/* Left Section - Form */}
           <div className="flex-1 space-y-12">

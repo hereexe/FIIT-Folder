@@ -39,7 +39,7 @@ const Modal: React.FC<ModalProps> = ({
   return ReactDOM.createPortal(
     <div className="modal-overlay" onClick={onClose}>
       <div 
-        className="modal-container" 
+        className="modal-container shadow-2xl" 
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"

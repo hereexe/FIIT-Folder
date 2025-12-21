@@ -22,6 +22,7 @@ export default function Login_page() {
 
         try {
             await login({ username, password }).unwrap();
+            sessionStorage.setItem("userName", username)
             navigate("/main_page");
         } catch (err: any) {
             console.error("Login failed:", err);

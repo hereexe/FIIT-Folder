@@ -50,11 +50,11 @@ export default function Index() {
   };
 
   return (
-    <div className="flex min-h-screen bg-app-bg font-[Inter]">
+    <div className="flex min-h-screen bg-app-bg font-[Inter] md:px-[40px] py-[14px]">
       {/* Main Content */}
       <main className="flex-1">
         {/* Top Bar */}
-        <div className="flex items-center justify-between px-5 md:px-[24px] py-[14px]">
+        <div className="flex items-center justify-between px-5 md:px-[40px] py-[14px]">
           {/* Левая часть - кнопки */}
           <div className="flex items-center gap-2 flex-shrink-0">
             <button
@@ -64,16 +64,17 @@ export default function Index() {
               <ChevronLeft className="w-10 h-10 text-app-text stroke-[2]" />
             </button>
           </div>
-        </div>
-
-        {/* Content Sections */}
-        <div className="px-5 md:px-[24px] py-0 flex flex-col gap-[15px] max-w-[780px] md:mr-auto md:ml-20 md:top-20">
           {/* Центральная часть - заголовок */}
-          <div className="flex-1 flex justify-left">
+          <div className="flex-1 flex md:px-[40px]">
             <h1 className="text-app-text text-[28px] md:text-[45px] font-semibold tracking-[0.9px] text-center">
               {subjectName}
             </h1>
           </div>
+        </div>
+
+        {/* Content Sections */}
+        <div className="px-5 md:px-[24px] py-0 flex flex-col gap-[15px] max-w-[780px] md:mr-auto md:ml-20 md:top-20">
+          
           {/* Экзамены Section */}
           {serverContent.map((examProps) => (
             <div>

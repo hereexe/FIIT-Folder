@@ -28,7 +28,7 @@ export default function Index() {
                 to={"/exam_type"}
                 onClick={() => handleClick(subject.id, subject.name)}
                 key={subject.id}
-                className="h-[105px] bg-app-purple rounded-[10px] flex items-center justify-center px-4 text-app-text text-lg md:text-[25px] font-medium tracking-[0.25px] leading-normal text-center hover:opacity-30 hover:scale-110 transition-all whitespace-pre-line"
+                className="h-[105px] bg-app-purple rounded-[10px] flex items-center justify-center text-app-text text-lg md:text-[25px] font-medium tracking-[0.25px] leading-normal text-center hover:opacity-30 hover:scale-110 transition-all"
               >
                 {subject.name.replace(' ', '\n')}
               </Link>
