@@ -44,6 +44,28 @@ export default function SearchMenu() {
   // Fetch subjects
   const { data: subjectsData = [] } = useGetSubjectsQuery();
 
+  // Get unique subjects by name (no duplicates)
+  const uniqueSubjects = useMemo(() => {
+    const seen = new Map<string, SubjectDto>();
+    subjectsData.forEach((s: SubjectDto) => {
+      if (!seen.has(s.name)) {
+        seen.set(s.name, s);
+      }
+    });
+    return Array.from(seen.values());
+  }, [subjectsData]);
+
+  // Map subject name to all subject IDs with that name (for filtering)
+  const subjectNameToIds = useMemo(() => {
+    const map = new Map<string, string[]>();
+    subjectsData.forEach((s: SubjectDto) => {
+      const ids = map.get(s.name) || [];
+      ids.push(s.id);
+      map.set(s.name, ids);
+    });
+    return map;
+  }, [subjectsData]);
+
   // Prepare query params
   // Strategy: If single value selected, pass to backend for optimization.
   // Otherwise pass null and filter on client.
@@ -106,6 +128,33 @@ export default function SearchMenu() {
   const uiContentTypes = Object.values(contentTypeMap);
   const years = ["2025", "2024", "2023", "2022", "2021"];
   const semesters = ["1", "2", "3", "4", "5", "6", "7", "8"];
+
+  // Toggle filter for subjects by NAME (handles all subject IDs with same name)
+  const toggleSubjectFilter = (subjectName: string) => {
+    const subjectIds = subjectNameToIds.get(subjectName) || [];
+    setFilters((prev) => {
+      const hasAny = subjectIds.some(id => prev.subjects.includes(id));
+      if (hasAny) {
+        // Remove all IDs for this subject name
+        return {
+          ...prev,
+          subjects: prev.subjects.filter(id => !subjectIds.includes(id))
+        };
+      } else {
+        // Add all IDs for this subject name
+        return {
+          ...prev,
+          subjects: [...prev.subjects, ...subjectIds]
+        };
+      }
+    });
+  };
+
+  // Check if subject name is selected (any of its IDs are selected)
+  const isSubjectSelected = (subjectName: string) => {
+    const subjectIds = subjectNameToIds.get(subjectName) || [];
+    return subjectIds.some(id => filters.subjects.includes(id));
+  };
 
   const toggleFilter = (
     category: keyof FilterState,
@@ -216,14 +265,11 @@ export default function SearchMenu() {
                 <div className="h-px w-full bg-purple-dark"></div>
                 <div className="space-y-1.5">
                   <div className="flex flex-wrap gap-2">
-                    {subjectsData.map((subject: SubjectDto) => (
+                    {uniqueSubjects.map((subject: SubjectDto) => (
                       <button
-                        key={subject.id}
-                        onClick={() => toggleFilter("subjects", subject.id)}
-                        className={`px-2 py-1.5 rounded-[20px] text-xl font-normal transition-all hover:bg-purple-light/77 ${getButtonStyle(
-                          "subjects",
-                          subject.id
-                        )}`}
+                        key={subject.name}
+                        onClick={() => toggleSubjectFilter(subject.name)}
+                        className={`px-2 py-1.5 rounded-[20px] text-xl font-normal transition-all hover:bg-purple-light/77 ${isSubjectSelected(subject.name) ? "bg-purple-dark text-purple-light" : "bg-white/50 text-purple-dark"}`}
                       >
                         {subject.name}
                       </button>
