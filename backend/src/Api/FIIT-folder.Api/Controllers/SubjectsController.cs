@@ -142,19 +142,33 @@ public class SubjectsController : ControllerBase
     {
         var subjects = new List<(string Name, int Semester, List<string> Types)>
         {
+            // 1 семестр
             ("Математический анализ", 1, new List<string> { "Exam", "Colloquium", "Pass" }),
             ("Алгебра и геометрия", 1, new List<string> { "Exam", "ControlWork", "ComputerPractice" }),
-            ("Дискретная математика", 1, new List<string> { "Exam", "ControlWork", "ComputerPractice" }),
             ("Введение в математику", 1, new List<string> { "ControlWork" }),
             ("Языки и технологии программирования", 1, new List<string> { "Exam" }),
             ("Основы российской государственности", 1, new List<string> { "Pass" }),
             ("Основы проектной деятельности", 1, new List<string> { "Pass" }),
-            ("Теория вероятности", 1, new List<string> { "Exam", "ControlWork" }),
-            ("Философия", 1, new List<string> { "Pass" }),
             ("Nand to Tetris", 1, new List<string> { "Exam" }),
-            ("Сети и протоколы интернета", 1, new List<string> { "Pass" }),
-            ("Python", 1, new List<string> { "Exam" }),
-            ("ПЭК", 1, new List<string> { "Pass" })
+            ("ПЭК", 1, new List<string> { "Pass" }),
+            
+            // 2 семестр
+            ("Математический анализ", 2, new List<string> { "Exam", "Colloquium", "Pass" }),
+            ("Алгебра и геометрия", 2, new List<string> { "Exam", "ControlWork", "ComputerPractice" }),
+            ("Языки и технологии программирования", 2, new List<string> { "Exam" }),
+            ("Философия", 2, new List<string> { "Pass" }),
+            ("Nand to Tetris", 2, new List<string> { "Exam" }),
+            ("Python", 2, new List<string> { "Exam" }),
+            
+            // 3 семестр
+            ("Математический анализ", 3, new List<string> { "Exam", "Colloquium", "Pass" }),
+            ("Дискретная математика", 3, new List<string> { "Exam", "ControlWork", "ComputerPractice" }),
+            ("Сети и протоколы интернета", 3, new List<string> { "Pass" }),
+            ("Теория вероятности", 3, new List<string> { "Exam", "ControlWork" }),
+            ("Python", 3, new List<string> { "Exam" }),
+            
+            // 4 семестр
+            ("Теория вероятности", 4, new List<string> { "Exam", "ControlWork" })
         };
 
         var createdCount = 0;
