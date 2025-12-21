@@ -57,6 +57,11 @@ public class GetFavoritesHandler : IRequestHandler<GetFavoritesQuery, List<Favor
                     matDto.Description = mat.Description;
                     matDto.SubjectId = mat.SubjectId.Value;
 
+                    matDto.SizeFormatted = FormatSize(mat.Size.Size);
+                    // Since we are in Application layer, we don't have HTTP Request. 
+                    // Frontend will handle the base URL or we can pass it if needed.
+                    matDto.DownloadUrl = $"/api/materials/{mat.Id.Value}/download";
+
                     var user = await _userRepository.GetByIdAsync(mat.UserId.Value, cancellationToken);
                     if (user != null)
                     {
@@ -86,5 +91,15 @@ public class GetFavoritesHandler : IRequestHandler<GetFavoritesQuery, List<Favor
         }
 
         return response;
+    }
+
+    private static string FormatSize(long bytes)
+    {
+        return bytes switch
+        {
+            >= 1024 * 1024 => $"{bytes / 1024.0 / 1024.0:F2} MB",
+            >= 1024 => $"{bytes / 1024.0:F2} KB",
+            _ => $"{bytes} B"
+        };
     }
 }

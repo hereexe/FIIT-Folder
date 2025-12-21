@@ -170,7 +170,7 @@ export const appApi = createApi({
       }),
       invalidatesTags: (result, error, { materialId }) => [
         { type: "Favorites" },
-        { type: "Materials", id: materialId },
+        { type: "Materials", id: "LIST" },
         { type: "MaterialDetail", id: materialId },
       ],
     }),
@@ -182,7 +182,7 @@ export const appApi = createApi({
       }),
       invalidatesTags: (result, error, materialId) => [
         { type: "Favorites" },
-        { type: "Materials", id: materialId },
+        { type: "Materials", id: "LIST" },
         { type: "MaterialDetail", id: materialId },
       ],
     }),
@@ -196,6 +196,15 @@ export const appApi = createApi({
             { type: "Favorites", id: "LIST" },
           ]
           : [{ type: "Favorites", id: "LIST" }],
+      transformResponse: (response: any[]) => {
+        return response.map(fav => ({
+          ...fav,
+          id: fav.materialId, // Use MaterialId as the ID for consistency in UI
+          downloadUrl: fav.downloadUrl.startsWith('http')
+            ? fav.downloadUrl
+            : `${BASE_URL.replace('/api', '')}${fav.downloadUrl}`
+        }));
+      }
     }),
 
     getSubjects: builder.query<SubjectDto[], void>({

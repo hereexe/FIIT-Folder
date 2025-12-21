@@ -12,10 +12,12 @@ public class FavoriteMaterialDto
     public int? Semester { get; set; }
     public string? Description { get; set; }
     public string? AuthorName { get; set; }
-    public Guid? SubjectId { get; set; }
+    public Guid SubjectId { get; set; }
     public DateTime AddedAt { get; set; }
     
+    public string SizeFormatted { get; set; } = string.Empty;
     public int LikesCount { get; set; }
     public int DislikesCount { get; set; }
     public string? CurrentUserRating { get; set; }
+    public string DownloadUrl { get; set; } = string.Empty;
 }
