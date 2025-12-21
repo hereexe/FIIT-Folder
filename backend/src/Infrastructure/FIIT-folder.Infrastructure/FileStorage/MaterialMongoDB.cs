@@ -180,6 +180,34 @@ public class MaterialMongoDB : IMaterialMongoDB
         return result;
     }
 
+    public async Task<List<StudyMaterial>> SearchAsync(string searchText)
+    {
+        var result = new List<StudyMaterial>();
+        try
+        {
+            var filter = Builders<BsonDocument>.Filter.Regex("name", new BsonRegularExpression(searchText, "i")) |
+                         Builders<BsonDocument>.Filter.Regex("description", new BsonRegularExpression(searchText, "i"));
+
+            var documents = await CollectionStudyMaterial.Find(filter).ToListAsync();
+            foreach (var doc in documents)
+            {
+                try
+                {
+                    result.Add(MapToStudyMaterial(doc));
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка маппинга документа {doc.GetValue("_id", "unknown")}: {ex.Message}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка при поиске материалов: {ex.Message}");
+        }
+        return result;
+    }
+
     public Task<StudyMaterial> Create(StudyMaterial material)
     {
         throw new NotImplementedException();

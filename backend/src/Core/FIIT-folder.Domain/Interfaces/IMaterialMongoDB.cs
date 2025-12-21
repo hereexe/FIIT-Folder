@@ -12,4 +12,5 @@ public interface IMaterialMongoDB
     Task<StudyMaterial> CreateStudyMaterial(StudyMaterial material);
     
     Task<StudyMaterial?> UpdateStudyMaterial(StudyMaterial material);
+    Task<List<StudyMaterial>> SearchAsync(string searchText);
 }

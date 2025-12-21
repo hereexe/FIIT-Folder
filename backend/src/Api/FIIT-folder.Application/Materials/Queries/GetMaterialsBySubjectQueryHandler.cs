@@ -30,6 +30,10 @@ public class GetMaterialsBySubjectQueryHandler : IRequestHandler<GetMaterialsByS
         {
             materials = await _materialRepository.GetBySubjectId(request.SubjectId.Value);
         }
+        else if (!string.IsNullOrWhiteSpace(request.SearchText))
+        {
+            materials = await _materialRepository.SearchAsync(request.SearchText);
+        }
         else
         {
             materials = await _materialRepository.GetAll();
