@@ -37,6 +37,7 @@ export default function FileViewer({
   const [dislikes, setDislikes] = useState(initialDislikes);
 
   const handleLike = () => {
+    
     if (isLiked) {
       // Already liked, remove like
       setIsLiked(false);
@@ -74,7 +75,7 @@ export default function FileViewer({
     setIsFavorited(!isFavorited);
   };
   return (
-    <div className="flex flex-col items-center gap-4 w-full max-w-[1280px] mx-auto px-4 md:px-6 py-6">
+    <div className="flex flex-col items-center gap-4 w-full max-w-80p mx-auto px-4 md:px-6 py-6">
       {/* Header section */}
       <div className="flex items-center justify-between w-full py-3">
         <button
@@ -87,10 +88,10 @@ export default function FileViewer({
         </button>
 
         <div className="flex flex-col items-center justify-center gap-2 flex-1 px-4">
-          <h2 className="text-folder-navy text-xl md:text-2xl lg:text-[30px] font-medium tracking-wide text-center truncate max-w-full">
+          <h2 className="text-folder-navy whitespace-normal break-words text-xl md:text-2xl lg:text-[30px] font-medium tracking-wide text-center truncate max-w-full">
             {title}
           </h2>
-          <p className="text-folder-navy text-lg md:text-xl lg:text-[23px] font-medium tracking-wide text-center truncate max-w-full">
+          <p className="text-folder-navy text-lg md:text-xl lg:text-[25px] font-medium tracking-wide text-center truncate max-w-full">
             {author}
           </p>
         </div>

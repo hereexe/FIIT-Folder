@@ -1,4 +1,10 @@
-import { ChevronLeft, ThumbsUp } from "lucide-react";
+import {
+  ChevronLeft,
+  Heart,
+  Download,
+  ThumbsUp,
+  ThumbsDown,
+} from "lucide-react";
 import { useState } from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useGetMaterialsQuery } from '../../api/api';
@@ -70,7 +76,12 @@ export default function Index() {
 function MaterialCard({ material }: { material: MaterialDto }) {
   const navigate = useNavigate();
   const handleClickFile = () => {
-    navigate("/fileview_page", { state: { material } });
+    console.log(material)
+    navigate("/fileview_page", { 
+      state: { 
+        material: material  // Передаем весь объект material
+      }
+    });
   }
   return (
     <div
@@ -90,7 +101,8 @@ function MaterialCard({ material }: { material: MaterialDto }) {
 
       <div className="absolute bottom-0 left-0 right-0 h-[35px] flex items-center justify-between px-[15px] z-10">
         <div className="flex items-center gap-2">
-          <ThumbsUp className={`w-[20px] h-[20px] ${material.isFavorite ? "fill-red-500" : ""}`} />
+          {/*TODO: Количество лайков isLiked*/}
+          <Heart className={`w-[25px] h-[25px] ${material.isFavorite ? "fill-red-500" : ""}`} />
           <span className="text-xl text-fiit-text"> {material.size} </span>
         </div>
       </div>
