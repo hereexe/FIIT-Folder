@@ -1,5 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import { MaterialDto } from "../../../api/types";
+import { useNavigate } from "react-router-dom";
 
 interface ListItemProps {
   title: string;
@@ -34,11 +35,15 @@ interface SearchResultProps {
 }
 
 export default function SearchResult({ items }: SearchResultProps) {
-  const handleItemClick = (item: MaterialDto) => {
-    if (item.downloadUrl) {
-      window.open(item.downloadUrl, '_blank');
-    }
-  };
+  const navigate = useNavigate();
+  const handleItemClick = (material: MaterialDto) => {
+    console.log(material)
+    navigate("/fileview_page", {
+      state: {
+        material: material  // Передаем весь объект material
+      }
+    });
+  }
 
   return (
     <div className="max-w-6xl mx-auto ">
