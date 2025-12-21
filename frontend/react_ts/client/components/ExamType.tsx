@@ -3,26 +3,33 @@ import { configureStore } from "@reduxjs/toolkit";
 import { useNavigate } from "react-router-dom";
 import { ChevronUp, ChevronDown } from "lucide-react";
 
-export interface ExamTypeProps {
-  examType: string;
-  examNames: string[];
+export interface ExamTypeItemProps {
+  displayName: string;
+  semester: number;
+  subjectId: string;
 }
 
-const ExamType: React.FC<ExamTypeProps> = ({ examType, examNames }) => {
+export interface ExamTypeProps {
+  examType: string;
+  rawType: string;
+  items: ExamTypeItemProps[];
+}
+
+const ExamType: React.FC<ExamTypeProps> = ({ examType, rawType, items }) => {
   const [examsExpanded, setExamsExpanded] = useState(true);
   const navigate = useNavigate();
 
   const handleHeaderClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Важно: останавливаем всплытие
+    e.stopPropagation();
     setExamsExpanded(!examsExpanded);
   };
 
-  const handleExamClick = (examName: string, e: React.MouseEvent) => {
-    e.stopPropagation(); // Останавливаем всплытие
-    console.log("Клик по экзамену:", examType, examName);
-    sessionStorage.setItem("examName", examName);
+  const handleItemClick = (item: ExamTypeItemProps, e: React.MouseEvent) => {
+    e.stopPropagation();
+    sessionStorage.setItem("examName", item.displayName);
+    sessionStorage.setItem("selectedSubjectId", item.subjectId);
     navigate("/doc_page", {
-      state: { examType, examName },
+      state: { examType: rawType, examName: item.displayName, semester: item.semester, subjectId: item.subjectId },
     });
   };
 
@@ -47,14 +54,14 @@ const ExamType: React.FC<ExamTypeProps> = ({ examType, examNames }) => {
 
       {examsExpanded && (
         <div className="flex flex-col gap-[15px]">
-          {examNames.map((examName, index) => (
+          {items.map((item, index) => (
             <div
               key={`${examType}-${index}`}
-              className="bg-app-item rounded-[10px] px-9 py-[11px] hover:opacity-80 transition-opacity"
-              onClick={(e) => handleExamClick(examName, e)}
+              className="bg-app-item rounded-[10px] px-9 py-[11px] hover:opacity-80 transition-opacity cursor-pointer"
+              onClick={(e) => handleItemClick(item, e)}
             >
-              <div className="text-black text-[23px] line-clamp-1 font-medium tracking-[0.23px] cursor-pointer">
-                {examName}
+              <div className="text-black text-[23px] line-clamp-1 font-medium tracking-[0.23px]">
+                {item.displayName}
               </div>
             </div>
           ))}

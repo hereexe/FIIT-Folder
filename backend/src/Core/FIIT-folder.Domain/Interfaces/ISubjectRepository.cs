@@ -9,5 +9,6 @@ public interface ISubjectRepository
     Task<Subject> Create(Subject subject);
     Task<bool> Update(Subject subject);
     Task<bool> Delete(Guid id);
+    Task<List<Subject>> GetByName(string name);
     Task<bool> ExistsByName(string name);
 }

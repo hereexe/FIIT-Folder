@@ -31,5 +31,13 @@ public class SubjectWithMaterialsResponse
 public class MaterialGroupResponse
 {
     public string ExamType { get; set; } = string.Empty;
-    public List<string> ExamNames { get; set; } = new();
+    public string RawType { get; set; } = string.Empty;
+    public List<MaterialGroupItemResponse> Items { get; set; } = new();
+}
+
+public class MaterialGroupItemResponse
+{
+    public string DisplayName { get; set; } = string.Empty;
+    public int Semester { get; set; }
+    public Guid SubjectId { get; set; }
 }

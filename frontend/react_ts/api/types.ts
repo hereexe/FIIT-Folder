@@ -77,9 +77,16 @@ export interface SubjectResponse {
   semester: number;
   materialTypes: MaterialTypeResponse[];
 }
+export interface ExamTypeItemProps {
+  displayName: string;
+  semester: number;
+  subjectId: string;
+}
+
 export interface ExamTypeProps {
   examType: string;
-  examNames: string[];
+  rawType: string;
+  items: ExamTypeItemProps[];
 }
 
 export interface SubjectWithMaterialsResponse {

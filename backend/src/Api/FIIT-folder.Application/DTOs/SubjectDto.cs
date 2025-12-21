@@ -24,5 +24,13 @@ public class SubjectWithMaterialsDto
 public class MaterialGroupDto
 {
     public string ExamType { get; set; } = string.Empty;
-    public List<string> ExamNames { get; set; } = new();
+    public string RawType { get; set; } = string.Empty;
+    public List<MaterialGroupItemDto> Items { get; set; } = new();
+}
+
+public class MaterialGroupItemDto
+{
+    public string DisplayName { get; set; } = string.Empty;
+    public int Semester { get; set; }
+    public Guid SubjectId { get; set; }
 }

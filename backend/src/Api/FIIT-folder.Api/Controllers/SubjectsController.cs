@@ -100,7 +100,13 @@ public class SubjectsController : ControllerBase
             Content = result.MaterialGroups.Select(g => new MaterialGroupResponse
             {
                 ExamType = g.ExamType,
-                ExamNames = g.ExamNames
+                RawType = g.RawType,
+                Items = g.Items.Select(i => new MaterialGroupItemResponse
+                {
+                    DisplayName = i.DisplayName,
+                    Semester = i.Semester,
+                    SubjectId = i.SubjectId
+                }).ToList()
             }).ToList()
         };
 

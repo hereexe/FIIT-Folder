@@ -4,18 +4,18 @@ namespace FIIT_folder.Domain.Enums;
 
 public enum MaterialType
 {
-    [Description("Экзамен")]
+    [Description("Экзамены")]
     Exam,
     
-    [Description("Коллоквиум")]
+    [Description("Коллоквиумы")]
     Colloquium,
     
-    [Description("Зачёт")]
+    [Description("Зачёты")]
     Pass,
     
-    [Description("Контрольная работа")]
+    [Description("Контрольные работы")]
     ControlWork,
     
-    [Description("Компьютерный практикум")]
+    [Description("Компьютерные практикумы")]
     ComputerPractice
 }
