@@ -25,7 +25,15 @@ public class GetMaterialsBySubjectQueryHandler : IRequestHandler<GetMaterialsByS
 
     public async Task<List<MaterialDto>> Handle(GetMaterialsBySubjectQuery request, CancellationToken cancellationToken)
     {
-        var materials = await _materialRepository.GetBySubjectId(request.SubjectId);
+        List<Domain.Entities.StudyMaterial> materials;
+        if (request.SubjectId.HasValue)
+        {
+            materials = await _materialRepository.GetBySubjectId(request.SubjectId.Value);
+        }
+        else
+        {
+            materials = await _materialRepository.GetAll();
+        }
 
         if (materials == null)
             return new List<MaterialDto>();

@@ -1,48 +1,91 @@
-import { useState } from "react";
-import { Search, Filter, X, CheckIcon, RefreshCcw } from "lucide-react";
+import { useState, useMemo } from "react";
+import { Search, Filter, CheckIcon, RefreshCcw } from "lucide-react";
 import SearchResult from "./SearchResult";
+import { useGetMaterialsQuery, useGetSubjectsQuery } from "../../../api/api";
+import { GetMaterialsParams, SubjectDto } from "../../../api/types";
 
 interface FilterState {
-  subjects: string[];
+  subjects: string[]; // Subject IDs
   contentTypes: string[];
   years: string[];
   semesters: string[];
 }
 
 export default function SearchMenu() {
+  const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState<FilterState>({
     subjects: [],
     contentTypes: [],
     years: [],
     semesters: [],
   });
-  
-  // Добавляем состояние для видимости окна фильтров
+
   const [showFilters, setShowFilters] = useState(true);
 
-  const subjects = [
-    "Математический анализ",
-    "Алгебра и геометрия",
-    "ОРГ",
-    "Философия",
-    "Теория вероятности",
-    "Дискретная математика",
-    "Nand To Tetris",
-    "ОПД",
-    "Сети и протоколы интернета",
-    "Английский язык",
-  ];
+  // Fetch subjects
+  const { data: subjectsData = [] } = useGetSubjectsQuery();
 
-  const contentTypes = [
-    "Лекции",
-    "Экзамены",
-    "Контрольные",
-    "Практики",
-    "Коллоквиумы",
-  ];
+  // Prepare query params
+  // Strategy: If single value selected, pass to backend for optimization.
+  // Otherwise pass null and filter on client.
+  const queryParams: GetMaterialsParams = {
+    searchQuery: searchQuery || undefined,
+    subjectId: filters.subjects.length === 1 ? filters.subjects[0] : undefined,
+    year: filters.years.length === 1 ? parseInt(filters.years[0]) : undefined,
+    semester: filters.semesters.length === 1 ? parseInt(filters.semesters[0]) : undefined,
+    materialType: filters.contentTypes.length === 1 ? filters.contentTypes[0] : undefined
+  };
 
+  const { data: materials = [], isLoading } = useGetMaterialsQuery(queryParams);
+
+  // Client-side filtering for multiple selections case or mixed scenarios
+  const filteredMaterials = useMemo(() => {
+    return materials.filter(material => {
+      // Subject Filter
+      if (filters.subjects.length > 0 && !filters.subjects.includes(material.subjectId)) {
+        return false;
+      }
+      // Content Type Filter (MaterialType is string in DTO)
+      if (filters.contentTypes.length > 0 && !filters.contentTypes.some(t => material.materialType.toLowerCase() === t.toLowerCase())) {
+        // Backend might return "Exam", "Lection". Filter UI has Russian names? 
+        // Need to map UI names to backend enum string values.
+        // Let's check logic below.
+        // Actually, let's look at what we are putting in `filters.contentTypes`.
+        return false;
+      }
+      // Year Filter
+      if (filters.years.length > 0 && !filters.years.includes(material.year.toString())) {
+        return false;
+      }
+      // Semester Filter
+      if (filters.semesters.length > 0 && !filters.semesters.includes(material.semester.toString())) {
+        return false;
+      }
+      return true;
+    });
+  }, [materials, filters]);
+
+  // Mapping for Content Types (UI Display -> Backend Enum)
+  // Backend types: Exam, Colloquium, Pass, ControlWork, ComputerPractice
+  // UI types: "Экзамены" -> "Exam", etc.
+
+  const contentTypeMap: Record<string, string> = {
+    "Exam": "Экзамены",
+    "Colloquium": "Коллоквиумы",
+    "Pass": "Зачёты",
+    "ControlWork": "Контрольные",
+    "ComputerPractice": "Практики"
+    // What about "Лекции"? Not in backend enum MaterialType.cs?
+    // Enum: Exam, Colloquium, Pass, ControlWork, ComputerPractice.
+    // So "Лекции" might not exist on backend yet! I will omit it or map strictly.
+  };
+
+  const invertedContentTypeMap: Record<string, string> = Object.fromEntries(
+    Object.entries(contentTypeMap).map(([k, v]) => [v, k])
+  );
+
+  const uiContentTypes = Object.values(contentTypeMap);
   const years = ["2025", "2024", "2023", "2022", "2021"];
-
   const semesters = ["1", "2", "3", "4", "5", "6", "7", "8"];
 
   const toggleFilter = (
@@ -75,14 +118,10 @@ export default function SearchMenu() {
     });
   };
 
-  // Обновляем saveFilters, чтобы он закрывал окно
   const saveFilters = () => {
-    // Здесь можно добавить логику сохранения фильтров
-    console.log("Сохраненные фильтры:", filters);
-    setShowFilters(false); // Закрываем окно фильтров
+    setShowFilters(false);
   };
 
-  // Функция для переключения видимости фильтров
   const toggleFilters = () => {
     setShowFilters(!showFilters);
   };
@@ -93,16 +132,20 @@ export default function SearchMenu() {
     isHovered?: boolean
   ) => {
     const isSelected = filters[category].includes(value);
-    
+
     if (isSelected) {
       return "bg-purple-dark text-purple-light";
     }
-    
-    if (isHovered) {
-      return "bg-purple-light/77 text-purple-dark";
-    }
-    
+
+    // Hover handling in React is separate, so just return base style
     return "bg-white/50 text-purple-dark";
+  };
+
+  // Helper to get Backend Value for ContentType filter
+  const handleContentTypeToggle = (uiValue: string) => {
+    // Convert "Экзамены" -> "Exam"
+    const backendValue = invertedContentTypeMap[uiValue];
+    if (backendValue) toggleFilter("contentTypes", backendValue);
   };
 
   return (
@@ -114,12 +157,14 @@ export default function SearchMenu() {
             <input
               type="text"
               placeholder="Search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="flex-1 bg-transparent text-xl text-purple-dark/75 placeholder:text-purple-dark/75 outline-none font-normal"
             />
           </div>
 
           <div className="lg:w-40 flex items-center justify-between px-2.5 py-2.5 rounded-[30px] bg-purple-medium gap-2">
-            <button 
+            <button
               onClick={toggleFilters}
               className="flex items-center gap-2.5 hover:opacity-70 transition-opacity"
             >
@@ -132,7 +177,7 @@ export default function SearchMenu() {
                 </div>
               </div>
             </button>
-            <button 
+            <button
               onClick={saveFilters}
               className="flex-shrink-0 hover:opacity-70 transition-opacity"
             >
@@ -152,30 +197,16 @@ export default function SearchMenu() {
                 <div className="h-px w-full bg-purple-dark"></div>
                 <div className="space-y-1.5">
                   <div className="flex flex-wrap gap-2">
-                    {subjects.slice(0, 5).map((subject) => (
+                    {subjectsData.map((subject: SubjectDto) => (
                       <button
-                        key={subject}
-                        onClick={() => toggleFilter("subjects", subject)}
+                        key={subject.id}
+                        onClick={() => toggleFilter("subjects", subject.id)}
                         className={`px-2 py-1.5 rounded-[20px] text-xl font-normal transition-all hover:bg-purple-light/77 ${getButtonStyle(
                           "subjects",
-                          subject
+                          subject.id
                         )}`}
                       >
-                        {subject}
-                    </button>
-                    ))}
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {subjects.slice(5).map((subject) => (
-                      <button
-                        key={subject}
-                        onClick={() => toggleFilter("subjects", subject)}
-                        className={`px-2 py-1.5 rounded-[20px] text-xl font-normal transition-all hover:bg-purple-light/77 ${getButtonStyle(
-                          "subjects",
-                          subject
-                        )}`}
-                      >
-                        {subject}
+                        {subject.name}
                       </button>
                     ))}
                   </div>
@@ -184,17 +215,17 @@ export default function SearchMenu() {
 
               <div className="space-y-4">
                 <h2 className="text-2xl font-medium text-purple-dark tracking-wide">
-                  Тип материала 
+                  Тип материала
                 </h2>
                 <div className="h-px w-full bg-purple-dark"></div>
                 <div className="flex flex-wrap gap-2">
-                  {contentTypes.map((type) => (
+                  {uiContentTypes.map((type) => (
                     <button
                       key={type}
-                      onClick={() => toggleFilter("contentTypes", type)}
+                      onClick={() => handleContentTypeToggle(type)}
                       className={`px-2 py-1.5 rounded-[20px] text-xl font-normal transition-all hover:bg-purple-light/77 ${getButtonStyle(
                         "contentTypes",
-                        type
+                        invertedContentTypeMap[type]
                       )}`}
                     >
                       {type}
@@ -253,11 +284,11 @@ export default function SearchMenu() {
             >
               <RefreshCcw className="w-12 h-12 text-purple-dark" strokeWidth={2} />
             </button>
-          
+
           </div>
         )}
 
-        {!showFilters && (SearchResult())}
+        {!showFilters && (<SearchResult items={filteredMaterials} />)}
       </div>
     </div>
   );

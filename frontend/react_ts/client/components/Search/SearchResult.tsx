@@ -1,4 +1,5 @@
 import { ChevronRight } from "lucide-react";
+import { MaterialDto } from "../../../api/types";
 
 interface ListItemProps {
   title: string;
@@ -28,32 +29,33 @@ function ListItem({ title, author, onClick }: ListItemProps) {
   );
 }
 
-export default function SearchResult() {
-  const items = [
-    { id: 1, title: "2022. Расписанные билеты", author: "Artem Scheglevatov" },
-    { id: 2, title: "2022. Расписанные билеты", author: "Artem Scheglevatov" },
-    { id: 3, title: "2022. Расписанные билеты", author: "Artem Scheglevatov" },
-    { id: 4, title: "2022. Расписанные билеты", author: "Artem Scheglevatov" },
-    { id: 5, title: "2022. Расписанные билеты", author: "Artem Scheglevatov" },
-    { id: 5, title: "2022. Расписанные билеты", author: "Artem Scheglevatov" },
-    { id: 5, title: "2022. Расписанные билеты", author: "Artem Scheglevatov" }
-  ];
+interface SearchResultProps {
+  items: MaterialDto[];
+}
 
-  const handleItemClick = (id: number) => {
-    console.log(`Item ${id} clicked`);
+export default function SearchResult({ items }: SearchResultProps) {
+  const handleItemClick = (item: MaterialDto) => {
+    if (item.downloadUrl) {
+      window.open(item.downloadUrl, '_blank');
+    }
   };
 
   return (
-      <div className="max-w-6xl mx-auto ">
-        <div className="flex flex-col gap-5 h-[calc(100vh-120px)] md:h-[calc(100vh-140px)] overflow-y-auto pr-2 md:pr-3">
-          {items.map((item) => (
-            <ListItem
-              key={item.id}
-              title={item.title}
-              author={item.author}
-              onClick={() => handleItemClick(item.id)}
-            />
-          ))}
+    <div className="max-w-6xl mx-auto ">
+      <div className="flex flex-col gap-5 h-[calc(100vh-120px)] md:h-[calc(100vh-140px)] overflow-y-auto pr-2 md:pr-3">
+        {items.map((item) => (
+          <ListItem
+            key={item.id}
+            title={item.name}
+            author={item.authorName || "Unknown"}
+            onClick={() => handleItemClick(item)}
+          />
+        ))}
+        {items.length === 0 && (
+          <div className="text-center text-gray-500 py-10">
+            No results found
+          </div>
+        )}
       </div>
     </div>
   );

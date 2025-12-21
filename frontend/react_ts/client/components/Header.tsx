@@ -10,11 +10,11 @@ const Header: React.FC = () => {
   const { isSideMenuOpen, openSideMenu, closeSideMenu } = useSideMenu();
   const { isOpen, openModal, closeModal } = useModal();
   const navigate = useNavigate();
-  
-  const handleClick = () => {
-      navigate("/main_page");
 
-    };
+  const handleClick = () => {
+    navigate("/main_page");
+
+  };
   return (
     <>
       <header className="w-full h-[81px] bg-app-purple flex items-center justify-between px-6 md:px-[25px] flex-shrink-0">
@@ -82,7 +82,7 @@ const Header: React.FC = () => {
       <SideMenu isOpen={isSideMenuOpen} onClose={closeSideMenu} />
       <Modal isOpen={isOpen} onClose={closeModal}>
         {" "}
-        {SearchMenu()}
+        <SearchMenu />
       </Modal>
     </>
   );

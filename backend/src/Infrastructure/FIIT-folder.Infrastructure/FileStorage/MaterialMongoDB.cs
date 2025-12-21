@@ -157,7 +157,16 @@ public class MaterialMongoDB : IMaterialMongoDB
 
     public async Task<List<StudyMaterial>> GetAll()
     {
-        return new List<StudyMaterial>();
+        try
+        {
+            var documents = await CollectionStudyMaterial.Find(new BsonDocument()).ToListAsync();
+            return documents.Select(MapToStudyMaterial).ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка при получении всех материалов: {ex.Message}");
+            return new List<StudyMaterial>();
+        }
     }
 
     public Task<StudyMaterial> Create(StudyMaterial material)

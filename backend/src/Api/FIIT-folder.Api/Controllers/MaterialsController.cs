@@ -25,7 +25,7 @@ public class MaterialsController : ControllerBase
     {
         var userId = GetUserIdOrNull();
         var materials = await _mediator.Send(new GetMaterialsBySubjectQuery(
-            request.SubjectId!.Value, 
+            request.SubjectId, 
             userId, 
             request.Semester, 
             request.Year, 
