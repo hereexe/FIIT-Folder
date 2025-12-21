@@ -1,14 +1,14 @@
-﻿using Xunit;
-using FIIT_folder.Infrastructure.FileStorage;
+﻿using NUnit.Framework;
 
-namespace FIIT_folder.Tests
+namespace FIIT_folder.Tests.Infrastructure.MongoDB
 {
+    [TestFixture]
     public class SimpleMathTest
     {
-        [Fact]
+        [Test]
         public void Two_Plus_Two_Equals_Four()
         {
-            Assert.Equal(4, 2 + 2);
+            Assert.That(2 + 2, Is.EqualTo(4));
         }
     }
 }
