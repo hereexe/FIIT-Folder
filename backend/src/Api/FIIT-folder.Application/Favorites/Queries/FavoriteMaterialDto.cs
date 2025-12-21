@@ -14,4 +14,8 @@ public class FavoriteMaterialDto
     public string? AuthorName { get; set; }
     public Guid? SubjectId { get; set; }
     public DateTime AddedAt { get; set; }
+    
+    public int LikesCount { get; set; }
+    public int DislikesCount { get; set; }
+    public string? CurrentUserRating { get; set; }
 }

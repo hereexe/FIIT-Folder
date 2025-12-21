@@ -22,17 +22,20 @@ export default function Index() {
       </div>
     );
   }
-  
+
   return (
     <div className="min-h-screen bg-folder-gradient">
       <main className="py-6">
         <FileViewer
+          id={material.id}
           title={material.name}
-          author={material.authorName}
-          description={material.description}
-          likes={202} 
-          // TODO: использовать лайки из material
-          dislikes={11}
+          author={material.authorName || "Аноним"}
+          description={material.description || ""}
+          likes={material.likesCount}
+          dislikes={material.dislikesCount}
+          currentUserRating={material.currentUserRating as "Like" | "Dislike" | null}
+          isFavorite={material.isFavorite}
+          pdfUrl={material.downloadUrl}
         />
       </main>
     </div>

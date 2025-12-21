@@ -102,11 +102,16 @@ function MaterialCard({ material }: { material: MaterialDto }) {
       <div className="absolute bottom-0 left-0 right-0 h-[35px] bg-fiit-bg/35 group-hover:bg-fiit-bg/50 transition-colors" />
 
       <div className="absolute bottom-0 left-0 right-0 h-[35px] flex items-center justify-between px-[15px] z-10">
-        <div className="flex items-center gap-2">
-          {/*TODO: Количество лайков isLiked*/}
-          <Heart className={`w-[25px] h-[25px] ${material.isFavorite ? "fill-red-500" : ""}`} />
-          <span className="text-xl text-fiit-text"> {material.size} </span>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1">
+            <Heart className={`w-[20px] h-[20px] ${material.isFavorite ? "fill-red-500 text-red-500" : "text-fiit-text"}`} />
+          </div>
+          <div className="flex items-center gap-1">
+            <ThumbsUp className={`w-[20px] h-[20px] ${material.currentUserRating === "Like" ? "fill-blue-500 text-blue-500" : "text-fiit-text"}`} />
+            <span className="text-lg text-fiit-text">{material.likesCount}</span>
+          </div>
         </div>
+        <span className="text-lg text-fiit-text">{material.size}</span>
       </div>
     </div>
   );

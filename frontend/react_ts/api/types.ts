@@ -42,6 +42,9 @@ export interface MaterialDto {
   size: string;
   uploadedAt: string;
   downloadUrl?: string;
+  likesCount: number;
+  dislikesCount: number;
+  currentUserRating: RatingType | null;
 }
 export interface UploadMaterialRequest {
   file: File;

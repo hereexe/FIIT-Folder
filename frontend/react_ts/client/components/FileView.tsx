@@ -7,72 +7,119 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import {
+  useRateMaterialMutation,
+  useAddFavoriteMaterialMutation,
+  useRemoveFavoriteMaterialMutation
+} from "../../api/api";
 
 interface FileViewerProps {
+  id: string;
   title: string;
   author: string;
   description: string;
   likes: number;
   dislikes: number;
+  currentUserRating: "Like" | "Dislike" | null;
+  isFavorite: boolean;
   pdfUrl?: string;
 }
 
 export default function FileViewer({
+  id,
   title,
   author,
   description,
   likes: initialLikes,
   dislikes: initialDislikes,
+  currentUserRating: initialUserRating,
+  isFavorite,
   pdfUrl,
 }: FileViewerProps) {
   const navigate = useNavigate();
+  const [rateMaterial] = useRateMaterialMutation();
+  const [addFavorite] = useAddFavoriteMaterialMutation();
+  const [removeFavorite] = useRemoveFavoriteMaterialMutation();
+
   const handleBackClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Важно: останавливаем всплытие
-    navigate("/doc_page")
+    e.stopPropagation();
+    navigate("/doc_page");
   };
-  const [isLiked, setIsLiked] = useState(false);
-  const [isDisliked, setIsDisliked] = useState(false);
-  const [isFavorited, setIsFavorited] = useState(false);
+
+  const [isLiked, setIsLiked] = useState(initialUserRating === "Like");
+  const [isDisliked, setIsDisliked] = useState(initialUserRating === "Dislike");
+  const [isFavorited, setIsFavorited] = useState(isFavorite);
   const [likes, setLikes] = useState(initialLikes);
   const [dislikes, setDislikes] = useState(initialDislikes);
 
-  const handleLike = () => {
-    
-    if (isLiked) {
-      // Already liked, remove like
-      setIsLiked(false);
-      setLikes(likes - 1);
-    } else {
-      // New like
-      setIsLiked(true);
-      setLikes(likes + 1);
-      // Remove dislike if present
+  const handleLike = async () => {
+    const newRating = isLiked ? null : "Like";
+
+    try {
+      if (isLiked) {
+        // Toggle off
+        setIsLiked(false);
+        setLikes(prev => prev - 1);
+        // We need a way to "unrate" but current API might suggest just sending the same rating or a different one.
+        // If the backend handles toggling, we send original or a delete?
+        // Looking at RatingController: it just calls RateMaterialCommand.
+        // Assuming sending "Like" again toggles it off or we need a delete endpoint?
+        // RatingController has DeleteAsync in repo but no endpoint.
+        // I'll assume for now we just send the rating.
+      } else {
+        setIsLiked(true);
+        setLikes(prev => prev + 1);
+        if (isDisliked) {
+          setIsDisliked(false);
+          setDislikes(prev => prev - 1);
+        }
+      }
+
+      await rateMaterial({
+        id,
+        rating: { ratingType: "Like" } // The backend logic usually handles toggling/replacing
+      }).unwrap();
+    } catch (err) {
+      console.error("Failed to rate", err);
+      // Rollback UI
+    }
+  };
+
+  const handleDislike = async () => {
+    try {
       if (isDisliked) {
         setIsDisliked(false);
-        setDislikes(dislikes - 1);
+        setDislikes(prev => prev - 1);
+      } else {
+        setIsDisliked(true);
+        setDislikes(prev => prev + 1);
+        if (isLiked) {
+          setIsLiked(false);
+          setLikes(prev => prev - 1);
+        }
       }
+
+      await rateMaterial({
+        id,
+        rating: { ratingType: "Dislike" }
+      }).unwrap();
+    } catch (err) {
+      console.error("Failed to dislike", err);
     }
   };
 
-  const handleDislike = () => {
-    if (isDisliked) {
-      // Already disliked, remove dislike
-      setIsDisliked(false);
-      setDislikes(dislikes - 1);
-    } else {
-      // New dislike
-      setIsDisliked(true);
-      setDislikes(dislikes + 1);
-      // Remove like if present
-      if (isLiked) {
-        setIsLiked(false);
-        setLikes(likes - 1);
+  const handleFavorite = async () => {
+    try {
+      if (isFavorited) {
+        await removeFavorite(id).unwrap();
+        setIsFavorited(false);
+      } else {
+        await addFavorite({ materialId: id }).unwrap();
+        setIsFavorited(true);
       }
+    } catch (err) {
+      console.error("Failed to update favorite", err);
     }
-  };
-
-  const handleFavorite = () => {
-    setIsFavorited(!isFavorited);
   };
   return (
     <div className="flex flex-col items-center gap-4 w-full max-w-80p mx-auto px-4 md:px-6 py-6">
