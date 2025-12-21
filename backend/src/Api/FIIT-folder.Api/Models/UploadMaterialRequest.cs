@@ -30,4 +30,5 @@ public class MaterialResponse
     public int LikesCount { get; set; }
     public int DislikesCount { get; set; }
     public string? CurrentUserRating { get; set; }
+    public string DownloadUrl { get; set; } = string.Empty;
 }

@@ -47,7 +47,8 @@ public class MaterialsController : ControllerBase
             UploadedAt = m.UploadedAt,
             LikesCount = m.LikesCount,
             DislikesCount = m.DislikesCount,
-            CurrentUserRating = m.CurrentUserRating
+            CurrentUserRating = m.CurrentUserRating,
+            DownloadUrl = $"{Request.Scheme}://{Request.Host}/api/materials/{m.Id}/download"
         }).AsEnumerable();
 
         if (!string.IsNullOrEmpty(request.MaterialType))
@@ -98,7 +99,8 @@ public class MaterialsController : ControllerBase
             IsFavorite = false,
             LikesCount = 0,
             DislikesCount = 0,
-            CurrentUserRating = null
+            CurrentUserRating = null,
+            DownloadUrl = $"{Request.Scheme}://{Request.Host}/api/materials/{result.Id}/download"
         };
 
         return Created($"/api/materials/{response.Id}", response);
@@ -131,7 +133,8 @@ public class MaterialsController : ControllerBase
             UploadedAt = material.UploadedAt,
             LikesCount = material.LikesCount,
             DislikesCount = material.DislikesCount,
-            CurrentUserRating = material.CurrentUserRating
+            CurrentUserRating = material.CurrentUserRating,
+            DownloadUrl = $"{Request.Scheme}://{Request.Host}/api/materials/{material.Id}/download"
         };
 
         return Ok(response);

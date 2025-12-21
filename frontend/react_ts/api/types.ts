@@ -42,7 +42,7 @@ export interface MaterialDto {
   size: number;
   sizeFormatted: string;
   uploadedAt: string;
-  downloadUrl?: string;
+  downloadUrl: string;
   likesCount: number;
   dislikesCount: number;
   currentUserRating: RatingType | null;
