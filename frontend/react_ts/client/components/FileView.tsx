@@ -43,7 +43,7 @@ export default function FileViewer({
 
   const handleBackClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    navigate("/doc_page");
+    navigate(-1);
   };
 
   const [isLiked, setIsLiked] = useState(initialUserRating === "Like");

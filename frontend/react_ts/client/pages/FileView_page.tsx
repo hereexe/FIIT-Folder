@@ -1,20 +1,20 @@
 import FileViewer from "@/components/FileView";
 import { useLocation } from "react-router-dom";
 import { MaterialDto } from "../../api/types";
-import { useEffect, useState } from "react";
+import { useGetMaterialByIdQuery } from "../../api/api";
 
 export default function Index() {
   const location = useLocation();
-  const [material, setMaterial] = useState<MaterialDto | null>(null);
+  const materialFromState = location.state?.material as MaterialDto | null;
 
-  useEffect(() => {
-    // Получаем материал из state навигации
-    if (location.state?.material) {
-      setMaterial(location.state.material);
-    }
-  }, [location]);
+  // Используем query для получения актуальных данных (лайки, избранное)
+  const { data: fetchedMaterial } = useGetMaterialByIdQuery(
+    materialFromState?.id || "",
+    { skip: !materialFromState?.id }
+  );
 
-  // Если материал не передан, показываем сообщение или загрузку
+  const material = fetchedMaterial || materialFromState;
+
   if (!material) {
     return (
       <div className="min-h-screen bg-folder-gradient flex items-center justify-center">

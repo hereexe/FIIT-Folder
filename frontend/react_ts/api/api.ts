@@ -169,9 +169,10 @@ export const appApi = createApi({
         body,
       }),
       invalidatesTags: (result, error, { materialId }) => [
-        { type: "Favorites" },
-        { type: "Materials", id: "LIST" },
-        { type: "MaterialDetail", id: materialId },
+        { type: "Favorites" as const, id: "LIST" },
+        { type: "Materials" as const, id: "LIST" },
+        { type: "Materials" as const, id: materialId },
+        { type: "MaterialDetail" as const, id: materialId },
       ],
     }),
 
@@ -181,9 +182,11 @@ export const appApi = createApi({
         method: "DELETE",
       }),
       invalidatesTags: (result, error, materialId) => [
-        { type: "Favorites" },
-        { type: "Materials", id: "LIST" },
-        { type: "MaterialDetail", id: materialId },
+        { type: "Favorites" as const, id: "LIST" },
+        { type: "Favorites" as const, id: materialId },
+        { type: "Materials" as const, id: "LIST" },
+        { type: "Materials" as const, id: materialId },
+        { type: "MaterialDetail" as const, id: materialId },
       ],
     }),
 
@@ -200,9 +203,9 @@ export const appApi = createApi({
         return response.map(fav => ({
           ...fav,
           id: fav.materialId, // Use MaterialId as the ID for consistency in UI
-          downloadUrl: fav.downloadUrl.startsWith('http')
+          downloadUrl: fav.downloadUrl?.startsWith('http')
             ? fav.downloadUrl
-            : `${BASE_URL.replace('/api', '')}${fav.downloadUrl}`
+            : `${BASE_URL.replace('/api', '')}${fav.downloadUrl || ''}`
         }));
       }
     }),

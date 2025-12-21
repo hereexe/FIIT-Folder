@@ -58,18 +58,16 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
     <>
       {/* Overlay с анимацией */}
       <div
-        className={`fixed inset-0 z-50 bg-black transition-all duration-300 ease-in-out ${
-          isOpen ? 'bg-opacity-50' : 'bg-opacity-0'
-        } ${!isMounted ? 'hidden' : ''}`}
+        className={`fixed inset-0 z-50 bg-black transition-all duration-300 ease-in-out ${isOpen ? 'bg-opacity-50' : 'bg-opacity-0'
+          } ${!isMounted ? 'hidden' : ''}`}
         onClick={onClose}
         onTransitionEnd={handleAnimationEnd}
       />
 
       {/* Sidebar с анимацией */}
       <aside
-        className={`fixed top-0 left-0 h-full z-50 bg-app-sidebar flex flex-col transition-all duration-300 ease-in-out ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
-        } ${sidebarCollapsed ? 'md:w-[100px]' : 'md:w-[400px]'} w-[338px]`}
+        className={`fixed top-0 left-0 h-full z-50 bg-app-sidebar flex flex-col transition-all duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full'
+          } ${sidebarCollapsed ? 'md:w-[100px]' : 'md:w-[400px]'} w-[338px]`}
         onTransitionEnd={handleAnimationEnd}
       >
         {/* Sidebar Header */}
@@ -121,7 +119,10 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
               </span>
             </button>
 
-            <button className="flex items-center gap-5 text-app-text hover:opacity-80 transition-opacity">
+            <button
+              onClick={() => { navigate("/favorites"); onClose(); }}
+              className="flex items-center gap-5 text-app-text hover:opacity-80 transition-opacity"
+            >
               <Heart className="w-[38px] h-[38px] stroke-[2]" />
               <span className="text-[23px] font-medium tracking-[0.23px] max-w-[220px] truncate">
                 Избранное
@@ -140,12 +141,12 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
 
             {token ? (
               <button
-                onClick={() => { 
-                  localStorage.removeItem("token"); 
+                onClick={() => {
+                  localStorage.removeItem("token");
                   sessionStorage.removeItem("userName");
-                  onClose(); 
-                  navigate("/main_page"); 
-                  window.location.reload(); 
+                  onClose();
+                  navigate("/main_page");
+                  window.location.reload();
                 }}
                 className="flex items-center gap-5 text-red-500 hover:opacity-80 transition-opacity"
               >

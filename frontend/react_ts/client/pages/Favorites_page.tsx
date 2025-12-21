@@ -9,12 +9,29 @@ import { MaterialDto } from "../../api/types";
 
 export default function Index() {
     const navigate = useNavigate();
+    const token = localStorage.getItem("token");
 
-    const { data: materialsData, isLoading, error } = useGetFavoritesQuery();
+    const { data: materialsData, isLoading, error } = useGetFavoritesQuery(undefined, {
+        skip: !token
+    });
 
     const handleClickBack = () => {
         navigate("/main_page");
     };
+
+    if (!token) {
+        return (
+            <div className="min-h-screen bg-fiit-bg flex flex-col items-center justify-center gap-4 text-fiit-text">
+                <div className="text-xl">Войдите в аккаунт, чтобы увидеть избранное</div>
+                <button
+                    onClick={() => navigate("/login")}
+                    className="px-6 py-2 bg-folder-navy text-white rounded-lg hover:opacity-90 transition-opacity"
+                >
+                    Войти
+                </button>
+            </div>
+        );
+    }
 
     if (isLoading) return <div className="min-h-screen bg-fiit-bg flex items-center justify-center text-fiit-text">Загрузка избранного...</div>;
     if (error) return <div className="min-h-screen bg-fiit-bg flex items-center justify-center text-fiit-text">Ошибка загрузки избранного</div>;
