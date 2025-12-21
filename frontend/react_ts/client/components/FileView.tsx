@@ -7,24 +7,10 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useRateMaterialMutation } from "../../api/api";
+import { MaterialDto } from "../../api/types";
 
-interface FileViewerProps {
-  title: string;
-  author: string;
-  description: string;
-  likes: number;
-  dislikes: number;
-  pdfUrl?: string;
-}
-
-export default function FileViewer({
-  title,
-  author,
-  description,
-  likes: initialLikes,
-  dislikes: initialDislikes,
-  pdfUrl,
-}: FileViewerProps) {
+export default function FileViewer(material: MaterialDto) {
   const navigate = useNavigate();
   const handleBackClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // Важно: останавливаем всплытие
@@ -32,12 +18,16 @@ export default function FileViewer({
   };
   const [isLiked, setIsLiked] = useState(false);
   const [isDisliked, setIsDisliked] = useState(false);
-  const [isFavorited, setIsFavorited] = useState(false);
-  const [likes, setLikes] = useState(initialLikes);
-  const [dislikes, setDislikes] = useState(initialDislikes);
+  const [isFavorited, setIsFavorited] = useState(material.isFavorite);
+  const [likes, setLikes] = useState(202);
+  const [dislikes, setDislikes] = useState(11);
+  const [rateMaterial, { isLoading, error }] = useRateMaterialMutation();
 
   const handleLike = () => {
-    
+    rateMaterial({ 
+      id: material.id, 
+      rating: { ratingType: "Like" } 
+    });
     if (isLiked) {
       // Already liked, remove like
       setIsLiked(false);
@@ -55,6 +45,10 @@ export default function FileViewer({
   };
 
   const handleDislike = () => {
+    rateMaterial({ 
+      id: material.id, 
+      rating: { ratingType: "Dislike" } 
+    });
     if (isDisliked) {
       // Already disliked, remove dislike
       setIsDisliked(false);
@@ -89,10 +83,10 @@ export default function FileViewer({
 
         <div className="flex flex-col items-center justify-center gap-2 flex-1 px-4">
           <h2 className="text-folder-navy whitespace-normal break-words text-xl md:text-2xl lg:text-[30px] font-medium tracking-wide text-center truncate max-w-full">
-            {title}
+            {material.name}
           </h2>
           <p className="text-folder-navy text-lg md:text-xl lg:text-[25px] font-medium tracking-wide text-center truncate max-w-full">
-            {author}
+            {material.authorName}
           </p>
         </div>
 
@@ -112,7 +106,7 @@ export default function FileViewer({
       {/* Description */}
       <div className="flex justify-center text-center w-full max-w-2xl">
         <p className="text-folder-navy text-base md:text-lg lg:text-xl leading-relaxed">
-          {description}
+          {material.description}
         </p>
       </div>
 
@@ -152,10 +146,10 @@ export default function FileViewer({
       <div className="relative w-full mt-4 flex gap-3">
         <div className="flex-1 aspect-[16/10] md:aspect-[16/9] bg-[#C4C4C4] rounded-2xl shadow-lg" />
         <iframe
-          src={pdfUrl ? `${pdfUrl}#view=FitH` : ""}
+          src={material.downloadUrl ? `${material.downloadUrl}#view=FitH` : ""}
           title="PDF Viewer"
           className="w-full h-[1000px] rounded border"
-          frameBorder="0"
+          frameBorder="5"
         />
       </div>
     </div>

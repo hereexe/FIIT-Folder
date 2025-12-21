@@ -16,7 +16,7 @@ export interface RegisterRequest {
   password: string;
 }
 export type RatingType = "Like" | "Dislike";
-
+  
 export interface RateRequest {
   ratingType: RatingType;
 }

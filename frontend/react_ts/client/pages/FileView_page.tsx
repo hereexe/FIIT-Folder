@@ -26,14 +26,7 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-folder-gradient">
       <main className="py-6">
-        <FileViewer
-          title={material.name}
-          author={material.authorName}
-          description={material.description}
-          likes={202} 
-          // TODO: использовать лайки из material
-          dislikes={11}
-        />
+        <FileViewer {...material}/>
       </main>
     </div>
   );
