@@ -3,6 +3,8 @@ using Moq;
 using Amazon.S3;
 using Amazon.S3.Model;
 using System.Text;
+using FIIT_folder.Domain.Interfaces;
+using FIIT_folder.Infrastructure.FileStorage;
 
 [TestFixture]
 public class YandexCloud_Should //не равботает пока можно закоментить
@@ -16,14 +18,14 @@ public class YandexCloud_Should //не равботает пока можно з
     {
         S3Mock = new Mock<IAmazonS3>();
         Repository = new FileStorageRepository(S3Mock.Object, Bucket);
-    }
+     }
 
-    [Test]
-    public async Task SaveFile_Should_Return_Path()
+     [Test]
+     public async Task SaveFile_Should()
     {
         var stream = new MemoryStream(Encoding.UTF8.GetBytes("test"));
-        var fileName = "file.txt";
-        var folder = "StudyMaterials";
+        var fileName = "file-test.txt";
+        var folder = "subject-test";
         var path = await Repository.SaveFile(
             fileName,
             stream.Length,
@@ -31,6 +33,6 @@ public class YandexCloud_Should //не равботает пока можно з
             stream,
             folder
         );
-        Assert.That(path, Is.EqualTo("Матан/file.txt"));
+        Assert.That(path, Is.EqualTo("subject-test/file-test.txt"));
     }
 }
