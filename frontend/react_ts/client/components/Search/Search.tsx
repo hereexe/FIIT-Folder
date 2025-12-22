@@ -103,7 +103,7 @@ export default function SearchMenu() {
         return false;
       }
       return true;
-    });
+    }).sort((a, b) => b.likesCount - a.likesCount);
   }, [materials, filters]);
 
   // Mapping for Content Types (UI Display -> Backend Enum)
