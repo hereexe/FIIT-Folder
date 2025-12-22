@@ -49,7 +49,7 @@ public class UploadMaterialCommandHandler : IRequestHandler<UploadMaterialComman
             folderPath);
 
         // Создаём доменную сущность
-        var material = new StudyMaterial(
+        var material = new Material(
             new MaterialName(request.FileName),
             new SubjectId(request.SubjectId),
             new UserId(request.UserId),
@@ -61,7 +61,7 @@ public class UploadMaterialCommandHandler : IRequestHandler<UploadMaterialComman
             new ResourceLocation(filePath));
 
         // Сохраняем метаданные в MongoDB
-        var created = await _materialRepository.CreateStudyMaterial(material);
+        var created = await _materialRepository.CreateMaterial(material);
 
         return new MaterialDto
         {

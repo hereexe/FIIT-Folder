@@ -1,6 +1,6 @@
 namespace FIIT_folder.Domain.Value_Object;
 
-public record StudyMaterialId(Guid Value)
+public record MaterialId(Guid Value)
 {
-    public static StudyMaterialId New() => new StudyMaterialId(Guid.NewGuid());
+    public static MaterialId New() => new MaterialId(Guid.NewGuid());
 }

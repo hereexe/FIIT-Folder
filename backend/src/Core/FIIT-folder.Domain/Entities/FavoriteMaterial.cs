@@ -6,10 +6,10 @@ public class FavoriteMaterial
 {
     public Guid Id { get; private set; }
     public UserId UserId { get; private set; } = default!;
-    public StudyMaterialId MaterialId { get; private set; } = default!;
+    public MaterialId MaterialId { get; private set; } = default!;
     public DateTime AddedAt { get; private set; }
 
-    public FavoriteMaterial(UserId userId, StudyMaterialId materialId)
+    public FavoriteMaterial(UserId userId, MaterialId materialId)
     {
         Id = Guid.NewGuid();
         UserId = userId;

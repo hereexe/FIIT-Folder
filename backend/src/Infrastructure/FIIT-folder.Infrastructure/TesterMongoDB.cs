@@ -31,16 +31,13 @@ public class TesterMongoDB
             
             var repository = GetRepository();
             
-            Console.WriteLine("Создаю новый StudyMaterial");
+            Console.WriteLine("Создаю новый Material");
             
-            int currentYear = DateTime.Now.Year;
-            int validYear = currentYear > 2018 ? currentYear : 2019;
-            
-            var material = new StudyMaterial(
+            var material = new Material(
                 new MaterialName("Матан"), 
                 new SubjectId(Guid.NewGuid()), 
                 new UserId(Guid.NewGuid()), 
-                new StudyYear(validYear),
+                new StudyYear(2024),
                 new Semester(1), // Semester
                 "Тестовое описание", // Description
                 new MaterialSize(2000), 
@@ -48,8 +45,8 @@ public class TesterMongoDB
                 new ResourceLocation("/путь/к/файлу.pdf")
             );
             
-            Console.WriteLine("Пытаюсь сохранить новый StudyMaterial");
-            var createdMaterial = await repository.CreateStudyMaterial(material);
+            Console.WriteLine("Пытаюсь сохранить новый Material");
+            var createdMaterial = await repository.CreateMaterial(material);
             
             if (createdMaterial != null)
                 Console.WriteLine($"Материал успешно создан в MongoDB!");
@@ -62,7 +59,7 @@ public class TesterMongoDB
         }
     }
     
-    public static async Task DeleteStudyMaterial()
+    public static async Task DeleteMaterial()
     {
         try
         {
@@ -71,8 +68,8 @@ public class TesterMongoDB
             var repository = GetRepository();
             
             
-            Console.WriteLine("Пытаюсь удалить StudyMaterial, который ранее создавал");
-            var flag = await repository.DeleteStudyMaterial(new Guid(
+            Console.WriteLine("Пытаюсь удалить Material, который ранее создавал");
+            var flag = await repository.DeleteMaterial(new Guid(
                 "5cf635fe-7f4e-45a1-89e6-71e30c702dab"));
             
             if (flag)
@@ -92,8 +89,8 @@ public class TesterMongoDB
         {
             Console.WriteLine("Тест на поиск в MongoBD");
             var repository = GetRepository();
-            Console.WriteLine("Пытаюсь найти StudyMaterial(который ранее создавал) по id");
-            var flag = await repository.GetByIdStudyMaterial(guid);
+            Console.WriteLine("Пытаюсь найти Material(который ранее создавал) по id");
+            var flag = await repository.GetByIdMaterial(guid);
 
             if (flag != null)
                 Console.WriteLine("материал нашелся! + в domain получаю его");
@@ -107,14 +104,14 @@ public class TesterMongoDB
         }
     }
     
-    public static async Task GetByNameMaterial(string studyMaterialName)
+    public static async Task GetByNameMaterial(string MaterialName)
     {
         try
         {
             Console.WriteLine("Тест на поиск в MongoBD по имени");
             var repository = GetRepository();
-            Console.WriteLine("Пытаюсь найти StudyMaterial(который ранее создавал) по MaterialName");
-            var flag = await repository.GetByNameStudyMaterial(studyMaterialName);
+            Console.WriteLine("Пытаюсь найти Material(который ранее создавал) по MaterialName");
+            var flag = await repository.GetByNameMaterial(MaterialName);
 
             if (flag != null)
                 Console.WriteLine("материал нашелся! + в domain получаю его");

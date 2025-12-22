@@ -20,7 +20,7 @@ public class AddFavoriteMaterialHandler : IRequestHandler<AddFavoriteMaterialCom
     {
         var favorite = new FavoriteMaterial(
             new UserId(request.UserId), 
-            new StudyMaterialId(request.MaterialId));
+            new MaterialId(request.MaterialId));
             
         await _favoriteRepository.AddMaterialAsync(favorite, cancellationToken);
         return favorite.Id;

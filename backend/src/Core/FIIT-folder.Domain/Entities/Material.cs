@@ -5,7 +5,7 @@ namespace FIIT_folder.Domain.Entities;
 
 public class Material
 {
-    public StudyMaterialId Id { get; private set; } = default!;
+    public MaterialId Id { get; private set; } = default!;
     public SubjectId  SubjectId { get; private set; } = default!;
     public UserId UserId { get; private set; } = default!;
     public MaterialName Name { get; private set; } = default!;
@@ -20,7 +20,7 @@ public class Material
     public Material(MaterialName name, SubjectId subjectId, UserId userId, StudyYear year, Semester semester, string description, MaterialSize size, MaterialType materialType,
         ResourceLocation fileReference)
     {
-        Id = StudyMaterialId.New();
+        Id = MaterialId.New();
         Name = name;
         SubjectId = subjectId;
         UserId = userId;

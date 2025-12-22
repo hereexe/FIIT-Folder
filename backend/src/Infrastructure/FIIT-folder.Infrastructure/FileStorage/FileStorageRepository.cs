@@ -15,7 +15,6 @@ public class FileStorageRepository : IFileStorageRepository
     {
         BucketName = bucketName;
         ServiceUrl = "https://storage.yandexcloud.net";
-        
         var config = new AmazonS3Config
         {
             ServiceURL = ServiceUrl,
@@ -24,8 +23,13 @@ public class FileStorageRepository : IFileStorageRepository
         };
 
         Client = new AmazonS3Client(accessKey, secretKey, config);
-        
         InitializeBucketAsync().Wait();
+    }
+    
+    public FileStorageRepository(IAmazonS3 client, string bucketName) //конструктор для mock-ов
+    {
+        Client = client;
+        BucketName = bucketName;
     }
     
     private async Task InitializeBucketAsync()
@@ -33,23 +37,21 @@ public class FileStorageRepository : IFileStorageRepository
         try
         {
             Console.WriteLine($"Подключение к Yandex Cloud Storage... Bucket: {BucketName}, ServiceUrl: {ServiceUrl}");
-            
             var request = new ListBucketsRequest(); //сделал запрос на получение
+            
             var response = await Client.ListBucketsAsync(request); //получаю список бакетов
-            
             Console.WriteLine($"Найдено бакетов: {response.Buckets.Count}");
+            
             foreach (var bucket in response.Buckets)
-            {
                 Console.WriteLine($"  - {bucket.BucketName}");
-            }
             
-            var bucketExists = response.Buckets.Any(bucket => bucket.BucketName == BucketName);//проверка на сущ
-            
-            if (!bucketExists) //бакета нет
+            var bucketExists = response.Buckets.Any(bucket => bucket.BucketName == BucketName);//существует?
+            if (!bucketExists) //если бакета нет
             {
                 Console.WriteLine($"ОШИБКА: Бакет '{BucketName}' не найден в списке доступных бакетов!");
                 throw new InvalidOperationException($"Бакет '{BucketName}' не существует в облаке. Доступные бакеты: {string.Join(", ", response.Buckets.Select(b => b.BucketName))}");
             }
+            
             Console.WriteLine($"Облако - контейнер '{BucketName}' инициализировано успешно");
         }
         catch (AmazonS3Exception s3Ex)
@@ -70,12 +72,10 @@ public class FileStorageRepository : IFileStorageRepository
         {
             var safeFileName = name;
             string pathInCloud;
-            
             if (string.IsNullOrEmpty(folder))
                 pathInCloud = safeFileName;
             else
                 pathInCloud = CreatePathInCloud(safeFileName, folder);
-            
             var uploadRequest = new TransferUtilityUploadRequest
             {
                 InputStream = content,
@@ -84,12 +84,13 @@ public class FileStorageRepository : IFileStorageRepository
                 ContentType = type,
                 AutoCloseStream = false
             };
+            
             var transferUtility = new TransferUtility(Client);
             await transferUtility.UploadAsync(uploadRequest);
 
             Console.WriteLine($"Файл загружен в облако с путем: {pathInCloud}");
             
-            return pathInCloud; //возвращаем путь к файлику для MobgoBD
+            return pathInCloud; //возвращаем путь к файлику для MobgoDB
         }
         catch (Exception ex)
         {
@@ -143,10 +144,8 @@ public class FileStorageRepository : IFileStorageRepository
         {
             if (string.IsNullOrEmpty(fullPathFile))
                 throw new ArgumentException("Путь нулевой", nameof(fullPathFile));
-
             if (!await IsFileInRepository(fullPathFile))
                 throw new ArgumentException("Файла в репеозитории нет!");
-            
             var request = new DeleteObjectRequest
             {
                 BucketName = BucketName,
@@ -173,7 +172,6 @@ public class FileStorageRepository : IFileStorageRepository
         {
             if (string.IsNullOrEmpty(fullPathFile))
                 return false;
-
             await Client.GetObjectMetadataAsync(BucketName, fullPathFile);
             return true;
         }

@@ -18,12 +18,12 @@ public class DeleteMaterialCommandHandler : IRequestHandler<DeleteMaterialComman
 
     public async Task<bool> Handle(DeleteMaterialCommand request, CancellationToken cancellationToken)
     {
-        var material = await _materialRepository.GetByIdStudyMaterial(request.Id);
+        var material = await _materialRepository.GetByIdMaterial(request.Id);
         if (material == null)
             throw new KeyNotFoundException($"Материал с ID '{request.Id}' не найден");
 
         await _fileStorage.DeleteFile(material.FilePath.Value);
 
-        return await _materialRepository.DeleteStudyMaterial(request.Id);
+        return await _materialRepository.DeleteMaterial(request.Id);
     }
 }

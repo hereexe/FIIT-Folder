@@ -22,7 +22,7 @@ public class GetMaterialByIdQueryHandler : IRequestHandler<GetMaterialByIdQuery,
 
     public async Task<MaterialDto?> Handle(GetMaterialByIdQuery request, CancellationToken cancellationToken)
     {
-        var material = await _materialRepository.GetByIdStudyMaterial(request.Id);
+        var material = await _materialRepository.GetByIdMaterial(request.Id);
 
         if (material == null)
             return null;

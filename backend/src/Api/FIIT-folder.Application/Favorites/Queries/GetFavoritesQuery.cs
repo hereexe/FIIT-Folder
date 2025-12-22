@@ -41,7 +41,7 @@ public class GetFavoritesHandler : IRequestHandler<GetFavoritesQuery, List<Favor
 
             try 
             {
-                var mat = await _materialRepository.GetByIdStudyMaterial(favMat.MaterialId.Value);
+                var mat = await _materialRepository.GetByIdMaterial(favMat.MaterialId.Value);
                 if (mat != null) 
                 {
                     materialName = mat.Name.Value;

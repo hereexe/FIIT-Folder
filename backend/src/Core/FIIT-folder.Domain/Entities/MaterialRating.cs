@@ -6,7 +6,7 @@ namespace FIIT_folder.Domain.Entities;
 public class MaterialRating
 {
     public Guid Id { get; set; }
-    public StudyMaterialId MaterialId { get; set; } = default!;
+    public MaterialId MaterialId { get; set; } = default!;
     public UserId UserId { get; set; } = default!;
     public RatingType Rating { get; set; }
     public DateTime CreatedAt { get; set; }

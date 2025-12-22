@@ -47,7 +47,7 @@ public class MaterialRatingMongoDB : IMaterialRatingRepository
         await _collection.UpdateOneAsync(filter, update);
     }
 
-    public async Task<MaterialRating?> GetByUserAndMaterialAsync(UserId userId, StudyMaterialId materialId)
+    public async Task<MaterialRating?> GetByUserAndMaterialAsync(UserId userId, MaterialId materialId)
     {
         var filter = Builders<BsonDocument>.Filter.And(
             Builders<BsonDocument>.Filter.Eq("userId", userId.Value.ToString()),
@@ -58,7 +58,7 @@ public class MaterialRatingMongoDB : IMaterialRatingRepository
         return document == null ? null : MapToMaterialRating(document);
     }
 
-    public async Task<List<MaterialRating>> GetByMaterialIdAsync(StudyMaterialId materialId)
+    public async Task<List<MaterialRating>> GetByMaterialIdAsync(MaterialId materialId)
     {
         var filter = Builders<BsonDocument>.Filter.Eq("materialId", materialId.Value.ToString());
         var documents = await _collection.Find(filter).ToListAsync();
@@ -76,7 +76,7 @@ public class MaterialRatingMongoDB : IMaterialRatingRepository
         return new MaterialRating
         {
             Id = Guid.Parse(document["ratingId"].AsString),
-            MaterialId = new StudyMaterialId(Guid.Parse(document["materialId"].AsString)),
+            MaterialId = new MaterialId(Guid.Parse(document["materialId"].AsString)),
             UserId = new UserId(Guid.Parse(document["userId"].AsString)),
             Rating = Enum.Parse<RatingType>(document["rating"].AsString),
             CreatedAt = document["createdAt"].ToUniversalTime(),
