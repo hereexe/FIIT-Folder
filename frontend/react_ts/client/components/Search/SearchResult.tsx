@@ -58,12 +58,9 @@ export default function SearchResult({ items }: SearchResultProps) {
     sessionStorage.setItem("selectedSubject", subjectName);
     sessionStorage.setItem("examName", examName);
 
-    navigate("/doc_page", {
+    navigate("/fileview_page", {
       state: {
-        examType: material.materialType,
-        examName: examName,
-        semester: material.semester,
-        subjectId: material.subjectId
+        material: material
       }
     });
   }
