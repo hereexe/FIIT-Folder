@@ -22,7 +22,7 @@ public class AddFavoriteMaterialHandler : IRequestHandler<AddFavoriteMaterialCom
             new UserId(request.UserId), 
             new MaterialId(request.MaterialId));
             
-        await _favoriteRepository.AddMaterialAsync(favorite, cancellationToken);
+        await _favoriteRepository.CreateMaterial(favorite, cancellationToken);
         return favorite.Id;
     }
 }

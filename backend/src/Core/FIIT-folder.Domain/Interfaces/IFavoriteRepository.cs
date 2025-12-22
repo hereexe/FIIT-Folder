@@ -5,7 +5,7 @@ namespace FIIT_folder.Domain.Interfaces;
 
 public interface IFavoriteRepository
 {
-    Task AddMaterialAsync(FavoriteMaterial material, CancellationToken cancellationToken);
-    Task<List<FavoriteMaterial>> GetMaterialsByUserIdAsync(UserId userId, CancellationToken cancellationToken);
-    Task RemoveMaterialAsync(Guid id, CancellationToken cancellationToken);
+    Task CreateMaterial(FavoriteMaterial material, CancellationToken cancellationToken);
+    Task<List<FavoriteMaterial>> GetMaterialsByUserId(UserId userId, CancellationToken cancellationToken);
+    Task DeleteMaterialAsync(Guid id, CancellationToken cancellationToken);
 }

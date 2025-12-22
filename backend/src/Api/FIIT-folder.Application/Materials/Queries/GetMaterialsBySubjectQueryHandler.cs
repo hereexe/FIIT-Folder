@@ -53,7 +53,7 @@ public class GetMaterialsBySubjectQueryHandler : IRequestHandler<GetMaterialsByS
         var favoriteMaterialIds = new HashSet<Guid>();
         if (request.UserId.HasValue)
         {
-            var favorites = await _favoriteRepository.GetMaterialsByUserIdAsync(new FIIT_folder.Domain.Value_Object.UserId(request.UserId.Value), cancellationToken);
+            var favorites = await _favoriteRepository.GetMaterialsByUserId(new FIIT_folder.Domain.Value_Object.UserId(request.UserId.Value), cancellationToken);
             foreach (var fav in favorites)
             {
                 favoriteMaterialIds.Add(fav.MaterialId.Value);

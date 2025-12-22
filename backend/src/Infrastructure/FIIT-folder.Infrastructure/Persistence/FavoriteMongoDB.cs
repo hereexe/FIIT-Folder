@@ -7,27 +7,26 @@ namespace FIIT_folder.Infrastructure.Persistence;
 
 public class FavoriteMongoDB : IFavoriteRepository
 {
-    private readonly IMongoCollection<FavoriteMaterial> _materials;
-
+    private readonly IMongoCollection<FavoriteMaterial> Materials;
     public FavoriteMongoDB(string connectionString, string databaseName)
     {
         var client = new MongoClient(connectionString);
         var database = client.GetDatabase(databaseName);
-        _materials = database.GetCollection<FavoriteMaterial>("FavoriteMaterials");
+        Materials = database.GetCollection<FavoriteMaterial>("FavoriteMaterials");
     }
 
-    public async Task AddMaterialAsync(FavoriteMaterial material, CancellationToken cancellationToken)
+    public async Task CreateMaterial(FavoriteMaterial material, CancellationToken cancellationToken)
     {
-        await _materials.InsertOneAsync(material, cancellationToken: cancellationToken);
+        await Materials.InsertOneAsync(material, cancellationToken);
     }
 
-    public async Task<List<FavoriteMaterial>> GetMaterialsByUserIdAsync(UserId userId, CancellationToken cancellationToken)
+    public async Task<List<FavoriteMaterial>> GetMaterialsByUserId(UserId userId, CancellationToken cancellationToken)
     {
-        return await _materials.Find(m => m.UserId == userId).ToListAsync(cancellationToken);
+        return await Materials.Find(m => m.UserId == userId).ToListAsync(cancellationToken);
     }
 
-    public async Task RemoveMaterialAsync(Guid id, CancellationToken cancellationToken)
+    public async Task DeleteMaterialAsync(Guid id, CancellationToken cancellationToken)
     {
-        await _materials.DeleteOneAsync(m => m.Id == id, cancellationToken);
+        await Materials.DeleteOneAsync(m => m.Id == id, cancellationToken);
     }
 }

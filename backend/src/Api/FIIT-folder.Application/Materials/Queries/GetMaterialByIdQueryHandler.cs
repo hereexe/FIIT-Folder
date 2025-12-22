@@ -37,7 +37,7 @@ public class GetMaterialByIdQueryHandler : IRequestHandler<GetMaterialByIdQuery,
         var isFavorite = false;
         if (request.UserId.HasValue)
         {
-            var favorites = await _favoriteRepository.GetMaterialsByUserIdAsync(new FIIT_folder.Domain.Value_Object.UserId(request.UserId.Value), cancellationToken);
+            var favorites = await _favoriteRepository.GetMaterialsByUserId(new FIIT_folder.Domain.Value_Object.UserId(request.UserId.Value), cancellationToken);
             isFavorite = favorites.Any(f => f.MaterialId.Value == request.Id);
         }
 

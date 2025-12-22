@@ -25,7 +25,7 @@ public class GetFavoritesHandler : IRequestHandler<GetFavoritesQuery, List<Favor
     public async Task<List<FavoriteMaterialDto>> Handle(GetFavoritesQuery request, CancellationToken cancellationToken)
     {
         var userId = new UserId(request.UserId);
-        var favMaterials = await _favoriteRepository.GetMaterialsByUserIdAsync(userId, cancellationToken);
+        var favMaterials = await _favoriteRepository.GetMaterialsByUserId(userId, cancellationToken);
 
         var response = new List<FavoriteMaterialDto>();
 
