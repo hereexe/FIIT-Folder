@@ -22,7 +22,7 @@ public class YandexCloud_Should //не равботает пока можно з
 
      [Test]
      public async Task SaveFile_Should()
-    {
+     {
         var stream = new MemoryStream(Encoding.UTF8.GetBytes("test"));
         var fileName = "file-test.txt";
         var folder = "subject-test";
@@ -34,5 +34,55 @@ public class YandexCloud_Should //не равботает пока можно з
             folder
         );
         Assert.That(path, Is.EqualTo("subject-test/file-test.txt"));
-    }
+     }
+     
+     public async Task DeleteFile_Should()
+     {
+         var stream = new MemoryStream(Encoding.UTF8.GetBytes("test"));
+         var fileName = "file-test.txt";
+         var folder = "subject-test";
+         var path = await Repository.SaveFile(
+             fileName,
+             stream.Length,
+             "text/plain",
+             stream,
+             folder
+         );
+         Assert.That(path, Is.EqualTo("subject-test/file-test.txt"));
+     }
+     
+     [Test]
+     public async Task FileIsInRepository_Should()
+     {
+         var filePath = "folder/test.txt";
+         S3Mock
+             .Setup(s => s.GetObjectMetadataAsync(Bucket, filePath, default))
+             .ReturnsAsync(new GetObjectMetadataResponse());
+         var result = await Repository.IsFileInRepository(filePath);
+         Assert.That(result, Is.True);
+         S3Mock.Verify(
+             s => s.GetObjectMetadataAsync(Bucket, filePath, default),
+             Times.Once
+         );
+     }
+     
+     [Test]
+     public async Task FileNotIsInRepository_Should()
+     {
+         var filePath = "folder-test/fantom-test.txt";
+         S3Mock
+             .Setup(s => s.GetObjectMetadataAsync(Bucket, filePath, default))
+             .ThrowsAsync(new AmazonS3Exception("Not found"));
+
+         var result = await Repository.IsFileInRepository(filePath);
+
+         Assert.That(result, Is.False);
+
+         S3Mock.Verify(
+             s => s.GetObjectMetadataAsync(Bucket, filePath, default),
+             Times.Once
+         );
+     }
+     
+     
 }
