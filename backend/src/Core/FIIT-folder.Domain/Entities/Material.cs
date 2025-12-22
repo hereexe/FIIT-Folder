@@ -3,7 +3,7 @@ using FIIT_folder.Domain.Enums;
 
 namespace FIIT_folder.Domain.Entities;
 
-public class StudyMaterial
+public class Material
 {
     public StudyMaterialId Id { get; private set; } = default!;
     public SubjectId  SubjectId { get; private set; } = default!;
@@ -17,7 +17,7 @@ public class StudyMaterial
     public ResourceLocation FilePath { get; private set; } = default!;
     public DateTime UploadedAt { get; private set; }
 
-    public StudyMaterial(MaterialName name, SubjectId subjectId, UserId userId, StudyYear year, Semester semester, string description, MaterialSize size, MaterialType materialType,
+    public Material(MaterialName name, SubjectId subjectId, UserId userId, StudyYear year, Semester semester, string description, MaterialSize size, MaterialType materialType,
         ResourceLocation fileReference)
     {
         Id = StudyMaterialId.New();
@@ -33,5 +33,5 @@ public class StudyMaterial
         UploadedAt = DateTime.UtcNow;
     }
     
-    private StudyMaterial() { }
+    private Material() { }
 }

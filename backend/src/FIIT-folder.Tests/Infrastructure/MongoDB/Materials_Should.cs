@@ -8,7 +8,7 @@ using FIIT_folder.Domain.Value_Object;
 using FIIT_folder.Domain.Enums;
 
 [TestFixture]
-public class StudyMaterialMongoDB
+public class MaterialMongoDB_Should
 {
     private Mock<IMongoCollection<BsonDocument>> CollectionMock = null;
     private MaterialMongoDB Repository = null;
@@ -21,9 +21,9 @@ public class StudyMaterialMongoDB
     }
 
     [Test]
-    public async Task CreateStudyMaterial_Should()
+    public async Task CreateMaterial_Should()
     {
-        var material = new StudyMaterial(
+        var material = new Material(
             new MaterialName("Матан"),
             new SubjectId(Guid.NewGuid()),
             new UserId(Guid.NewGuid()),
@@ -37,7 +37,7 @@ public class StudyMaterialMongoDB
         CollectionMock
             .Setup(c => c.InsertOneAsync(It.IsAny<BsonDocument>(), null, default))
             .Returns(Task.CompletedTask);
-        var result = await Repository.CreateStudyMaterial(material);
+        var result = await Repository.CreateMaterial(material);
         
         Assert.That(result, Is.Not.Null);
 
@@ -46,7 +46,7 @@ public class StudyMaterialMongoDB
     }
     
     [Test]
-    public async Task DeleteStudyMaterial_Should()
+    public async Task DeleteMaterial_Should()
     {
         var materialId = Guid.NewGuid();
         var deleteResult = new Mock<DeleteResult>();
@@ -54,7 +54,7 @@ public class StudyMaterialMongoDB
         
         CollectionMock.Setup(c => c.DeleteOneAsync(It.Is<FilterDefinition<BsonDocument>>
                 (f => true), default)).ReturnsAsync(deleteResult.Object);
-        var result = await Repository.DeleteStudyMaterial(materialId);
+        var result = await Repository.DeleteMaterial(materialId);
         Assert.That(result, Is.False);
         CollectionMock.Verify(c => c.DeleteOneAsync(
             It.Is<FilterDefinition<BsonDocument>> (f => true), default), Times.Once);
