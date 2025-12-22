@@ -7,7 +7,7 @@ using FIIT_folder.Domain.Interfaces;
 using FIIT_folder.Infrastructure.FileStorage;
 
 [TestFixture]
-public class YandexCloud_Should //не равботает пока можно закоментить
+public class YandexCloud_Should
 {
     private Mock<IAmazonS3> S3Mock = null;
     private FileStorageRepository Repository = null;
@@ -34,21 +34,6 @@ public class YandexCloud_Should //не равботает пока можно з
             folder
         );
         Assert.That(path, Is.EqualTo("subject-test/file-test.txt"));
-     }
-     
-     public async Task DeleteFile_Should()
-     {
-         var stream = new MemoryStream(Encoding.UTF8.GetBytes("test"));
-         var fileName = "file-test.txt";
-         var folder = "subject-test";
-         var path = await Repository.SaveFile(
-             fileName,
-             stream.Length,
-             "text/plain",
-             stream,
-             folder
-         );
-         Assert.That(path, Is.EqualTo("subject-test/file-test.txt"));
      }
      
      [Test]
@@ -84,5 +69,28 @@ public class YandexCloud_Should //не равботает пока можно з
          );
      }
      
+     [Test]
+     public async Task DeleteFile_Should()
+     {
+         var filePath = "folder-test/file-test.txt";
+         S3Mock
+             .Setup(s => s.GetObjectMetadataAsync(Bucket, filePath, default))
+             .ReturnsAsync(new GetObjectMetadataResponse());
+         S3Mock
+             .Setup(s => s.DeleteObjectAsync(
+                 It.Is<DeleteObjectRequest>(r =>
+                     r.BucketName == Bucket &&
+                     r.Key == filePath),
+                 default))
+             .ReturnsAsync(new DeleteObjectResponse());
+         await Repository.DeleteFile(filePath);
+         S3Mock.Verify(
+             s => s.DeleteObjectAsync(
+                 It.IsAny<DeleteObjectRequest>(),
+                 default),
+             Times.Once
+         );
+     }
+
      
 }
