@@ -10,13 +10,13 @@ namespace FIIT_folder.Infrastructure.FileStorage;
 
 public class SubjectMongoDB : ISubjectRepository
 {
-    private readonly IMongoCollection<BsonDocument> _collection;
+    private readonly IMongoCollection<BsonDocument> Collection;
 
     public SubjectMongoDB(string connectionString, string databaseName)
     {
         var client = new MongoClient(connectionString);
         var database = client.GetDatabase(databaseName);
-        _collection = database.GetCollection<BsonDocument>("subjects");
+        Collection = database.GetCollection<BsonDocument>("subjects");
     }
 
     public async Task<Subject> Create(Subject subject)
@@ -31,7 +31,7 @@ public class SubjectMongoDB : ISubjectRepository
                 { "materialTypes", new BsonArray(subject.AvailableMaterialTypes.Select(t => t.ToString())) }
             };
 
-            await _collection.InsertOneAsync(document);
+            await Collection.InsertOneAsync(document);
             Console.WriteLine($"Предмет '{subject.Name.Value}' сохранён в MongoDB");
             return subject;
         }
@@ -46,7 +46,7 @@ public class SubjectMongoDB : ISubjectRepository
         try
         {
             var filter = Builders<BsonDocument>.Filter.Eq("subjectId", id.ToString());
-            var document = await _collection.Find(filter).FirstOrDefaultAsync();
+            var document = await Collection.Find(filter).FirstOrDefaultAsync();
 
             if (document == null)
                 return null;
@@ -63,7 +63,7 @@ public class SubjectMongoDB : ISubjectRepository
     {
         try
         {
-            var documents = await _collection.Find(new BsonDocument()).ToListAsync();
+            var documents = await Collection.Find(new BsonDocument()).ToListAsync();
             return documents.Select(MapToSubject).ToList();
         }
         catch (Exception ex)
@@ -82,7 +82,7 @@ public class SubjectMongoDB : ISubjectRepository
                 .Set("semester", subject.Semester.Value)
                 .Set("materialTypes", new BsonArray(subject.AvailableMaterialTypes.Select(t => t.ToString())));
 
-            var result = await _collection.UpdateOneAsync(filter, update);
+            var result = await Collection.UpdateOneAsync(filter, update);
             return result.ModifiedCount > 0;
         }
         catch (Exception ex)
@@ -96,7 +96,7 @@ public class SubjectMongoDB : ISubjectRepository
         try
         {
             var filter = Builders<BsonDocument>.Filter.Eq("subjectId", id.ToString());
-            var result = await _collection.DeleteOneAsync(filter);
+            var result = await Collection.DeleteOneAsync(filter);
             return result.DeletedCount > 0;
         }
         catch (Exception ex)
@@ -110,7 +110,7 @@ public class SubjectMongoDB : ISubjectRepository
         try
         {
             var filter = Builders<BsonDocument>.Filter.Eq("name", name);
-            var count = await _collection.CountDocumentsAsync(filter);
+            var count = await Collection.CountDocumentsAsync(filter);
             return count > 0;
         }
         catch (Exception ex)

@@ -21,7 +21,7 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, string>
 
     public async Task<string> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByLoginAsync(request.Username, cancellationToken);
+        var user = await _userRepository.GetByLogin(request.Username, cancellationToken);
 
         if (user == null || !_passwordHasher.Verify(request.Password, user.PasswordHash.Value))
         {

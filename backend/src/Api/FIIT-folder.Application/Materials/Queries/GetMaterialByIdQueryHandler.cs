@@ -28,7 +28,7 @@ public class GetMaterialByIdQueryHandler : IRequestHandler<GetMaterialByIdQuery,
             return null;
 
         var authorName = "Unknown";
-        var user = await _userRepository.GetByIdAsync(material.UserId.Value, cancellationToken);
+        var user = await _userRepository.GetById(material.UserId.Value, cancellationToken);
         if (user != null)
         {
             authorName = user.Login.Value;

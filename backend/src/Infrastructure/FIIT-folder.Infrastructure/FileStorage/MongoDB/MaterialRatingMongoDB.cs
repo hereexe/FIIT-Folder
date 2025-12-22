@@ -9,32 +9,19 @@ namespace FIIT_folder.Infrastructure.FileStorage;
 
 public class MaterialRatingMongoDB : IMaterialRatingRepository
 {
-    private readonly IMongoCollection<BsonDocument> _collection;
+    private readonly IMongoCollection<BsonDocument> Collection;
 
     public MaterialRatingMongoDB(string connectionString, string databaseName)
     {
         var client = new MongoClient(connectionString);
         var database = client.GetDatabase(databaseName);
-        _collection = database.GetCollection<BsonDocument>("MaterialRatings");
+        Collection = database.GetCollection<BsonDocument>("MaterialRatings");
     }
 
     public async Task AddAsync(MaterialRating rating)
     {
-        var document = new BsonDocument
-        {
-            { "_id", rating.Id.ToString() }, // MongoDB needs _id, using generic Id as _id or separately? MaterialMongoDB used "materialId" field and allowed MongoDB to generate _id or used it? MaterialMongoDB used "materialId". I will use "_id" as string guid to be simple, or follow the pattern. MaterialMongoDB used "materialId" and stored it. I'll stick to a custom id field "ratingId" to be safe and consistent with MaterialMongoDB pattern if possible, but _id is standard. Let's look at MaterialMongoDB again. It used "materialId" in the document, and likely let Mongo generate ObjectId for _id or just ignored it.
-            // MaterialMongoDB: { "materialId", material.Id.Value.ToString() }
-            // It didn't specify "_id".
-            // I'll use "ratingId" explicitly.
-            { "ratingId", rating.Id.ToString() },
-            { "materialId", rating.MaterialId.Value.ToString() },
-            { "userId", rating.UserId.Value.ToString() },
-            { "rating", rating.Rating.ToString() },
-            { "createdAt", rating.CreatedAt },
-            { "updatedAt", rating.UpdatedAt }
-        };
-
-        await _collection.InsertOneAsync(document);
+        var bsonDocument = MapToBsonDocument(rating);
+        await Collection.InsertOneAsync(bsonDocument);
     }
 
     public async Task UpdateAsync(MaterialRating rating)
@@ -44,7 +31,7 @@ public class MaterialRatingMongoDB : IMaterialRatingRepository
             .Set("rating", rating.Rating.ToString())
             .Set("updatedAt", rating.UpdatedAt);
 
-        await _collection.UpdateOneAsync(filter, update);
+        await Collection.UpdateOneAsync(filter, update);
     }
 
     public async Task<MaterialRating?> GetByUserAndMaterialAsync(UserId userId, MaterialId materialId)
@@ -54,14 +41,14 @@ public class MaterialRatingMongoDB : IMaterialRatingRepository
             Builders<BsonDocument>.Filter.Eq("materialId", materialId.Value.ToString())
         );
 
-        var document = await _collection.Find(filter).FirstOrDefaultAsync();
+        var document = await Collection.Find(filter).FirstOrDefaultAsync();
         return document == null ? null : MapToMaterialRating(document);
     }
 
     public async Task<List<MaterialRating>> GetByMaterialIdAsync(MaterialId materialId)
     {
         var filter = Builders<BsonDocument>.Filter.Eq("materialId", materialId.Value.ToString());
-        var documents = await _collection.Find(filter).ToListAsync();
+        var documents = await Collection.Find(filter).ToListAsync();
         
         var result = new List<MaterialRating>();
         foreach (var doc in documents)
@@ -90,13 +77,13 @@ public class MaterialRatingMongoDB : IMaterialRatingRepository
             Builders<BsonDocument>.Filter.Eq("userId", userId.ToString()),
             Builders<BsonDocument>.Filter.Eq("materialId", materialId.ToString())
         );
-        await _collection.DeleteOneAsync(filter);
+        await Collection.DeleteOneAsync(filter);
     }
 
     public async Task<(int likes, int dislikes)> GetRatingCountsAsync(Guid materialId, CancellationToken cancellationToken = default)
     {
         var filter = Builders<BsonDocument>.Filter.Eq("materialId", materialId.ToString());
-        var documents = await _collection.Find(filter).ToListAsync(cancellationToken);
+        var documents = await Collection.Find(filter).ToListAsync(cancellationToken);
 
         int likes = 0;
         int dislikes = 0;
@@ -111,5 +98,27 @@ public class MaterialRatingMongoDB : IMaterialRatingRepository
         }
 
         return (likes, dislikes);
+    }
+    
+    private static BsonDocument MapToBsonDocument(MaterialRating rating)
+    {
+        if (rating == null)
+            throw new ArgumentNullException(nameof(rating), "Rating не должен быть null");
+    
+        var bsonDocument = new BsonDocument
+        {
+            { "_id", rating.Id.ToString() }, // MongoDB needs _id, using generic Id as _id or separately? MaterialMongoDB used "materialId" field and allowed MongoDB to generate _id or used it? MaterialMongoDB used "materialId". I will use "_id" as string guid to be simple, or follow the pattern. MaterialMongoDB used "materialId" and stored it. I'll stick to a custom id field "ratingId" to be safe and consistent with MaterialMongoDB pattern if possible, but _id is standard. Let's look at MaterialMongoDB again. It used "materialId" in the document, and likely let Mongo generate ObjectId for _id or just ignored it.
+            // MaterialMongoDB: { "materialId", material.Id.Value.ToString() }
+            // It didn't specify "_id".
+            // I'll use "ratingId" explicitly.
+            { "ratingId", rating.Id.ToString() },
+            { "materialId", rating.MaterialId.Value.ToString() },
+            { "userId", rating.UserId.Value.ToString() },
+            { "rating", rating.Rating.ToString() },
+            { "createdAt", rating.CreatedAt },
+            { "updatedAt", rating.UpdatedAt }
+        };
+        
+        return bsonDocument;
     }
 }

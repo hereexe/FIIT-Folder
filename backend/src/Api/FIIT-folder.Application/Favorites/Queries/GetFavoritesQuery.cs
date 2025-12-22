@@ -54,7 +54,7 @@ public class GetFavoritesHandler : IRequestHandler<GetFavoritesQuery, List<Favor
                     matDto.Description = mat.Description;
                     matDto.SubjectId = mat.SubjectId.Value;
 
-                    var user = await _userRepository.GetByIdAsync(mat.UserId.Value, cancellationToken);
+                    var user = await _userRepository.GetById(mat.UserId.Value, cancellationToken);
                     if (user != null)
                     {
                         matDto.AuthorName = user.Login.Value;

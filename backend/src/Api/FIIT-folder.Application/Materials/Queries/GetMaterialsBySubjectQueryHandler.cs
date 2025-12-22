@@ -65,7 +65,7 @@ public class GetMaterialsBySubjectQueryHandler : IRequestHandler<GetMaterialsByS
         {
             var authorName = "Unknown";
             // Potential N+1 issue, but acceptable for now
-            var user = await _userRepository.GetByIdAsync(m.UserId.Value, cancellationToken);
+            var user = await _userRepository.GetById(m.UserId.Value, cancellationToken);
             if (user != null)
                 authorName = user.Login.Value;
 

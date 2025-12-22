@@ -20,7 +20,7 @@ public class RegisterUserCommandHandler: IRequestHandler<RegisterUserCommand, Gu
 
     public async Task<Guid> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        var existingUser = await _userRepository.GetByLoginAsync(request.Username, cancellationToken);
+        var existingUser = await _userRepository.GetByLogin(request.Username, cancellationToken);
         if (existingUser != null)
         {
             throw new Exception("Пользователь с таким логином уже существует.");
@@ -32,7 +32,7 @@ public class RegisterUserCommandHandler: IRequestHandler<RegisterUserCommand, Gu
         
         var user = new User(userId, login, passwordHash, UserRole.Student);
         
-        await _userRepository.AddAsync(user, cancellationToken);
+        await _userRepository.CreateUser(user, cancellationToken);
         return userId.Value;
     }
 
