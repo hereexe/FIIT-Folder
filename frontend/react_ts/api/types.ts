@@ -22,8 +22,8 @@ export interface RateRequest {
 }
 
 export interface RatingResponse {
-  likes: number;
-  dislikes: number;
+  likesCount: number;
+  dislikesCount: number;
   userRating: RatingType | null;
 }
 export interface AddFavoriteRequest {
@@ -39,9 +39,13 @@ export interface MaterialDto {
   authorName?: string;
   isFavorite: boolean;
   materialType: string;
-  size: string;
+  size: number;
+  sizeFormatted: string;
   uploadedAt: string;
-  downloadUrl?: string;
+  downloadUrl: string;
+  likesCount: number;
+  dislikesCount: number;
+  currentUserRating: RatingType | null;
 }
 export interface UploadMaterialRequest {
   file: File;
@@ -77,9 +81,16 @@ export interface SubjectResponse {
   semester: number;
   materialTypes: MaterialTypeResponse[];
 }
+export interface ExamTypeItemProps {
+  displayName: string;
+  semester: number;
+  subjectId: string;
+}
+
 export interface ExamTypeProps {
   examType: string;
-  examNames: string[];
+  rawType: string;
+  items: ExamTypeItemProps[];
 }
 
 export interface SubjectWithMaterialsResponse {

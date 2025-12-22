@@ -32,17 +32,35 @@ public class FileStorageRepository : IFileStorageRepository
     {
         try
         {
+            Console.WriteLine($"Подключение к Yandex Cloud Storage... Bucket: {BucketName}, ServiceUrl: {ServiceUrl}");
+            
             var request = new ListBucketsRequest(); //сделал запрос на получение
             var response = await Client.ListBucketsAsync(request); //получаю список бакетов
+            
+            Console.WriteLine($"Найдено бакетов: {response.Buckets.Count}");
+            foreach (var bucket in response.Buckets)
+            {
+                Console.WriteLine($"  - {bucket.BucketName}");
+            }
+            
             var bucketExists = response.Buckets.Any(bucket => bucket.BucketName == BucketName);//проверка на сущ
             
             if (!bucketExists) //бакета нет
-                throw new InvalidOperationException($"Бакет не существует в облаке.");
-            Console.WriteLine("Облако - контейнер инициализировано");
+            {
+                Console.WriteLine($"ОШИБКА: Бакет '{BucketName}' не найден в списке доступных бакетов!");
+                throw new InvalidOperationException($"Бакет '{BucketName}' не существует в облаке. Доступные бакеты: {string.Join(", ", response.Buckets.Select(b => b.BucketName))}");
+            }
+            Console.WriteLine($"Облако - контейнер '{BucketName}' инициализировано успешно");
         }
-        catch (Exception ex)
+        catch (AmazonS3Exception s3Ex)
         {
-            throw new InvalidOperationException("Ошибка инициализации");
+            Console.WriteLine($"Ошибка S3: {s3Ex.ErrorCode} - {s3Ex.Message}");
+            throw new InvalidOperationException($"Ошибка инициализации S3: {s3Ex.ErrorCode} - {s3Ex.Message}", s3Ex);
+        }
+        catch (Exception ex) when (ex is not InvalidOperationException)
+        {
+            Console.WriteLine($"Ошибка инициализации хранилища: {ex.GetType().Name} - {ex.Message}");
+            throw new InvalidOperationException($"Ошибка инициализации хранилища: {ex.Message}", ex);
         }
     }
     
@@ -73,7 +91,7 @@ public class FileStorageRepository : IFileStorageRepository
             
             return pathInCloud; //возвращаем путь к файлику для MobgoBD
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             throw new InvalidOperationException($"Ошибка загрузки файла '{name}' в облако плаки плаки");
         }
@@ -138,7 +156,7 @@ public class FileStorageRepository : IFileStorageRepository
             await Client.DeleteObjectAsync(request);
             Console.WriteLine("Файл удален из облака");
         }
-        catch (AmazonS3Exception ex)
+        catch (AmazonS3Exception)
         {
             throw new InvalidOperationException($"Ошибка удаления файла");
         }
@@ -159,9 +177,9 @@ public class FileStorageRepository : IFileStorageRepository
             await Client.GetObjectMetadataAsync(BucketName, fullPathFile);
             return true;
         }
-        catch
+        catch (Exception)
         {
-            Console.WriteLine("Файл не найден!");
+            Console.WriteLine("Error");
             return false;
         }
     }

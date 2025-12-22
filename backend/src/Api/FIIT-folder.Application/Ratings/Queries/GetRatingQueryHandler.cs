@@ -21,8 +21,8 @@ public class GetRatingQueryHandler : IRequestHandler<GetRatingQuery, RatingResul
 
         return new RatingResultDto
         {
-            LikeCount = likes,
-            DislikeCount = dislikes,
+            LikesCount = likes,
+            DislikesCount = dislikes,
             UserRating = null
         };
     }

@@ -17,6 +17,10 @@ export default {
         '8xl': '88rem',
         '9xl': '96rem',
         '10xl': '104rem',
+        '80p': '80%'
+      },
+      maxHeight: {
+        '8xl' : '60rem'
       },
       maxHeight: {
         '8xl' : '60rem'

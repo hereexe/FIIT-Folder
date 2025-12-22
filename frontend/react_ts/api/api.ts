@@ -16,7 +16,7 @@ import {
   AddFavoriteRequest,
 } from "./types";
 
-const BASE_URL = "https://158.160.99.237";
+const BASE_URL = "http://158.160.99.237:8080/api";
 
 export const appApi = createApi({
   reducerPath: "appApi",
@@ -80,15 +80,15 @@ export const appApi = createApi({
           MaterialType: params.materialType,
           Semester: params.semester,
           Year: params.year,
-          Search: params.searchQuery,
+          SearchText: params.searchQuery,
         },
       }),
       providesTags: (result) =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: "Materials" as const, id })),
-              { type: "Materials", id: "LIST" },
-            ]
+            ...result.map(({ id }) => ({ type: "Materials" as const, id })),
+            { type: "Materials", id: "LIST" },
+          ]
           : [{ type: "Materials", id: "LIST" }],
     }),
 
@@ -98,7 +98,7 @@ export const appApi = createApi({
       transformResponse: (response: MaterialDto) => {
         return {
           ...response,
-          downloadUrl: `${BASE_URL}Materials/${response.id}/download`,
+          downloadUrl: `${BASE_URL}/Materials/${response.id}/download`,
         };
       },
     }),
@@ -150,7 +150,11 @@ export const appApi = createApi({
         method: "POST",
         body: rating,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: "Rating", id }],
+      invalidatesTags: (result, error, { id }) => [
+        { type: "Materials", id: "LIST" },
+        { type: "MaterialDetail", id },
+        { type: "Favorites", id: "LIST" },
+      ],
     }),
 
     getMaterialRating: builder.query<RatingResponse, string>({
@@ -165,9 +169,10 @@ export const appApi = createApi({
         body,
       }),
       invalidatesTags: (result, error, { materialId }) => [
-        { type: "Favorites" },
-        { type: "Materials", id: materialId },
-        { type: "MaterialDetail", id: materialId },
+        { type: "Favorites" as const, id: "LIST" },
+        { type: "Materials" as const, id: "LIST" },
+        { type: "Materials" as const, id: materialId },
+        { type: "MaterialDetail" as const, id: materialId },
       ],
     }),
 
@@ -177,9 +182,11 @@ export const appApi = createApi({
         method: "DELETE",
       }),
       invalidatesTags: (result, error, materialId) => [
-        { type: "Favorites" },
-        { type: "Materials", id: materialId },
-        { type: "MaterialDetail", id: materialId },
+        { type: "Favorites" as const, id: "LIST" },
+        { type: "Favorites" as const, id: materialId },
+        { type: "Materials" as const, id: "LIST" },
+        { type: "Materials" as const, id: materialId },
+        { type: "MaterialDetail" as const, id: materialId },
       ],
     }),
 
@@ -188,10 +195,19 @@ export const appApi = createApi({
       providesTags: (result) =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: "Favorites" as const, id })),
-              { type: "Favorites", id: "LIST" },
-            ]
+            ...result.map(({ id }) => ({ type: "Favorites" as const, id })),
+            { type: "Favorites", id: "LIST" },
+          ]
           : [{ type: "Favorites", id: "LIST" }],
+      transformResponse: (response: any[]) => {
+        return response.map(fav => ({
+          ...fav,
+          id: fav.materialId, // Use MaterialId as the ID for consistency in UI
+          downloadUrl: fav.downloadUrl?.startsWith('http')
+            ? fav.downloadUrl
+            : `${BASE_URL.replace('/api', '')}${fav.downloadUrl || ''}`
+        }));
+      }
     }),
 
     getSubjects: builder.query<SubjectDto[], void>({

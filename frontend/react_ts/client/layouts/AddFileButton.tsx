@@ -11,6 +11,7 @@ const AddFileButton: React.FC = () => {
         className="fixed bottom-8 right-8 text-fiit-text hover:opacity-80 transition-opacity z-index-100"
         aria-label="Add new material"
         onClick={openModal}
+        style={{ zIndex: 1000 }}
       >
         <svg
           className="w-[60px] h-[60px]"

@@ -100,7 +100,13 @@ public class SubjectsController : ControllerBase
             Content = result.MaterialGroups.Select(g => new MaterialGroupResponse
             {
                 ExamType = g.ExamType,
-                ExamNames = g.ExamNames
+                RawType = g.RawType,
+                Items = g.Items.Select(i => new MaterialGroupItemResponse
+                {
+                    DisplayName = i.DisplayName,
+                    Semester = i.Semester,
+                    SubjectId = i.SubjectId
+                }).ToList()
             }).ToList()
         };
 
@@ -129,5 +135,71 @@ public class SubjectsController : ControllerBase
     {
         var result = await _mediator.Send(new DeleteSubjectCommand(id));
         return NoContent();
+    }
+    [HttpPost("seed")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> Seed()
+    {
+        var subjects = new List<(string Name, int Semester, List<string> Types)>
+        {
+            // 1 семестр
+            ("Математический анализ", 1, new List<string> { "Exam", "Colloquium", "Pass" }),
+            ("Алгебра и геометрия", 1, new List<string> { "Exam", "ControlWork", "ComputerPractice" }),
+            ("Введение в математику", 1, new List<string> { "ControlWork" }),
+            ("Языки и технологии программирования", 1, new List<string> { "Exam" }),
+            ("Основы российской государственности", 1, new List<string> { "Pass" }),
+            ("Основы проектной деятельности", 1, new List<string> { "Pass" }),
+            ("Nand to Tetris", 1, new List<string> { "Exam" }),
+            ("ПЭК", 1, new List<string> { "Pass" }),
+            
+            // 2 семестр
+            ("Математический анализ", 2, new List<string> { "Exam", "Colloquium", "Pass" }),
+            ("Алгебра и геометрия", 2, new List<string> { "Exam", "ControlWork", "ComputerPractice" }),
+            ("Языки и технологии программирования", 2, new List<string> { "Exam" }),
+            ("Философия", 2, new List<string> { "Pass" }),
+            ("Nand to Tetris", 2, new List<string> { "Exam" }),
+            ("Python", 2, new List<string> { "Exam" }),
+            
+            // 3 семестр
+            ("Математический анализ", 3, new List<string> { "Exam", "Colloquium", "Pass" }),
+            ("Дискретная математика", 3, new List<string> { "Exam", "ControlWork", "ComputerPractice" }),
+            ("Сети и протоколы интернета", 3, new List<string> { "Pass" }),
+            ("Теория вероятности", 3, new List<string> { "Exam", "ControlWork" }),
+            ("Python", 3, new List<string> { "Exam" }),
+            
+            // 4 семестр
+            ("Теория вероятности", 4, new List<string> { "Exam", "ControlWork" })
+        };
+
+        var createdCount = 0;
+        var skippedCount = 0;
+        var errors = new List<string>();
+
+        foreach (var sub in subjects)
+        {
+            try
+            {
+                // CreateSubjectCommand expects Name, Semester, MaterialTypes
+                await _mediator.Send(new CreateSubjectCommand(sub.Name, sub.Semester, sub.Types));
+                createdCount++;
+            }
+            catch (InvalidOperationException) 
+            {
+                // Already exists (handled by handler)
+                skippedCount++;
+            }
+            catch (Exception ex)
+            {
+                errors.Add($"Error creating {sub.Name}: {ex.Message}");
+            }
+        }
+
+        return Ok(new 
+        { 
+            Message = "Seeding completed", 
+            Created = createdCount, 
+            Skipped = skippedCount, 
+            Errors = errors 
+        });
     }
 }

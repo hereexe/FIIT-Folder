@@ -7,5 +7,5 @@ public interface IFavoriteRepository
 {
     Task AddMaterialAsync(FavoriteMaterial material, CancellationToken cancellationToken);
     Task<List<FavoriteMaterial>> GetMaterialsByUserIdAsync(UserId userId, CancellationToken cancellationToken);
-    Task RemoveMaterialAsync(Guid id, CancellationToken cancellationToken);
+    Task RemoveMaterialAsync(UserId userId, Guid materialId, CancellationToken cancellationToken);
 }

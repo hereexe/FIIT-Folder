@@ -18,9 +18,18 @@ public class AddFavoriteMaterialHandler : IRequestHandler<AddFavoriteMaterialCom
 
     public async Task<Guid> Handle(AddFavoriteMaterialCommand request, CancellationToken cancellationToken)
     {
-        var favorite = new FavoriteMaterial(
-            new UserId(request.UserId), 
-            new StudyMaterialId(request.MaterialId));
+        var userIdObj = new UserId(request.UserId);
+        var matIdObj = new StudyMaterialId(request.MaterialId);
+
+        var existing = await _favoriteRepository.GetMaterialsByUserIdAsync(userIdObj, cancellationToken);
+        var existingFav = existing.FirstOrDefault(m => m.MaterialId == matIdObj);
+        
+        if (existingFav != null)
+        {
+            return existingFav.Id;
+        }
+
+        var favorite = new FavoriteMaterial(userIdObj, matIdObj);
             
         await _favoriteRepository.AddMaterialAsync(favorite, cancellationToken);
         return favorite.Id;

@@ -38,43 +38,69 @@ public class DataSeeder
     {
         return new List<Subject>
         {
-            // 1 семестр
+            // ===== 1 СЕМЕСТР =====
             CreateSubject("Математический анализ", 1, 
                 MaterialType.Exam, MaterialType.Colloquium, MaterialType.Pass),
             
             CreateSubject("Алгебра и геометрия", 1, 
-                MaterialType.Exam, MaterialType.Colloquium),
-            
-            CreateSubject("Дискретная математика", 1, 
-                MaterialType.Exam, MaterialType.Colloquium),
-            
-            CreateSubject("Введение в математику", 1, 
-                MaterialType.Pass),
-            
-            CreateSubject("Языки и технологии программирования", 1, 
                 MaterialType.Exam, MaterialType.ControlWork, MaterialType.ComputerPractice),
             
-            CreateSubject("Основы российской государственности", 1, 
-                MaterialType.Pass),
+            CreateSubject("Введение в математику", 1, 
+                MaterialType.ControlWork),
             
-            CreateSubject("Английский язык", 1, 
+            CreateSubject("Языки и технологии программирования", 1, 
+                MaterialType.Exam),
+            
+            CreateSubject("Основы российской государственности", 1, 
                 MaterialType.Pass),
             
             CreateSubject("Основы проектной деятельности", 1, 
                 MaterialType.Pass),
 
-            // 2 семестр
-            CreateSubject("Теория вероятности", 2, 
-                MaterialType.Exam, MaterialType.Colloquium),
+            CreateSubject("Nand to Tetris", 1, 
+                MaterialType.Exam),
+
+            CreateSubject("ПЭК", 1, 
+                MaterialType.Pass),
+
+            // ===== 2 СЕМЕСТР =====
+            CreateSubject("Математический анализ", 2, 
+                MaterialType.Exam, MaterialType.Colloquium, MaterialType.Pass),
             
-            CreateSubject("Философия", 2, 
+            CreateSubject("Алгебра и геометрия", 2, 
+                MaterialType.Exam, MaterialType.ControlWork, MaterialType.ComputerPractice),
+            
+            CreateSubject("Языки и технологии программирования", 2, 
                 MaterialType.Exam),
             
+            CreateSubject("Философия", 2, 
+                MaterialType.Pass),
+
             CreateSubject("Nand to Tetris", 2, 
-                MaterialType.Pass, MaterialType.ComputerPractice),
+                MaterialType.Exam),
+
+            CreateSubject("Python", 2, 
+                MaterialType.Exam),
+
+            // ===== 3 СЕМЕСТР =====
+            CreateSubject("Математический анализ", 3, 
+                MaterialType.Exam, MaterialType.Colloquium, MaterialType.Pass),
+
+            CreateSubject("Дискретная математика", 3, 
+                MaterialType.Exam, MaterialType.ControlWork, MaterialType.ComputerPractice),
+
+            CreateSubject("Сети и протоколы интернета", 3, 
+                MaterialType.Pass),
+
+            CreateSubject("Теория вероятности", 3, 
+                MaterialType.Exam, MaterialType.ControlWork),
+
+            CreateSubject("Python", 3, 
+                MaterialType.Exam),
             
-            CreateSubject("Сети и протоколы интернета", 2, 
-                MaterialType.Exam, MaterialType.ComputerPractice),
+            // ===== 4 СЕМЕСТР =====
+            CreateSubject("Теория вероятности", 4, 
+                MaterialType.Exam, MaterialType.ControlWork)
         };
     }
 

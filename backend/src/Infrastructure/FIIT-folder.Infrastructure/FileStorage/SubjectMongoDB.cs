@@ -105,6 +105,20 @@ public class SubjectMongoDB : ISubjectRepository
         }
     }
 
+    public async Task<List<Subject>> GetByName(string name)
+    {
+        try
+        {
+            var filter = Builders<BsonDocument>.Filter.Eq("name", name);
+            var documents = await _collection.Find(filter).ToListAsync();
+            return documents.Select(MapToSubject).ToList();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Ошибка при получении предметов по имени: {ex.Message}", ex);
+        }
+    }
+
     public async Task<bool> ExistsByName(string name)
     {
         try

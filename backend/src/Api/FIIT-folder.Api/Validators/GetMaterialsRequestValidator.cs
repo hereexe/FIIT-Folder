@@ -9,8 +9,8 @@ public class GetMaterialsRequestValidator : AbstractValidator<GetMaterialsReques
 {
     public GetMaterialsRequestValidator()
     {
-        RuleFor(x => x.SubjectId)
-            .NotEmpty().WithMessage("SubjectId обязателен");
+        // SubjectId is optional for global search
+        // RuleFor(x => x.SubjectId).NotEmpty().WithMessage("SubjectId обязателен");
 
         RuleFor(x => x.MaterialType)
             .Must(type => string.IsNullOrEmpty(type) || Enum.TryParse<MaterialType>(type, true, out _))

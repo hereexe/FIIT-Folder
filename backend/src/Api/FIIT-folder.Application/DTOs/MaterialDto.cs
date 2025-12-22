@@ -14,4 +14,8 @@ public class MaterialDto
     public long Size { get; set; }
     public string FilePath { get; set; } = string.Empty;
     public DateTime UploadedAt { get; set; }
+    
+    public int LikesCount { get; set; }
+    public int DislikesCount { get; set; }
+    public string? CurrentUserRating { get; set; } // "Like", "Dislike" or null
 }

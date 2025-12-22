@@ -62,7 +62,7 @@ namespace FIIT_folder.Infrastructure.Test
                 
                 Console.WriteLine($"Файл сохранен");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Console.WriteLine("Error");
             }

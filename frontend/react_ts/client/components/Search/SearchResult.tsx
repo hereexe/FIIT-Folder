@@ -1,4 +1,7 @@
 import { ChevronRight } from "lucide-react";
+import { MaterialDto } from "../../../api/types";
+import { useNavigate } from "react-router-dom";
+import { useGetSubjectsQuery } from "../../../api/api";
 
 interface ListItemProps {
   title: string;
@@ -28,32 +31,56 @@ function ListItem({ title, author, onClick }: ListItemProps) {
   );
 }
 
-export default function SearchResult() {
-  const items = [
-    { id: 1, title: "2022. Расписанные билеты", author: "Artem Scheglevatov" },
-    { id: 2, title: "2022. Расписанные билеты", author: "Artem Scheglevatov" },
-    { id: 3, title: "2022. Расписанные билеты", author: "Artem Scheglevatov" },
-    { id: 4, title: "2022. Расписанные билеты", author: "Artem Scheglevatov" },
-    { id: 5, title: "2022. Расписанные билеты", author: "Artem Scheglevatov" },
-    { id: 5, title: "2022. Расписанные билеты", author: "Artem Scheglevatov" },
-    { id: 5, title: "2022. Расписанные билеты", author: "Artem Scheglevatov" }
-  ];
+interface SearchResultProps {
+  items: MaterialDto[];
+}
 
-  const handleItemClick = (id: number) => {
-    console.log(`Item ${id} clicked`);
-  };
+const materialTypeLabels: Record<string, string> = {
+  "Exam": "Экзамен",
+  "Colloquium": "Коллоквиум",
+  "Pass": "Зачёт",
+  "ControlWork": "Контрольная работа",
+  "ComputerPractice": "Компьютерный практикум"
+};
+
+export default function SearchResult({ items }: SearchResultProps) {
+  const navigate = useNavigate();
+  const { data: subjects = [] } = useGetSubjectsQuery();
+
+  const handleItemClick = (material: MaterialDto) => {
+    const subject = subjects.find(s => s.id === material.subjectId);
+    const subjectName = subject?.name || "Предмет";
+    const typeLabel = materialTypeLabels[material.materialType] || material.materialType;
+    const examName = `${typeLabel}, ${material.semester} семестр`;
+
+    // Сохраняем в sessionStorage для корректного отображения на странице Docs_page
+    sessionStorage.setItem("selectedSubjectId", material.subjectId);
+    sessionStorage.setItem("selectedSubject", subjectName);
+    sessionStorage.setItem("examName", examName);
+
+    navigate("/fileview_page", {
+      state: {
+        material: material
+      }
+    });
+  }
 
   return (
-      <div className="max-w-6xl mx-auto ">
-        <div className="flex flex-col gap-5 h-[calc(100vh-120px)] md:h-[calc(100vh-140px)] overflow-y-auto pr-2 md:pr-3">
-          {items.map((item) => (
-            <ListItem
-              key={item.id}
-              title={item.title}
-              author={item.author}
-              onClick={() => handleItemClick(item.id)}
-            />
-          ))}
+    <div className="max-w-6xl mx-auto ">
+      <div className="flex flex-col gap-5 h-[calc(100vh-120px)] md:h-[calc(100vh-140px)] overflow-y-auto pr-2 md:pr-3">
+        {items.map((item) => (
+          <ListItem
+            key={item.id}
+            title={item.name}
+            author={item.authorName || "Unknown"}
+            onClick={() => handleItemClick(item)}
+          />
+        ))}
+        {items.length === 0 && (
+          <div className="text-center text-gray-500 py-10">
+            No results found
+          </div>
+        )}
       </div>
     </div>
   );

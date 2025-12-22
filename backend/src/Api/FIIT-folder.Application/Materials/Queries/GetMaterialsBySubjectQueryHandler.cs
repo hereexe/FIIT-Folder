@@ -9,20 +9,35 @@ public class GetMaterialsBySubjectQueryHandler : IRequestHandler<GetMaterialsByS
     private readonly IMaterialMongoDB _materialRepository;
     private readonly IUserRepository _userRepository;
     private readonly IFavoriteRepository _favoriteRepository;
+    private readonly IMaterialRatingRepository _ratingRepository;
 
     public GetMaterialsBySubjectQueryHandler(
         IMaterialMongoDB materialRepository,
         IUserRepository userRepository,
-        IFavoriteRepository favoriteRepository)
+        IFavoriteRepository favoriteRepository,
+        IMaterialRatingRepository ratingRepository)
     {
         _materialRepository = materialRepository;
         _userRepository = userRepository;
         _favoriteRepository = favoriteRepository;
+        _ratingRepository = ratingRepository;
     }
 
     public async Task<List<MaterialDto>> Handle(GetMaterialsBySubjectQuery request, CancellationToken cancellationToken)
     {
-        var materials = await _materialRepository.GetBySubjectId(request.SubjectId);
+        List<Domain.Entities.StudyMaterial> materials;
+        if (request.SubjectId.HasValue)
+        {
+            materials = await _materialRepository.GetBySubjectId(request.SubjectId.Value);
+        }
+        else if (!string.IsNullOrWhiteSpace(request.SearchText))
+        {
+            materials = await _materialRepository.SearchAsync(request.SearchText);
+        }
+        else
+        {
+            materials = await _materialRepository.GetAll();
+        }
 
         if (materials == null)
             return new List<MaterialDto>();
@@ -30,7 +45,7 @@ public class GetMaterialsBySubjectQueryHandler : IRequestHandler<GetMaterialsByS
         // Filter by semester if provided
         if (request.Semester.HasValue)
         {
-            materials = materials.Where(m => m.Semester == request.Semester.Value).ToList();
+            materials = materials.Where(m => m.Semester.Value == request.Semester.Value).ToList();
         }
 
         // Filter by year if provided
@@ -69,20 +84,33 @@ public class GetMaterialsBySubjectQueryHandler : IRequestHandler<GetMaterialsByS
             if (user != null)
                 authorName = user.Login.Value;
 
+            var (likes, dislikes) = await _ratingRepository.GetRatingCountsAsync(m.Id.Value, cancellationToken);
+            string? currentUserRating = null;
+            if (request.UserId.HasValue)
+            {
+                var rating = await _ratingRepository.GetByUserAndMaterialAsync(
+                    new FIIT_folder.Domain.Value_Object.UserId(request.UserId.Value),
+                    m.Id);
+                currentUserRating = rating?.Rating.ToString();
+            }
+
             result.Add(new MaterialDto
             {
                 Id = m.Id.Value,
                 SubjectId = m.SubjectId.Value,
                 Name = m.Name.Value,
                 Year = m.Year.Value,
-                Semester = m.Semester,
+                Semester = m.Semester.Value,
                 Description = m.Description,
                 AuthorName = authorName,
                 IsFavorite = favoriteMaterialIds.Contains(m.Id.Value),
                 MaterialType = m.MaterialType.ToString(),
                 Size = m.Size.Size,
                 FilePath = m.FilePath.Value,
-                UploadedAt = m.UploadedAt
+                UploadedAt = m.UploadedAt,
+                LikesCount = likes,
+                DislikesCount = dislikes,
+                CurrentUserRating = currentUserRating
             });
         }
 

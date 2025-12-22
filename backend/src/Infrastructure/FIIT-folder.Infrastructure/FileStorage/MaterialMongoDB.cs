@@ -68,7 +68,7 @@ public class MaterialMongoDB : IMaterialMongoDB
                 { "userId", material.UserId.Value.ToString() },
                 { "name", material.Name.Value },
                 { "year", material.Year.Value },
-                { "semester", material.Semester },
+                { "semester", material.Semester.Value },
                 { "description", material.Description },
                 { "size", material.Size.Size },
                 { "materialType", material.MaterialType.ToString() },
@@ -143,7 +143,7 @@ public class MaterialMongoDB : IMaterialMongoDB
         }
     }
 
-    public Task<StudyMaterial> UpdateStudyMaterial(StudyMaterial material)
+    public async Task<StudyMaterial?> UpdateStudyMaterial(StudyMaterial material)
     {
         try
         {
@@ -157,7 +157,55 @@ public class MaterialMongoDB : IMaterialMongoDB
 
     public async Task<List<StudyMaterial>> GetAll()
     {
-        return null;
+        var result = new List<StudyMaterial>();
+        try
+        {
+            var documents = await CollectionStudyMaterial.Find(new BsonDocument()).ToListAsync();
+            foreach (var doc in documents)
+            {
+                try
+                {
+                    result.Add(MapToStudyMaterial(doc));
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка маппинга документа {doc.GetValue("_id", "unknown")}: {ex.Message}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка при получении всех материалов: {ex.Message}");
+        }
+        return result;
+    }
+
+    public async Task<List<StudyMaterial>> SearchAsync(string searchText)
+    {
+        var result = new List<StudyMaterial>();
+        try
+        {
+            var filter = Builders<BsonDocument>.Filter.Regex("name", new BsonRegularExpression(searchText, "i")) |
+                         Builders<BsonDocument>.Filter.Regex("description", new BsonRegularExpression(searchText, "i"));
+
+            var documents = await CollectionStudyMaterial.Find(filter).ToListAsync();
+            foreach (var doc in documents)
+            {
+                try
+                {
+                    result.Add(MapToStudyMaterial(doc));
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка маппинга документа {doc.GetValue("_id", "unknown")}: {ex.Message}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка при поиске материалов: {ex.Message}");
+        }
+        return result;
     }
 
     public Task<StudyMaterial> Create(StudyMaterial material)
@@ -189,7 +237,7 @@ public class MaterialMongoDB : IMaterialMongoDB
         var materialType = Enum.Parse<MaterialType>(document["materialType"].AsString, ignoreCase: true);
         var filePath = new ResourceLocation(document["filePath"].AsString);
         
-        var semester = document.Contains("semester") ? document["semester"].AsInt32 : 0;
+        var semester = new Semester(document.Contains("semester") ? document["semester"].AsInt32 : 1);
         var description = document.Contains("description") ? document["description"].AsString : string.Empty;
 
         var material = new StudyMaterial(name, subjectId, userId, year, semester, description, size, materialType, filePath);

@@ -5,10 +5,16 @@ namespace FIIT_folder.Domain.Value_Object;
 
 public record Login
 {
-    public string Value { get; }
+    public string Value { get; private set; }
     private static readonly Regex AllowedPattern = new(@"^[a-zA-Z0-9_]+$", RegexOptions.Compiled);
 
-    private Login(string value)
+    // Private parameterless constructor for MongoDB deserialization
+    private Login()
+    {
+        Value = string.Empty;
+    }
+
+    public Login(string value)
     {
         Value = value;
     }

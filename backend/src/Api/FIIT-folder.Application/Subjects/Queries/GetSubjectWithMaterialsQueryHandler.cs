@@ -20,30 +20,67 @@ public class GetSubjectWithMaterialsQueryHandler : IRequestHandler<GetSubjectWit
 
     public async Task<SubjectWithMaterialsDto?> Handle(GetSubjectWithMaterialsQuery request, CancellationToken cancellationToken)
     {
-        var subject = await _subjectRepository.GetById(request.SubjectId);
-        if (subject == null)
+        var targetSubject = await _subjectRepository.GetById(request.SubjectId);
+        if (targetSubject == null)
             return null;
 
-        var materials = await _materialRepository.GetBySubjectId(request.SubjectId);
+        // Consolidate: find all semesters of this subject
+        var subjects = await _subjectRepository.GetByName(targetSubject.Name.Value);
+        
+        var resultGroups = new List<MaterialGroupDto>();
+        
+        // Define all material types present in these subjects
+        var allMaterialTypes = subjects
+            .SelectMany(s => s.AvailableMaterialTypes)
+            .Distinct()
+            .ToList();
 
-        var materialGroups = subject.AvailableMaterialTypes
-            .Select(materialType => new MaterialGroupDto
+        foreach (var materialType in allMaterialTypes)
+        {
+            var group = new MaterialGroupDto
             {
                 ExamType = materialType.GetDescription(),
-                ExamNames = materials
-                    .Where(m => m.MaterialType == materialType)
-                    .Select(m => m.Name.Value)
-                    .Distinct()
-                    .OrderBy(name => name)
-                    .ToList()
-            })
-            .ToList();
+                RawType = materialType.ToString(),
+                Items = new List<MaterialGroupItemDto>()
+            };
+
+            foreach (var s in subjects.OrderBy(sub => sub.Semester.Value))
+            {
+                if (s.HasMaterialType(materialType))
+                {
+                    group.Items.Add(new MaterialGroupItemDto
+                    {
+                        DisplayName = $"{GetSingularTypeDescription(materialType)}, {s.Semester.Value} семестр",
+                        Semester = s.Semester.Value,
+                        SubjectId = s.Id.Value
+                    });
+                }
+            }
+
+            if (group.Items.Any())
+            {
+                resultGroups.Add(group);
+            }
+        }
 
         return new SubjectWithMaterialsDto
         {
-            Id = subject.Id.Value,
-            Name = subject.Name.Value,
-            MaterialGroups = materialGroups
+            Id = targetSubject.Id.Value,
+            Name = targetSubject.Name.Value,
+            MaterialGroups = resultGroups
+        };
+    }
+
+    private string GetSingularTypeDescription(FIIT_folder.Domain.Enums.MaterialType type)
+    {
+        return type switch
+        {
+            FIIT_folder.Domain.Enums.MaterialType.Exam => "Экзамен",
+            FIIT_folder.Domain.Enums.MaterialType.Colloquium => "Коллоквиум",
+            FIIT_folder.Domain.Enums.MaterialType.Pass => "Зачёт",
+            FIIT_folder.Domain.Enums.MaterialType.ControlWork => "Контрольная работа",
+            FIIT_folder.Domain.Enums.MaterialType.ComputerPractice => "Компьютерный практикум",
+            _ => type.ToString()
         };
     }
 }
