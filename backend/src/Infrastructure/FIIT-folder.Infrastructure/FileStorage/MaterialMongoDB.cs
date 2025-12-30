@@ -73,7 +73,9 @@ public class MaterialMongoDB : IMaterialMongoDB
                 { "size", material.Size.Size },
                 { "materialType", material.MaterialType.ToString() },
                 { "filePath", material.FilePath.Value },
-                { "uploadedAt", material.UploadedAt }
+                { "uploadedAt", material.UploadedAt },
+                { "viewCount", material.ViewCount },
+                { "downloadCount", material.DownloadCount }
             };
             
             await CollectionStudyMaterial.InsertOneAsync(bsonDocument);
@@ -247,7 +249,44 @@ public class MaterialMongoDB : IMaterialMongoDB
         
         idProperty?.SetValue(material, new StudyMaterialId(Guid.Parse(document["materialId"].AsString)));
         uploadedAtProperty?.SetValue(material, document["uploadedAt"].ToUniversalTime());
+        
+        var viewCountProperty = typeof(StudyMaterial).GetProperty("ViewCount");
+        var downloadCountProperty = typeof(StudyMaterial).GetProperty("DownloadCount");
+        viewCountProperty?.SetValue(material, document.Contains("viewCount") ? document["viewCount"].AsInt32 : 0);
+        downloadCountProperty?.SetValue(material, document.Contains("downloadCount") ? document["downloadCount"].AsInt32 : 0);
 
         return material;
+    }
+
+    public async Task<bool> IncrementViewCountAsync(Guid id)
+    {
+        try
+        {
+            var filter = Builders<BsonDocument>.Filter.Eq("materialId", id.ToString());
+            var update = Builders<BsonDocument>.Update.Inc("viewCount", 1);
+            var result = await CollectionStudyMaterial.UpdateOneAsync(filter, update);
+            return result.ModifiedCount > 0;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка при увеличении счетчика просмотров: {ex.Message}");
+            return false;
+        }
+    }
+
+    public async Task<bool> IncrementDownloadCountAsync(Guid id)
+    {
+        try
+        {
+            var filter = Builders<BsonDocument>.Filter.Eq("materialId", id.ToString());
+            var update = Builders<BsonDocument>.Update.Inc("downloadCount", 1);
+            var result = await CollectionStudyMaterial.UpdateOneAsync(filter, update);
+            return result.ModifiedCount > 0;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка при увеличении счетчика скачиваний: {ex.Message}");
+            return false;
+        }
     }
 }

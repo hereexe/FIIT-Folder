@@ -110,7 +110,9 @@ public class GetMaterialsBySubjectQueryHandler : IRequestHandler<GetMaterialsByS
                 UploadedAt = m.UploadedAt,
                 LikesCount = likes,
                 DislikesCount = dislikes,
-                CurrentUserRating = currentUserRating
+                CurrentUserRating = currentUserRating,
+                ViewCount = m.ViewCount,
+                DownloadCount = m.DownloadCount
             });
         }
 

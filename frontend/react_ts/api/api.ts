@@ -233,6 +233,16 @@ export const appApi = createApi({
       }),
       invalidatesTags: ["Subjects"],
     }),
+
+    incrementViewCount: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `Materials/${id}/view`,
+        method: "POST",
+      }),
+      invalidatesTags: (result, error, id) => [
+        { type: "MaterialDetail", id },
+      ],
+    }),
   }),
 });
 
@@ -252,4 +262,5 @@ export const {
   useAddFavoriteMaterialMutation,
   useRemoveFavoriteMaterialMutation,
   useGetFavoritesQuery,
+  useIncrementViewCountMutation,
 } = appApi;

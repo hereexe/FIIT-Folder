@@ -23,6 +23,8 @@ interface FileViewerProps {
   currentUserRating: "Like" | "Dislike" | null;
   isFavorite: boolean;
   pdfUrl?: string;
+  viewCount: number;
+  downloadCount: number;
 }
 
 export default function FileViewer({
@@ -35,6 +37,8 @@ export default function FileViewer({
   currentUserRating: initialUserRating,
   isFavorite,
   pdfUrl,
+  viewCount,
+  downloadCount,
 }: FileViewerProps) {
   const navigate = useNavigate();
   const [rateMaterial] = useRateMaterialMutation();
@@ -149,10 +153,11 @@ export default function FileViewer({
             download
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+            className="p-2 hover:bg-white/20 rounded-lg transition-colors flex items-center gap-2"
             title="Скачать файл"
           >
             <Download className="w-9 h-9 md:w-10 md:h-10 text-folder-navy" strokeWidth={2} />
+            <span className="text-folder-navy font-medium">({downloadCount})</span>
           </a>
           <button
             onClick={handleFavorite}
@@ -208,11 +213,16 @@ export default function FileViewer({
       {/* File content area */}
       <div className="relative w-full mt-4 flex flex-col items-center">
         {title.toLowerCase().endsWith(".pdf") ? (
-          <iframe
-            src={pdfUrl ? `${pdfUrl}#view=FitH` : ""}
-            title="PDF Viewer"
-            className="w-full h-[800px] md:h-[1000px] rounded-2xl border-none shadow-xl bg-white"
-          />
+          <>
+            <div className="text-folder-navy text-lg mb-4">
+              Просмотров: {viewCount}
+            </div>
+            <iframe
+              src={pdfUrl ? `${pdfUrl}#view=FitH` : ""}
+              title="PDF Viewer"
+              className="w-full h-[800px] md:h-[1000px] rounded-2xl border-none shadow-xl bg-white"
+            />
+          </>
         ) : (
           <div className="w-full aspect-[16/10] md:aspect-[16/9] bg-white/10 backdrop-blur-md rounded-2xl shadow-xl flex flex-col items-center justify-center gap-6 border border-white/20">
             <div className="p-8 rounded-full bg-folder-navy/10">
@@ -225,9 +235,9 @@ export default function FileViewer({
             <a
               href={`${pdfUrl}${pdfUrl?.includes('?') ? '&' : '?'}download=true`}
               download
-              className="mt-4 px-10 h-[60px] flex items-center justify-center rounded-2xl bg-folder-navy text-white text-xl font-bold shadow-lg hocus:scale-[1.02] active:scale-[0.98] transition-all"
+              className="mt-4 px-10 h-[60px] flex items-center justify-center gap-3 rounded-2xl bg-folder-navy text-white text-xl font-bold shadow-lg hocus:scale-[1.02] active:scale-[0.98] transition-all"
             >
-              Скачать материал
+              Скачать материал ({downloadCount})
             </a>
           </div>
         )}

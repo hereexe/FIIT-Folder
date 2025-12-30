@@ -13,4 +13,7 @@ public interface IMaterialMongoDB
     
     Task<StudyMaterial?> UpdateStudyMaterial(StudyMaterial material);
     Task<List<StudyMaterial>> SearchAsync(string searchText);
+    
+    Task<bool> IncrementViewCountAsync(Guid id);
+    Task<bool> IncrementDownloadCountAsync(Guid id);
 }

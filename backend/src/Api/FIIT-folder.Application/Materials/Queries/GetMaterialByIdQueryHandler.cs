@@ -70,7 +70,9 @@ public class GetMaterialByIdQueryHandler : IRequestHandler<GetMaterialByIdQuery,
             UploadedAt = material.UploadedAt,
             LikesCount = likes,
             DislikesCount = dislikes,
-            CurrentUserRating = currentUserRating
+            CurrentUserRating = currentUserRating,
+            ViewCount = material.ViewCount,
+            DownloadCount = material.DownloadCount
         };
     }
 }

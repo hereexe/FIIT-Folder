@@ -16,6 +16,8 @@ public class StudyMaterial
     public MaterialSize Size { get; private set; } = default!;
     public ResourceLocation FilePath { get; private set; } = default!;
     public DateTime UploadedAt { get; private set; }
+    public int ViewCount { get; private set; }
+    public int DownloadCount { get; private set; }
 
     public StudyMaterial(MaterialName name, SubjectId subjectId, UserId userId, StudyYear year, Semester semester, string description, MaterialSize size, MaterialType materialType,
         ResourceLocation fileReference)
@@ -31,7 +33,12 @@ public class StudyMaterial
         MaterialType = materialType;
         FilePath = fileReference;
         UploadedAt = DateTime.UtcNow;
+        ViewCount = 0;
+        DownloadCount = 0;
     }
+    
+    public void IncrementViewCount() => ViewCount++;
+    public void IncrementDownloadCount() => DownloadCount++;
     
     private StudyMaterial() { }
 }

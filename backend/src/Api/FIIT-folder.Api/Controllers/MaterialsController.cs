@@ -2,6 +2,7 @@ using System.Security.Claims;
 using FIIT_folder.Api.Models;
 using FIIT_folder.Application.Materials.Commands;
 using FIIT_folder.Application.Materials.Queries;
+using FIIT_folder.Domain.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +14,12 @@ namespace FIIT_folder.Api.Controllers;
 public class MaterialsController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly IMaterialMongoDB _materialRepository;
 
-    public MaterialsController(IMediator mediator)
+    public MaterialsController(IMediator mediator, IMaterialMongoDB materialRepository)
     {
         _mediator = mediator;
+        _materialRepository = materialRepository;
     }
 
     [HttpGet]
@@ -48,7 +51,9 @@ public class MaterialsController : ControllerBase
             LikesCount = m.LikesCount,
             DislikesCount = m.DislikesCount,
             CurrentUserRating = m.CurrentUserRating,
-            DownloadUrl = $"{Request.Scheme}://{Request.Host}/api/materials/{m.Id}/download"
+            DownloadUrl = $"{Request.Scheme}://{Request.Host}/api/materials/{m.Id}/download",
+            ViewCount = m.ViewCount,
+            DownloadCount = m.DownloadCount
         }).AsEnumerable();
 
         if (!string.IsNullOrEmpty(request.MaterialType))
@@ -100,7 +105,9 @@ public class MaterialsController : ControllerBase
             LikesCount = 0,
             DislikesCount = 0,
             CurrentUserRating = null,
-            DownloadUrl = $"{Request.Scheme}://{Request.Host}/api/materials/{result.Id}/download"
+            DownloadUrl = $"{Request.Scheme}://{Request.Host}/api/materials/{result.Id}/download",
+            ViewCount = 0,
+            DownloadCount = 0
         };
 
         return Created($"/api/materials/{response.Id}", response);
@@ -134,7 +141,9 @@ public class MaterialsController : ControllerBase
             LikesCount = material.LikesCount,
             DislikesCount = material.DislikesCount,
             CurrentUserRating = material.CurrentUserRating,
-            DownloadUrl = $"{Request.Scheme}://{Request.Host}/api/materials/{material.Id}/download"
+            DownloadUrl = $"{Request.Scheme}://{Request.Host}/api/materials/{material.Id}/download",
+            ViewCount = material.ViewCount,
+            DownloadCount = material.DownloadCount
         };
 
         return Ok(response);
@@ -148,13 +157,26 @@ public class MaterialsController : ControllerBase
         var result = await _mediator.Send(new DownloadMaterialQuery(id));
         if (result == null) return NotFound();
 
+        // Increment download count only when explicitly downloading
         if (download)
         {
+            await _materialRepository.IncrementDownloadCountAsync(id);
             return File(result.FileStream, result.ContentType, result.FileName);
         }
         
         // Inline display (for PDF viewer etc.)
         return File(result.FileStream, result.ContentType);
+    }
+
+    [HttpPost("{id}/view")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> IncrementViewCount(Guid id)
+    {
+        var success = await _materialRepository.IncrementViewCountAsync(id);
+        if (!success)
+            return NotFound();
+        return Ok();
     }
 
     [HttpDelete("{id}")]

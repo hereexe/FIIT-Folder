@@ -31,4 +31,7 @@ public class MaterialResponse
     public int DislikesCount { get; set; }
     public string? CurrentUserRating { get; set; }
     public string DownloadUrl { get; set; } = string.Empty;
+    
+    public int ViewCount { get; set; }
+    public int DownloadCount { get; set; }
 }

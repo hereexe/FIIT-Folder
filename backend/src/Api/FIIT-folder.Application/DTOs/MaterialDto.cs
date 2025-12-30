@@ -18,4 +18,7 @@ public class MaterialDto
     public int LikesCount { get; set; }
     public int DislikesCount { get; set; }
     public string? CurrentUserRating { get; set; } // "Like", "Dislike" or null
+    
+    public int ViewCount { get; set; }
+    public int DownloadCount { get; set; }
 }

@@ -46,6 +46,8 @@ export interface MaterialDto {
   likesCount: number;
   dislikesCount: number;
   currentUserRating: RatingType | null;
+  viewCount: number;
+  downloadCount: number;
 }
 export interface UploadMaterialRequest {
   file: File;
