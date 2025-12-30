@@ -72,7 +72,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
         setUserName("Войдите в аккаунт");
       }
     }
-  }, [isOpen]); // Обновляем при каждом открытии
+  }, []); // Run once on mount to restore username from token
 
   // Для плавной анимации
   useEffect(() => {
