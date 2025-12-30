@@ -40,8 +40,13 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
           }).join(''));
 
           const payload = JSON.parse(jsonPayload);
-          // В JwtProvider.cs мы клали Login в claim "unique_name"
-          const login = payload.unique_name || payload.sub; // Fallback to sub if name not found
+
+          // Check various common claim names
+          const login =
+            payload.unique_name ||
+            payload.name ||
+            payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"] ||
+            payload.sub;
 
           if (login) {
             setUserName(login);
