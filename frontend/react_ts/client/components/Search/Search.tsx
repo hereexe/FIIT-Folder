@@ -169,8 +169,12 @@ export default function SearchMenu() {
   };
 
   const getFilterCount = () => {
+    // Count unique selected subject names, not individual subject IDs
+    const selectedSubjectsCount = uniqueSubjects.filter(
+      (subject) => isSubjectSelected(subject.name)
+    ).length;
     return (
-      filters.subjects.length +
+      selectedSubjectsCount +
       filters.contentTypes.length +
       filters.years.length +
       filters.semesters.length
