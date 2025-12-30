@@ -27,13 +27,25 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
 
     if (sessionName) {
       setUserName(sessionName);
-    } else {
-      // Пытаемся восстановить из токена
-      const token = localStorage.getItem("token");
-      if (token) {
+    }
+
+    // Always check token if name is default or we want to double check (optional)
+    // But primarily if session failed to provide a name, we MUST check token.
+    if (!sessionName) {
+      const tokenRaw = localStorage.getItem("token");
+      if (tokenRaw) {
         try {
+          // Clean token just in case it was stored with quotes
+          const token = tokenRaw.replace(/^"|"$/g, '');
+
+          const parts = token.split('.');
+          if (parts.length !== 3) {
+            console.error("Invalid token format");
+            return;
+          }
+
           // Декодируем JWT (payload - вторая часть)
-          const base64Url = token.split('.')[1];
+          const base64Url = parts[1];
           const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
           const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
             return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
@@ -46,7 +58,8 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
             payload.unique_name ||
             payload.name ||
             payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"] ||
-            payload.sub;
+            payload.sub ||
+            payload.login; // Added explicit login field just in case
 
           if (login) {
             setUserName(login);
