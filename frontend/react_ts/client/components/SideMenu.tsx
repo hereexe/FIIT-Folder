@@ -21,12 +21,38 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
   const [isMounted, setIsMounted] = useState(false);
 
   // Инициализация имени пользователя
+  // Инициализация имени пользователя
   useEffect(() => {
     const sessionName = sessionStorage.getItem("userName");
-    if (sessionName == null) {
-      setUserName("Войдите в аккаунт");
-    } else {
+
+    if (sessionName) {
       setUserName(sessionName);
+    } else {
+      // Пытаемся восстановить из токена
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          // Декодируем JWT (payload - вторая часть)
+          const base64Url = token.split('.')[1];
+          const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+          const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+          }).join(''));
+
+          const payload = JSON.parse(jsonPayload);
+          // В JwtProvider.cs мы клали Login в claim "unique_name"
+          const login = payload.unique_name || payload.sub; // Fallback to sub if name not found
+
+          if (login) {
+            setUserName(login);
+            sessionStorage.setItem("userName", login);
+          }
+        } catch (e) {
+          console.error("Failed to decode token", e);
+        }
+      } else {
+        setUserName("Войдите в аккаунт");
+      }
     }
   }, [isOpen]); // Обновляем при каждом открытии
 
