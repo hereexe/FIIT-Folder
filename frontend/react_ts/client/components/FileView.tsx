@@ -4,14 +4,17 @@ import {
   Download,
   ThumbsUp,
   ThumbsDown,
+  Trash2,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import {
   useRateMaterialMutation,
   useAddFavoriteMaterialMutation,
-  useRemoveFavoriteMaterialMutation
+  useRemoveFavoriteMaterialMutation,
+  useDeleteMaterialMutation
 } from "../../api/api";
+import { isAdmin } from "../utils/authUtils";
 
 interface FileViewerProps {
   id: string;
@@ -44,10 +47,25 @@ export default function FileViewer({
   const [rateMaterial] = useRateMaterialMutation();
   const [addFavorite] = useAddFavoriteMaterialMutation();
   const [removeFavorite] = useRemoveFavoriteMaterialMutation();
+  const [deleteMaterial, { isLoading: isDeleting }] = useDeleteMaterialMutation();
+  const userIsAdmin = isAdmin();
 
   const handleBackClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     navigate(-1);
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm("Вы уверены, что хотите удалить этот файл? Это действие необратимо.")) {
+      return;
+    }
+    try {
+      await deleteMaterial(id).unwrap();
+      navigate(-1);
+    } catch (err) {
+      console.error("Failed to delete material", err);
+      alert("Не удалось удалить файл. Проверьте права доступа.");
+    }
   };
 
   const [isLiked, setIsLiked] = useState(initialUserRating === "Like");
@@ -168,6 +186,19 @@ export default function FileViewer({
               strokeWidth={2}
             />
           </button>
+          {userIsAdmin && (
+            <button
+              onClick={handleDelete}
+              disabled={isDeleting}
+              className="p-2 hover:bg-red-100 rounded-lg transition-colors"
+              title="Удалить файл (Администратор)"
+            >
+              <Trash2
+                className={`w-9 h-9 md:w-10 md:h-10 text-red-600 transition-all ${isDeleting ? "opacity-50" : ""}`}
+                strokeWidth={2}
+              />
+            </button>
+          )}
         </div>
       </div>
 

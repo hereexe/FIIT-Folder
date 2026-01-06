@@ -1,3 +1,4 @@
+using FIIT_folder.Application.Interfaces;
 using FIIT_folder.Domain.Entities;
 using FIIT_folder.Domain.Interfaces;
 using FIIT_folder.Domain.Value_Object;
@@ -8,18 +9,31 @@ namespace FIIT_folder.Infrastructure;
 public class DataSeeder
 {
     private readonly ISubjectRepository _subjectRepository;
+    private readonly IUserRepository _userRepository;
+    private readonly IPasswordHasher _passwordHasher;
 
-    public DataSeeder(ISubjectRepository subjectRepository)
+    public DataSeeder(
+        ISubjectRepository subjectRepository,
+        IUserRepository userRepository,
+        IPasswordHasher passwordHasher)
     {
         _subjectRepository = subjectRepository;
+        _userRepository = userRepository;
+        _passwordHasher = passwordHasher;
     }
 
     public async Task SeedAsync()
     {
+        await SeedSubjectsAsync();
+        await SeedAdminAsync();
+    }
+
+    private async Task SeedSubjectsAsync()
+    {
         var existingSubjects = await _subjectRepository.GetAll();
         if (existingSubjects.Count > 0)
         {
-            Console.WriteLine("База данных уже содержит предметы. Seed пропущен.");
+            Console.WriteLine("База данных уже содержит предметы. Seed предметов пропущен.");
             return;
         }
 
@@ -31,7 +45,26 @@ public class DataSeeder
             Console.WriteLine($"Создан предмет: {subject.Name.Value}");
         }
 
-        Console.WriteLine($"Seed завершён. Создано предметов: {subjects.Count}");
+        Console.WriteLine($"Seed предметов завершён. Создано предметов: {subjects.Count}");
+    }
+
+    private async Task SeedAdminAsync()
+    {
+        var existingAdmin = await _userRepository.GetByLoginAsync("admin");
+        if (existingAdmin != null)
+        {
+            Console.WriteLine("Пользователь admin уже существует. Seed пропущен.");
+            return;
+        }
+
+        var login = Login.Create("admin");
+        var passwordHash = PasswordHash.Create(_passwordHasher.Hash("admin"));
+        var userId = UserId.New();
+        
+        var adminUser = new User(userId, login, passwordHash, UserRole.Admin);
+        
+        await _userRepository.AddAsync(adminUser);
+        Console.WriteLine("Создан пользователь-администратор: admin / admin");
     }
 
     private List<Subject> GetSubjectsToSeed()
