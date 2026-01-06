@@ -25,6 +25,8 @@ services:
       YANDEX_SECRET_KEY: "${YANDEX_SECRET_KEY:-}"
       YANDEX_BUCKET_NAME: "${YANDEX_BUCKET_NAME:-fiit-folder}"
       YANDEX_REGION: "${YANDEX_REGION:-ru-central1}"
+      # Admin
+      ADMIN_PASSWORD: "${ADMIN_PASSWORD:-admin}"
     depends_on:
       mongo:
         condition: service_healthy
