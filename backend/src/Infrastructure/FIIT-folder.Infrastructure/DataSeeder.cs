@@ -50,21 +50,28 @@ public class DataSeeder
 
     private async Task SeedAdminAsync()
     {
+        // ЧТОБЫ ИЗМЕНИТЬ ПАРОЛЬ АДМИНА: Измените строку ниже и перезапустите сервер
+        var adminPassword = "admin"; 
+
         var existingAdmin = await _userRepository.GetByLoginAsync("admin");
         if (existingAdmin != null)
         {
-            Console.WriteLine("Пользователь admin уже существует. Seed пропущен.");
+            // Обновляем пароль, если пользователь уже существует (чтобы можно было сбросить)
+            var newHash = PasswordHash.Create(_passwordHasher.Hash(adminPassword));
+            existingAdmin.UpdatePassword(newHash);
+            await _userRepository.UpdateAsync(existingAdmin);
+            Console.WriteLine($"Пароль администратора (admin) обновлен.");
             return;
         }
 
         var login = Login.Create("admin");
-        var passwordHash = PasswordHash.Create(_passwordHasher.Hash("admin"));
+        var passwordHash = PasswordHash.Create(_passwordHasher.Hash(adminPassword));
         var userId = UserId.New();
         
         var adminUser = new User(userId, login, passwordHash, UserRole.Admin);
         
         await _userRepository.AddAsync(adminUser);
-        Console.WriteLine("Создан пользователь-администратор: admin / admin");
+        Console.WriteLine($"Создан пользователь-администратор: admin / {adminPassword}");
     }
 
     private List<Subject> GetSubjectsToSeed()

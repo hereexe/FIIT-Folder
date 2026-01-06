@@ -33,4 +33,10 @@ public class UserMongoDB : IUserRepository
         var filter = Builders<User>.Filter.Eq(u => u.Id.Value, id);
         return await _usersCollection.Find(filter).FirstOrDefaultAsync(cancellationToken);
     }
+
+    public async Task UpdateAsync(User user, CancellationToken cancellationToken = default)
+    {
+        var filter = Builders<User>.Filter.Eq(u => u.Id.Value, user.Id.Value);
+        await _usersCollection.ReplaceOneAsync(filter, user, cancellationToken: cancellationToken);
+    }
 }
