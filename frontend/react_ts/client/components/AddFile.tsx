@@ -21,6 +21,23 @@ export default function Index() {
   const [contentType, setContentType] = useState("");
   const [description, setDescription] = useState("");
   const [files, setFiles] = useState<File | null>(null);
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full min-h-[50vh] gap-6 text-center">
+        <p className="text-2xl font-medium text-primary-dark">
+          Пожалуйста, войдите в аккаунт, чтобы добавить файл
+        </p>
+        <button
+          onClick={() => navigate("/login")}
+          className="px-8 py-3 rounded-[15px] bg-primary-dark text-white text-xl font-bold hover:opacity-90 transition-opacity"
+        >
+          Войти
+        </button>
+      </div>
+    );
+  }
 
   const { data: subjects = [] } = useGetSubjectsQuery() as { data: SubjectDto[] };
 
