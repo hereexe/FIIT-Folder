@@ -50,8 +50,8 @@ public class DataSeeder
 
     private async Task SeedAdminAsync()
     {
-        // ЧТОБЫ ИЗМЕНИТЬ ПАРОЛЬ АДМИНА: Измените строку ниже и перезапустите сервер
-        var adminPassword = "admin"; 
+        // Пароль берется из переменной окружения ADMIN_PASSWORD, или "admin" по умолчанию
+        var adminPassword = Environment.GetEnvironmentVariable("ADMIN_PASSWORD") ?? "admin"; 
 
         var existingAdmin = await _userRepository.GetByLoginAsync("admin");
         if (existingAdmin != null)
