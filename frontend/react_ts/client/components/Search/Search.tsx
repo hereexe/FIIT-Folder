@@ -225,7 +225,7 @@ export default function SearchMenu({ onClose }: SearchMenuProps) {
   };
 
   return (
-    <div className="h-full max-h-8xl bg-purple-light p-4 sm:p-6 md:p-8 lg:p-10 flex items-start justify-center overflow-hidden">
+    <div className="h-full max-h-8xl bg-purple-light p-4 sm:p-6 md:p-8 lg:p-10 flex items-start justify-center overflow-y-auto">
       <div className="w-full max-w-[1200px]">
         <div className="flex flex-col lg:flex-row gap-4 mb-6">
           <div className="flex-1 flex items-center gap-2.5 px-4 py-2.5 rounded-[30px] border-2 border-purple-dark bg-white/50">
