@@ -31,21 +31,32 @@ public class DataSeeder
     private async Task SeedSubjectsAsync()
     {
         var existingSubjects = await _subjectRepository.GetAll();
-        if (existingSubjects.Count > 0)
+        var subjectsToSeed = GetSubjectsToSeed();
+
+        int createdCount = 0;
+        foreach (var subject in subjectsToSeed)
         {
-            Console.WriteLine("База данных уже содержит предметы. Seed предметов пропущен.");
-            return;
+            // Simple check by name and semester to avoid duplicates
+            // Assuming we don't have a GetByNameAndSemester method, we filtering in memory from existingSubjects
+            // If existingSubjects could be large, this should be a DB query, but for seed data it's fine.
+            bool exists = existingSubjects.Any(s => s.Name.Value == subject.Name.Value && s.Semester.Value == subject.Semester.Value);
+            
+            if (!exists)
+            {
+                await _subjectRepository.Create(subject);
+                Console.WriteLine($"Создан предмет: {subject.Name.Value} ({subject.Semester.Value} семестр)");
+                createdCount++;
+            }
         }
 
-        var subjects = GetSubjectsToSeed();
-
-        foreach (var subject in subjects)
+        if (createdCount == 0)
         {
-            await _subjectRepository.Create(subject);
-            Console.WriteLine($"Создан предмет: {subject.Name.Value}");
+             Console.WriteLine("Все предметы уже существуют. Новых предметов не создано.");
         }
-
-        Console.WriteLine($"Seed предметов завершён. Создано предметов: {subjects.Count}");
+        else
+        {
+             Console.WriteLine($"Seed предметов завершён. Создано новых предметов: {createdCount}");
+        }
     }
 
     private async Task SeedAdminAsync()
@@ -140,7 +151,10 @@ public class DataSeeder
             
             // ===== 4 СЕМЕСТР =====
             CreateSubject("Теория вероятности", 4, 
-                MaterialType.Exam, MaterialType.ControlWork)
+                MaterialType.Exam, MaterialType.ControlWork),
+
+            CreateSubject("Алгоритмы и структуры данных", 4,
+                MaterialType.Exam, MaterialType.Contest)
         };
     }
 

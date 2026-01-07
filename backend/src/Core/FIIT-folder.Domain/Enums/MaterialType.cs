@@ -17,5 +17,8 @@ public enum MaterialType
     ControlWork,
     
     [Description("Компьютерные практикумы")]
-    ComputerPractice
+    ComputerPractice,
+
+    [Description("Контесты")]
+    Contest
 }
