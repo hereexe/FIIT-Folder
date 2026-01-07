@@ -299,6 +299,7 @@ export default function Index() {
                   <input
                     type="file"
                     onChange={handleFileChange}
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.ppt,.pptx,.txt,.md"
                     className="hidden"
                   />
                 </label>

@@ -7,7 +7,8 @@ public record ResourceLocation
         ".xls", ".xlsx",
         ".png", ".jpg", ".jpeg",
         ".ppt", ".pptx",
-        ".txt"
+        ".txt",
+        ".md"
     };
     
     public string Value { get; }
