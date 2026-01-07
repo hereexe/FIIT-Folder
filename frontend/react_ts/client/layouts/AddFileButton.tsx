@@ -35,7 +35,7 @@ const AddFileButton: React.FC = () => {
       </button>
       <Modal isOpen={isOpen} onClose={closeModal}>
         {" "}
-        {AddFile()}
+        <AddFile onClose={closeModal} />
       </Modal>
     </>
   );

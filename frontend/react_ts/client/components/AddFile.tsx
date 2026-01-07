@@ -11,7 +11,11 @@ interface SubjectDto {
   materialTypes: { value: string; displayName: string }[];
 }
 
-export default function Index() {
+interface AddFileProps {
+  onClose?: () => void;
+}
+
+export default function Index({ onClose }: AddFileProps) {
   const navigate = useNavigate();
   const [dragActive, setDragActive] = useState(false);
   const [selectedSubjectName, setSelectedSubjectName] = useState("");
@@ -153,7 +157,7 @@ export default function Index() {
     <div className="flex items-center justify-center p-2 md:p-4 ">
       <div className="w-full rounded-[20px] p-4 md:p-8 lg:p-10 relative">
         <button
-          onClick={() => navigate(-1)}
+          onClick={onClose || (() => navigate(-1))}
           className="absolute top-2 right-2 md:top-4 md:right-4 p-2 hover:bg-primary-dark/10 rounded-full transition-colors z-10"
           aria-label="Close"
         >
