@@ -127,14 +127,14 @@ export default function FileViewer({
       <div className="flex items-center justify-between w-full py-3">
         <button
           onClick={handleBackClick}
-          className="p-2 hover:bg-white/20 rounded-lg transition-colors">
+          className="order-1 p-2 hover:bg-white/20 rounded-lg transition-colors">
           <ChevronLeft
             className="w-10 h-10 md:w-11 md:h-11 text-folder-navy"
             strokeWidth={2}
           />
         </button>
 
-        <div className="flex flex-col items-center justify-center gap-2 flex-1 px-4">
+        <div className="order-2 flex flex-col items-center justify-center gap-2 flex-1 px-4">
           <h2 className="text-folder-navy whitespace-normal break-words text-xl md:text-2xl lg:text-[30px] font-medium tracking-wide text-center truncate max-w-full">
             {title}
           </h2>
@@ -143,7 +143,7 @@ export default function FileViewer({
           </p>
         </div>
 
-        <div className="flex items-center gap-2 md:gap-3">
+        <div className="flex order-3 items-center gap-2 md:gap-3">
           <a
             href={`${pdfUrl}${pdfUrl?.includes('?') ? '&' : '?'}download=true`}
             download
