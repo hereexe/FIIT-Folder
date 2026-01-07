@@ -253,18 +253,34 @@ export default function SearchMenu({ onClose }: SearchMenuProps) {
                 </div>
               </div>
             </button>
-            <button
-              onClick={saveFilters}
-              className="flex-shrink-0 hover:opacity-70 transition-opacity"
-            >
-              <CheckIcon className="w-10 h-10 text-purple-dark" strokeWidth={2} />
-            </button>
+            {showFilters ? (
+              <button
+                onClick={saveFilters}
+                className="flex-shrink-0 hover:opacity-70 transition-opacity"
+              >
+                <CheckIcon className="w-10 h-10 text-purple-dark" strokeWidth={2} />
+              </button>
+            ) : (
+              <button
+                onClick={onClose}
+                className="flex-shrink-0 hover:opacity-70 transition-opacity"
+              >
+                <X className="w-10 h-10 text-purple-dark" strokeWidth={2} />
+              </button>
+            )}
           </div>
         </div>
 
         {/* Условный рендеринг окна фильтров */}
         {showFilters && (
           <div className="relative bg-purple-medium rounded-[20px] p-6 sm:p-8 md:p-10">
+            <button
+              onClick={() => setShowFilters(false)}
+              className="absolute top-4 right-4 hover:opacity-70 transition-opacity"
+              aria-label="Close filters"
+            >
+              <X className="w-8 h-8 text-purple-dark" strokeWidth={2} />
+            </button>
             <div className="space-y-8">
               <div className="space-y-4">
                 <h2 className="text-2xl font-medium text-purple-dark tracking-wide">
@@ -357,13 +373,7 @@ export default function SearchMenu({ onClose }: SearchMenuProps) {
             >
               <RefreshCcw className="w-12 h-12 text-purple-dark" strokeWidth={2} />
             </button>
-            <button
-              onClick={() => setShowFilters(false)}
-              className="absolute bottom-6 right-6 hover:opacity-70 transition-opacity"
-              aria-label="Close filters"
-            >
-              <X className="w-12 h-12 text-purple-dark" strokeWidth={2} />
-            </button>
+
 
           </div>
         )}

@@ -1,4 +1,4 @@
-import { ChevronDown, FilePlus2 } from "lucide-react";
+import { ChevronDown, FilePlus2, X } from "lucide-react";
 import { useState, useMemo } from "react";
 import { useUploadMaterialMutation, useGetSubjectsQuery } from "../../api/api";
 import { UploadMaterialRequest } from "../../api/types";
@@ -151,7 +151,14 @@ export default function Index() {
 
   return (
     <div className="flex items-center justify-center p-2 md:p-4 ">
-      <div className="w-full rounded-[20px] p-4 md:p-8 lg:p-10">
+      <div className="w-full rounded-[20px] p-4 md:p-8 lg:p-10 relative">
+        <button
+          onClick={() => navigate(-1)}
+          className="absolute top-2 right-2 md:top-4 md:right-4 p-2 hover:bg-primary-dark/10 rounded-full transition-colors z-10"
+          aria-label="Close"
+        >
+          <X className="w-8 h-8 text-primary-dark" />
+        </button>
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
           {/* Left Section - Form */}
           <div className="flex-1 space-y-12">
