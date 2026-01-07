@@ -66,24 +66,24 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
 
       {/* Sidebar с анимацией */}
       <aside
-      className={`fixed top-0 left-0 h-full z-50 bg-app-sidebar flex flex-col transition-all duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full'
-        } ${sidebarCollapsed ? 'md:w-[80px] lg:w-[100px]' : 'w-[90vw] max-w-[300px] sm:max-w-[350px] md:w-[400px] lg:w-[400px]'}`}
-      onTransitionEnd={handleAnimationEnd}
-    >
+        className={`fixed top-0 left-0 h-full z-50 bg-app-sidebar flex flex-col transition-all duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full'
+          } ${sidebarCollapsed ? 'md:w-[80px] lg:w-[100px]' : 'w-[90vw] max-w-[300px] sm:max-w-[350px] md:w-[400px] lg:w-[400px]'}`}
+        onTransitionEnd={handleAnimationEnd}
+      >
         {/* Sidebar Header */}
         <div className="flex items-center justify-between px-4 md:px-5 py-3 md:py-[10px] bg-app-sidebar-header h-[70px] md:h-[77px]">
           {!sidebarCollapsed && (
             <div className="flex items-center gap-3 md:gap-4">
               {/* Логотип с адаптивным размером */}
-              <svg 
-                className="w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 text-app-sidebar" 
-                viewBox="0 0 40 40" 
-                fill="none" 
+              <svg
+                className="w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 text-app-sidebar"
+                viewBox="0 0 40 40"
+                fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path d="M8.86041 32.3974C9.87429 30.0087 12.2415 28.3334 14.9999 28.3334H24.9999C27.7584 28.3334 30.1255 30.0087 31.1394 32.3974M26.6666 15.8334C26.6666 19.5153 23.6818 22.5 19.9999 22.5C16.318 22.5 13.3333 19.5153 13.3333 15.8334C13.3333 12.1515 16.318 9.16671 19.9999 9.16671C23.6818 9.16671 26.6666 12.1515 26.6666 15.8334ZM36.6666 20C36.6666 29.2048 29.2047 36.6667 19.9999 36.6667C10.7952 36.6667 3.33325 29.2048 3.33325 20C3.33325 10.7953 10.7952 3.33337 19.9999 3.33337C29.2047 3.33337 36.6666 10.7953 36.6666 20Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-              <div className="text-app-sidebar font-medium tracking-[0.25px] truncate max-w-[120px] md:max-w-[160px] lg:max-w-[190px] text-sm md:text-base">
+              <div className="text-app-sidebar font-medium tracking-[0.25px] truncate max-w-[120px] md:max-w-[160px] lg:max-w-[190px] text-xl md:text-[25px]">
                 {userName}
               </div>
             </div>
@@ -94,10 +94,10 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
               className="hover:opacity-80 transition-opacity mx-auto"
               title="Expand sidebar"
             >
-              <svg 
-                className="w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 text-app-sidebar" 
-                viewBox="0 0 40 40" 
-                fill="none" 
+              <svg
+                className="w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 text-app-sidebar"
+                viewBox="0 0 40 40"
+                fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path d="M8.86041 32.3974C9.87429 30.0087 12.2415 28.3334 14.9999 28.3334H24.9999C27.7584 28.3334 30.1255 30.0087 31.1394 32.3974M26.6666 15.8334C26.6666 19.5153 23.6818 22.5 19.9999 22.5C16.318 22.5 13.3333 19.5153 13.3333 15.8334C13.3333 12.1515 16.318 9.16671 19.9999 9.16671C23.6818 9.16671 26.6666 12.1515 26.6666 15.8334ZM36.6666 20C36.6666 29.2048 29.2047 36.6667 19.9999 36.6667C10.7952 36.6667 3.33325 29.2048 3.33325 20C3.33325 10.7953 10.7952 3.33337 19.9999 3.33337C29.2047 3.33337 36.6666 10.7953 36.6666 20Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -110,10 +110,10 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
               className="hover:opacity-80 transition-opacity hidden md:block"
               title="Close sidebar"
             >
-              <svg 
-                className="w-7 h-7 md:w-8 md:h-8 lg:w-[35px] lg:h-[35px] text-app-sidebar" 
-                viewBox="0 0 35 35" 
-                fill="none" 
+              <svg
+                className="w-7 h-7 md:w-8 md:h-8 lg:w-[35px] lg:h-[35px] text-app-sidebar"
+                viewBox="0 0 35 35"
+                fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path d="M13.125 4.375V30.625M11.375 4.375H23.625C26.0752 4.375 27.3003 4.375 28.2362 4.85185C29.0594 5.27129 29.7287 5.94058 30.1482 6.76379C30.625 7.69966 30.625 8.92477 30.625 11.375V23.625C30.625 26.0752 30.625 27.3003 30.1482 28.2362C29.7287 29.0594 29.0594 29.7287 28.2362 30.1482C27.3003 30.625 26.0752 30.625 23.625 30.625H11.375C8.92477 30.625 7.69966 30.625 6.76379 30.1482C5.94058 29.7287 5.27129 29.0594 4.85185 28.2362C4.375 27.3003 4.375 26.0752 4.375 23.625V11.375C4.375 8.92477 4.375 7.69966 4.85185 6.76379C5.27129 5.94058 5.94058 5.27129 6.76379 4.85185C7.69966 4.375 8.92477 4.375 11.375 4.375Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -131,30 +131,34 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
               className="flex items-center gap-4 md:gap-5 text-app-text hover:opacity-80 transition-opacity"
             >
               <LayoutGrid className="w-7 h-7 md:w-8 md:h-8 lg:w-[38px] lg:h-[38px] stroke-[1.5] md:stroke-[2]" />
-              <span className="font-medium tracking-[0.23px] max-w-[calc(100%-60px)] md:max-w-[220px] truncate text-sm md:text-base">
+              <span className="font-medium tracking-[0.23px] max-w-[calc(100%-60px)] md:max-w-[220px] truncate text-lg md:text-[23px]">
                 Главная
               </span>
             </button>
 
-            <button
-              onClick={() => { navigate("/favorites"); onClose(); }}
-              className="flex items-center gap-4 md:gap-5 text-app-text hover:opacity-80 transition-opacity"
-            >
-              <Heart className="w-7 h-7 md:w-8 md:h-8 lg:w-[38px] lg:h-[38px] stroke-[1.5] md:stroke-[2]" />
-              <span className="font-medium tracking-[0.23px] max-w-[calc(100%-60px)] md:max-w-[220px] truncate text-sm md:text-base">
-                Избранное
-              </span>
-            </button>
+            {token && (
+              <>
+                <button
+                  onClick={() => { navigate("/favorites"); onClose(); }}
+                  className="flex items-center gap-4 md:gap-5 text-app-text hover:opacity-80 transition-opacity"
+                >
+                  <Heart className="w-7 h-7 md:w-8 md:h-8 lg:w-[38px] lg:h-[38px] stroke-[1.5] md:stroke-[2]" />
+                  <span className="font-medium tracking-[0.23px] max-w-[calc(100%-60px)] md:max-w-[220px] truncate text-lg md:text-[23px]">
+                    Избранное
+                  </span>
+                </button>
 
-            <button
-              onClick={() => { navigate("/add_file"); onClose(); }}
-              className="flex items-center gap-4 md:gap-5 text-app-text hover:opacity-80 transition-opacity"
-            >
-              <PlusCircle className="w-7 h-7 md:w-8 md:h-8 lg:w-[38px] lg:h-[38px] stroke-[1.5] md:stroke-[2]" />
-              <span className="font-medium tracking-[0.23px] max-w-[calc(100%-60px)] md:max-w-[220px] truncate text-sm md:text-base">
-                Добавить файл
-              </span>
-            </button>
+                <button
+                  onClick={() => { navigate("/add_file"); onClose(); }}
+                  className="flex items-center gap-4 md:gap-5 text-app-text hover:opacity-80 transition-opacity"
+                >
+                  <PlusCircle className="w-7 h-7 md:w-8 md:h-8 lg:w-[38px] lg:h-[38px] stroke-[1.5] md:stroke-[2]" />
+                  <span className="font-medium tracking-[0.23px] max-w-[calc(100%-60px)] md:max-w-[220px] truncate text-lg md:text-[23px]">
+                    Добавить файл
+                  </span>
+                </button>
+              </>
+            )}
 
             {token ? (
               <button
@@ -168,7 +172,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
                 className="flex items-center gap-4 md:gap-5 text-red-500 hover:opacity-80 transition-opacity"
               >
                 <X className="w-7 h-7 md:w-8 md:h-8 lg:w-[38px] lg:h-[38px] stroke-[1.5] md:stroke-[2]" />
-                <span className="font-medium tracking-[0.23px] max-w-[calc(100%-60px)] md:max-w-[190px] truncate text-sm md:text-base">
+                <span className="font-medium tracking-[0.23px] max-w-[calc(100%-60px)] md:max-w-[190px] truncate text-lg md:text-[23px]">
                   Выйти
                 </span>
               </button>
@@ -178,7 +182,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
                 className="flex items-center gap-4 md:gap-5 text-app-text hover:opacity-80 transition-opacity"
               >
                 <UserCircle className="w-7 h-7 md:w-8 md:h-8 lg:w-[38px] lg:h-[38px] stroke-[1.5] md:stroke-[2]" />
-                <span className="font-medium tracking-[0.23px] max-w-[calc(100%-60px)] md:max-w-[190px] truncate text-sm md:text-base">
+                <span className="font-medium tracking-[0.23px] max-w-[calc(100%-60px)] md:max-w-[190px] truncate text-lg md:text-[23px]">
                   Войти
                 </span>
               </button>
