@@ -265,51 +265,51 @@ export default function Index() {
                 className="w-full h-32 px-4 py-3 rounded-[10px] bg-[rgba(228,183,245,0.3)] text-primary-dark text-base md:text-xl placeholder:text-primary-dark/50 resize-none focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
               />
             </div>
-          </div>
 
-          {/* Upload Button */}
-          <div className="flex justify-center">
-            <button
-              onClick={handleUpload}
-              disabled={isLoading}
-              className="px-8 h-[55px] min-w-[200px] rounded-[20px] bg-primary-dark text-white text-xl md:text-2xl font-bold shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
-            >
-              {isLoading ? "Загрузка..." : "Загрузить"}
-            </button>
-          </div>
-        </div>
-
-        {/* Right Section - File Drop Zone */}
-        <div className="flex-1 flex items-center justify-center lg:min-h-[700px]">
-          <div
-            onDragEnter={handleDrag}
-            onDragLeave={handleDrag}
-            onDragOver={handleDrag}
-            onDrop={handleDrop}
-            className={`w-full max-w-xl h-full min-h-[400px] lg:min-h-[700px] flex flex-col items-center justify-center gap-8 px-8 md:px-24 rounded-[25px] border-2 border-dashed border-primary-dark bg-primary-dark/[0.04] transition-all ${dragActive ? "scale-[1.02] border-primary-dark/80 bg-primary-dark/[0.08]" : ""
-              }`}
-          >
-            <FilePlus2 className="w-20 h-20 text-primary-dark stroke-[1.5]" />
-
-            <div className="flex flex-col items-center gap-7">
-              <p className="text-primary-dark text-center text-xl md:text-2xl font-medium tracking-[0.25px]">
-                Кидай сюда или
-              </p>
-              <label className="px-6 py-3 rounded-[15px] bg-primary-dark text-white text-xl md:text-2xl font-bold tracking-[0.25px] cursor-pointer hover:bg-primary-dark/90 transition-all active:scale-[0.95]">
-                выбрать файл
-                <input
-                  type="file"
-                  onChange={handleFileChange}
-                  className="hidden"
-                />
-              </label>
+            {/* Upload Button */}
+            <div className="flex justify-center">
+              <button
+                onClick={handleUpload}
+                disabled={isLoading}
+                className="px-8 h-[55px] min-w-[200px] rounded-[20px] bg-primary-dark text-white text-xl md:text-2xl font-bold shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
+              >
+                {isLoading ? "Загрузка..." : "Загрузить"}
+              </button>
             </div>
+          </div>
 
-            {files && (
-              <div className="mt-4 text-primary-dark text-lg font-medium bg-primary-dark/10 px-6 py-3 rounded-[12px] animate-in fade-in zoom-in duration-300">
-                {files.name}
+          {/* Right Section - File Drop Zone */}
+          <div className="flex-1 flex items-center justify-center lg:min-h-[700px]">
+            <div
+              onDragEnter={handleDrag}
+              onDragLeave={handleDrag}
+              onDragOver={handleDrag}
+              onDrop={handleDrop}
+              className={`w-full max-w-xl h-full min-h-[400px] lg:min-h-[700px] flex flex-col items-center justify-center gap-8 px-8 md:px-24 rounded-[25px] border-2 border-dashed border-primary-dark bg-primary-dark/[0.04] transition-all ${dragActive ? "scale-[1.02] border-primary-dark/80 bg-primary-dark/[0.08]" : ""
+                }`}
+            >
+              <FilePlus2 className="w-20 h-20 text-primary-dark stroke-[1.5]" />
+
+              <div className="flex flex-col items-center gap-7">
+                <p className="text-primary-dark text-center text-xl md:text-2xl font-medium tracking-[0.25px]">
+                  Кидай сюда или
+                </p>
+                <label className="px-6 py-3 rounded-[15px] bg-primary-dark text-white text-xl md:text-2xl font-bold tracking-[0.25px] cursor-pointer hover:bg-primary-dark/90 transition-all active:scale-[0.95]">
+                  выбрать файл
+                  <input
+                    type="file"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
+                </label>
               </div>
-            )}
+
+              {files && (
+                <div className="mt-4 text-primary-dark text-lg font-medium bg-primary-dark/10 px-6 py-3 rounded-[12px] animate-in fade-in zoom-in duration-300">
+                  {files.name}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
