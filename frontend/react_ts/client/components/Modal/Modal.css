@@ -16,7 +16,14 @@
   .modal-container {
     background: white;
     border-radius: 8px;
-    min-width: 50%;
+    border-radius: 8px;
+    width: 95%;
+    max-height: 90vh;
+    
+    @media (min-width: 768px) {
+        width: auto;
+        min-width: 50%;
+    }
 
     overflow: auto;
     animation: slideIn 0.3s ease-out;

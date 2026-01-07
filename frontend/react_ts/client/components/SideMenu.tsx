@@ -121,7 +121,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
               <svg className="w-10 h-10 text-app-sidebar" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M8.86041 32.3974C9.87429 30.0087 12.2415 28.3334 14.9999 28.3334H24.9999C27.7584 28.3334 30.1255 30.0087 31.1394 32.3974M26.6666 15.8334C26.6666 19.5153 23.6818 22.5 19.9999 22.5C16.318 22.5 13.3333 19.5153 13.3333 15.8334C13.3333 12.1515 16.318 9.16671 19.9999 9.16671C23.6818 9.16671 26.6666 12.1515 26.6666 15.8334ZM36.6666 20C36.6666 29.2048 29.2047 36.6667 19.9999 36.6667C10.7952 36.6667 3.33325 29.2048 3.33325 20C3.33325 10.7953 10.7952 3.33337 19.9999 3.33337C29.2047 3.33337 36.6666 10.7953 36.6666 20Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-              <div className="text-app-sidebar text-[25px] font-medium tracking-[0.25px] truncate max-w-[190px]">
+              <div className="text-app-sidebar text-xl md:text-[25px] font-medium tracking-[0.25px] truncate max-w-[190px]">
                 {userName}
               </div>
             </div>
@@ -158,7 +158,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
               className="flex items-center gap-5 text-app-text hover:opacity-80 transition-opacity"
             >
               <LayoutGrid className="w-[38px] h-[38px] stroke-[2]" />
-              <span className="text-[23px] font-medium tracking-[0.23px] max-w-[220px] truncate">
+              <span className="text-lg md:text-[23px] font-medium tracking-[0.23px] max-w-[220px] truncate">
                 Главная
               </span>
             </button>
@@ -170,7 +170,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
                   className="flex items-center gap-5 text-app-text hover:opacity-80 transition-opacity"
                 >
                   <Heart className="w-[38px] h-[38px] stroke-[2]" />
-                  <span className="text-[23px] font-medium tracking-[0.23px] max-w-[220px] truncate">
+                  <span className="text-lg md:text-[23px] font-medium tracking-[0.23px] max-w-[220px] truncate">
                     Избранное
                   </span>
                 </button>
@@ -180,7 +180,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
                   className="flex items-center gap-5 text-app-text hover:opacity-80 transition-opacity"
                 >
                   <PlusCircle className="w-[38px] h-[38px] stroke-[2]" />
-                  <span className="text-[23px] font-medium tracking-[0.23px] max-w-[220px] truncate">
+                  <span className="text-lg md:text-[23px] font-medium tracking-[0.23px] max-w-[220px] truncate">
                     Добавить файл
                   </span>
                 </button>
@@ -199,7 +199,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
                 className="flex items-center gap-5 text-red-500 hover:opacity-80 transition-opacity"
               >
                 <X className="w-[38px] h-[38px] stroke-[2]" />
-                <span className="text-[23px] font-medium tracking-[0.23px] max-w-[190px] truncate">
+                <span className="text-lg md:text-[23px] font-medium tracking-[0.23px] max-w-[190px] truncate">
                   Выйти
                 </span>
               </button>
@@ -209,7 +209,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
                 className="flex items-center gap-5 text-app-text hover:opacity-80 transition-opacity"
               >
                 <UserCircle className="w-[38px] h-[38px] stroke-[2]" />
-                <span className="text-[23px] font-medium tracking-[0.23px] max-w-[190px] truncate">
+                <span className="text-lg md:text-[23px] font-medium tracking-[0.23px] max-w-[190px] truncate">
                   Войти
                 </span>
               </button>

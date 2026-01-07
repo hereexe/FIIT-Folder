@@ -150,171 +150,170 @@ export default function Index() {
   };
 
   return (
-    <div className="flex items-center justify-center p-4 ">
-      <div className="w-full rounded-[20px] p-6 md:p-8 lg:p-10">
+    <div className="flex items-center justify-center p-2 md:p-4 ">
+      <div className="w-full rounded-[20px] p-4 md:p-8 lg:p-10">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
           {/* Left Section - Form */}
           <div className="flex-1 space-y-12">
             {/* Form Fields */}
             <div className="space-y-6">
               {/* Subject */}
-              <div className="space-y-2">
-                <label className="block text-primary-dark text-xl font-normal">
-                  Предмет
-                </label>
-                <div className="relative">
-                  <select
-                    value={selectedSubjectName}
-                    onChange={(e) => handleSubjectNameChange(e.target.value)}
-                    className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
-                  >
-                    <option value="" className="text-primary-dark/50">
-                      Выберите предмет
+              <label className="block text-primary-dark text-lg md:text-xl font-normal">
+                Предмет
+              </label>
+              <div className="relative">
+                <select
+                  value={selectedSubjectName}
+                  onChange={(e) => handleSubjectNameChange(e.target.value)}
+                  className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-base md:text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
+                >
+                  <option value="" className="text-primary-dark/50">
+                    Выберите предмет
+                  </option>
+                  {uniqueSubjectNames.map((name) => (
+                    <option key={name} value={name}>
+                      {name}
                     </option>
-                    {uniqueSubjectNames.map((name) => (
-                      <option key={name} value={name}>
-                        {name}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
-                </div>
-              </div>
-
-              {/* Year */}
-              <div className="space-y-2">
-                <label className="block text-primary-dark text-xl font-normal">
-                  Год
-                </label>
-                <div className="relative">
-                  <select
-                    value={year}
-                    onChange={(e) => setYear(e.target.value)}
-                    className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
-                  >
-                    <option value="" className="text-primary-dark/50">
-                      Выберите год
-                    </option>
-                    <option value="2025">2025</option>
-                    <option value="2024">2024</option>
-                    <option value="2023">2023</option>
-                    <option value="2022">2022</option>
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
-                </div>
-              </div>
-
-              {/* Semester */}
-              <div className="space-y-2">
-                <label className="block text-primary-dark text-xl font-normal">
-                  Семестр
-                </label>
-                <div className="relative">
-                  <select
-                    value={semester}
-                    onChange={(e) => handleSemesterChange(e.target.value)}
-                    disabled={!selectedSubjectName}
-                    className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <option value="" className="text-primary-dark/50">
-                      {selectedSubjectName ? "Выберите семестр" : "Сначала выберите предмет"}
-                    </option>
-                    {availableSemesters.map((sem) => (
-                      <option key={sem} value={sem.toString()}>
-                        {sem} семестр
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
-                </div>
-              </div>
-
-              {/* Type of content */}
-              <div className="space-y-2">
-                <label className="block text-primary-dark text-xl font-normal">
-                  Тип контента
-                </label>
-                <div className="relative">
-                  <select
-                    value={contentType}
-                    onChange={(e) => setContentType(e.target.value)}
-                    disabled={!selectedSubjectName}
-                    className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <option value="" className="text-primary-dark/50">
-                      {selectedSubjectName ? "Выберите тип" : "Сначала выберите предмет"}
-                    </option>
-                    {availableMaterialTypes.map((type) => (
-                      <option key={type.value} value={type.value}>
-                        {type.displayName}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
-                </div>
-              </div>
-
-              {/* Description */}
-              <div className="space-y-2">
-                <label className="block text-primary-dark text-xl font-normal">
-                  Описание
-                </label>
-                <textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Дополнительная информация"
-                  className="w-full h-32 px-4 py-3 rounded-[10px] bg-[rgba(228,183,245,0.3)] text-primary-dark text-xl placeholder:text-primary-dark/50 resize-none focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
-                />
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
               </div>
             </div>
 
-            {/* Upload Button */}
-            <div className="flex justify-center">
-              <button
-                onClick={handleUpload}
-                disabled={isLoading}
-                className="px-8 h-[55px] min-w-[200px] rounded-[20px] bg-primary-dark text-white text-2xl font-bold shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
-              >
-                {isLoading ? "Загрузка..." : "Загрузить"}
-              </button>
+            {/* Year */}
+            <div className="space-y-2">
+              <label className="block text-primary-dark text-lg md:text-xl font-normal">
+                Год
+              </label>
+              <div className="relative">
+                <select
+                  value={year}
+                  onChange={(e) => setYear(e.target.value)}
+                  className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-base md:text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
+                >
+                  <option value="" className="text-primary-dark/50">
+                    Выберите год
+                  </option>
+                  <option value="2025">2025</option>
+                  <option value="2024">2024</option>
+                  <option value="2023">2023</option>
+                  <option value="2022">2022</option>
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
+              </div>
+            </div>
+
+            {/* Semester */}
+            <div className="space-y-2">
+              <label className="block text-primary-dark text-lg md:text-xl font-normal">
+                Семестр
+              </label>
+              <div className="relative">
+                <select
+                  value={semester}
+                  onChange={(e) => handleSemesterChange(e.target.value)}
+                  disabled={!selectedSubjectName}
+                  className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-base md:text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <option value="" className="text-primary-dark/50">
+                    {selectedSubjectName ? "Выберите семестр" : "Сначала выберите предмет"}
+                  </option>
+                  {availableSemesters.map((sem) => (
+                    <option key={sem} value={sem.toString()}>
+                      {sem} семестр
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
+              </div>
+            </div>
+
+            {/* Type of content */}
+            <div className="space-y-2">
+              <label className="block text-primary-dark text-lg md:text-xl font-normal">
+                Тип контента
+              </label>
+              <div className="relative">
+                <select
+                  value={contentType}
+                  onChange={(e) => setContentType(e.target.value)}
+                  disabled={!selectedSubjectName}
+                  className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-base md:text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <option value="" className="text-primary-dark/50">
+                    {selectedSubjectName ? "Выберите тип" : "Сначала выберите предмет"}
+                  </option>
+                  {availableMaterialTypes.map((type) => (
+                    <option key={type.value} value={type.value}>
+                      {type.displayName}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
+              </div>
+            </div>
+
+            {/* Description */}
+            <div className="space-y-2">
+              <label className="block text-primary-dark text-lg md:text-xl font-normal">
+                Описание
+              </label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Дополнительная информация"
+                className="w-full h-32 px-4 py-3 rounded-[10px] bg-[rgba(228,183,245,0.3)] text-primary-dark text-base md:text-xl placeholder:text-primary-dark/50 resize-none focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
+              />
             </div>
           </div>
 
-          {/* Right Section - File Drop Zone */}
-          <div className="flex-1 flex items-center justify-center lg:min-h-[700px]">
-            <div
-              onDragEnter={handleDrag}
-              onDragLeave={handleDrag}
-              onDragOver={handleDrag}
-              onDrop={handleDrop}
-              className={`w-full max-w-xl h-full min-h-[400px] lg:min-h-[700px] flex flex-col items-center justify-center gap-8 px-8 md:px-24 rounded-[25px] border-2 border-dashed border-primary-dark bg-primary-dark/[0.04] transition-all ${dragActive ? "scale-[1.02] border-primary-dark/80 bg-primary-dark/[0.08]" : ""
-                }`}
+          {/* Upload Button */}
+          <div className="flex justify-center">
+            <button
+              onClick={handleUpload}
+              disabled={isLoading}
+              className="px-8 h-[55px] min-w-[200px] rounded-[20px] bg-primary-dark text-white text-xl md:text-2xl font-bold shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
             >
-              <FilePlus2 className="w-20 h-20 text-primary-dark stroke-[1.5]" />
+              {isLoading ? "Загрузка..." : "Загрузить"}
+            </button>
+          </div>
+        </div>
 
-              <div className="flex flex-col items-center gap-7">
-                <p className="text-primary-dark text-center text-2xl font-medium tracking-[0.25px]">
-                  Кидай сюда или
-                </p>
-                <label className="px-6 py-3 rounded-[15px] bg-primary-dark text-white text-2xl font-bold tracking-[0.25px] cursor-pointer hover:bg-primary-dark/90 transition-all active:scale-[0.95]">
-                  выбрать файл
-                  <input
-                    type="file"
-                    onChange={handleFileChange}
-                    className="hidden"
-                  />
-                </label>
-              </div>
+        {/* Right Section - File Drop Zone */}
+        <div className="flex-1 flex items-center justify-center lg:min-h-[700px]">
+          <div
+            onDragEnter={handleDrag}
+            onDragLeave={handleDrag}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
+            className={`w-full max-w-xl h-full min-h-[400px] lg:min-h-[700px] flex flex-col items-center justify-center gap-8 px-8 md:px-24 rounded-[25px] border-2 border-dashed border-primary-dark bg-primary-dark/[0.04] transition-all ${dragActive ? "scale-[1.02] border-primary-dark/80 bg-primary-dark/[0.08]" : ""
+              }`}
+          >
+            <FilePlus2 className="w-20 h-20 text-primary-dark stroke-[1.5]" />
 
-              {files && (
-                <div className="mt-4 text-primary-dark text-lg font-medium bg-primary-dark/10 px-6 py-3 rounded-[12px] animate-in fade-in zoom-in duration-300">
-                  {files.name}
-                </div>
-              )}
+            <div className="flex flex-col items-center gap-7">
+              <p className="text-primary-dark text-center text-xl md:text-2xl font-medium tracking-[0.25px]">
+                Кидай сюда или
+              </p>
+              <label className="px-6 py-3 rounded-[15px] bg-primary-dark text-white text-xl md:text-2xl font-bold tracking-[0.25px] cursor-pointer hover:bg-primary-dark/90 transition-all active:scale-[0.95]">
+                выбрать файл
+                <input
+                  type="file"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+              </label>
             </div>
+
+            {files && (
+              <div className="mt-4 text-primary-dark text-lg font-medium bg-primary-dark/10 px-6 py-3 rounded-[12px] animate-in fade-in zoom-in duration-300">
+                {files.name}
+              </div>
+            )}
           </div>
         </div>
       </div>
     </div>
+
   );
 }
