@@ -82,7 +82,7 @@ const Header: React.FC = () => {
       <SideMenu isOpen={isSideMenuOpen} onClose={closeSideMenu} />
       <Modal isOpen={isOpen} onClose={closeModal}>
         {" "}
-        <SearchMenu />
+        <SearchMenu onClose={closeModal} />
       </Modal>
     </>
   );

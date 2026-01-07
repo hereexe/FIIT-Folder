@@ -184,7 +184,7 @@ export default function FileViewer({
   const isMarkdown = cleanTitle.endsWith(".md");
 
   return (
-    <div className="flex flex-col items-center gap-4 w-full max-w-80p mx-auto px-4 md:px-6 py-6">
+    <div className="flex flex-col items-center gap-4 w-full max-w-[95%] md:max-w-[80%] mx-auto px-4 md:px-6 py-6">
       {/* Header section */}
       <div className="flex items-center justify-between w-full py-3">
         <button

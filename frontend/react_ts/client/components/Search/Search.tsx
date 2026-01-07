@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { Search, Filter, CheckIcon, RefreshCcw } from "lucide-react";
+import { Search, Filter, CheckIcon, RefreshCcw, X } from "lucide-react";
 import SearchResult from "./SearchResult";
 import { useGetMaterialsQuery, useGetSubjectsQuery } from "../../../api/api";
 import { GetMaterialsParams, SubjectDto } from "../../../api/types";
@@ -11,7 +11,11 @@ interface FilterState {
   semesters: string[];
 }
 
-export default function SearchMenu() {
+interface SearchMenuProps {
+  onClose?: () => void;
+}
+
+export default function SearchMenu({ onClose }: SearchMenuProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
 
@@ -348,16 +352,23 @@ export default function SearchMenu() {
 
             <button
               onClick={resetFilters}
-              className="absolute bottom-6 right-6 hover:opacity-70 transition-opacity"
+              className="absolute bottom-6 right-16 hover:opacity-70 transition-opacity"
               aria-label="Reset filters"
             >
               <RefreshCcw className="w-12 h-12 text-purple-dark" strokeWidth={2} />
+            </button>
+            <button
+              onClick={() => setShowFilters(false)}
+              className="absolute bottom-6 right-6 hover:opacity-70 transition-opacity"
+              aria-label="Close filters"
+            >
+              <X className="w-12 h-12 text-purple-dark" strokeWidth={2} />
             </button>
 
           </div>
         )}
 
-        {!showFilters && (<SearchResult items={filteredMaterials} />)}
+        {!showFilters && (<SearchResult items={filteredMaterials} onMaterialSelect={onClose} />)}
       </div>
     </div>
   );

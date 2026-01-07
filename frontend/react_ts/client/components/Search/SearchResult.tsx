@@ -33,6 +33,7 @@ function ListItem({ title, author, onClick }: ListItemProps) {
 
 interface SearchResultProps {
   items: MaterialDto[];
+  onMaterialSelect?: () => void;
 }
 
 const materialTypeLabels: Record<string, string> = {
@@ -43,7 +44,7 @@ const materialTypeLabels: Record<string, string> = {
   "ComputerPractice": "Компьютерный практикум"
 };
 
-export default function SearchResult({ items }: SearchResultProps) {
+export default function SearchResult({ items, onMaterialSelect }: SearchResultProps) {
   const navigate = useNavigate();
   const { data: subjects = [] } = useGetSubjectsQuery();
 
@@ -63,6 +64,9 @@ export default function SearchResult({ items }: SearchResultProps) {
         material: material
       }
     });
+    if (onMaterialSelect) {
+      onMaterialSelect();
+    }
   }
 
   return (
