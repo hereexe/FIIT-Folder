@@ -18,6 +18,7 @@ import AddFile_page from "./components/AddFile"
 import Login_page from "./pages/Login_page"
 import Register_page from "./pages/Register_page"
 import Favorites_page from "./pages/Favorites_page";
+import MathTest from "./pages/MathTest";
 import { Provider } from 'react-redux';
 import { store } from "../api/store"
 import React from 'react';
@@ -43,6 +44,7 @@ const App = () => (
                 <Route path="/register" element={<Register_page />} />
                 <Route path="/add_file" element={<AddFile_page />} />
                 <Route path="/favorites" element={<Favorites_page />} />
+                <Route path="/math-test" element={<MathTest />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
 
                 <Route path="*" element={<NotFound />} />

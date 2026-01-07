@@ -82,9 +82,18 @@ export default function FileViewer({
 
   useEffect(() => {
     if (title.trim().toLowerCase().endsWith('.md') && pdfUrl) {
+      console.log("Fetching markdown from:", pdfUrl);
       fetch(pdfUrl)
-        .then(res => res.text())
-        .then(text => setMarkdownContent(text))
+        .then(res => {
+          console.log("Response status:", res.status);
+          console.log("Content-Type:", res.headers.get('content-type'));
+          return res.text();
+        })
+        .then(text => {
+          console.log("Fetched content (first 500 chars):", text.substring(0, 500));
+          console.log("Content length:", text.length);
+          setMarkdownContent(text);
+        })
         .catch(err => console.error("Failed to fetch markdown content", err));
     }
   }, [title, pdfUrl]);
