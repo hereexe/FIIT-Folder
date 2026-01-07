@@ -68,49 +68,56 @@ public class MaterialsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Upload([FromForm] UploadMaterialRequest request)
     {
-        if (request.File == null)
-            return BadRequest(new { message = "Файл не выбран" });
-
-        await using var stream = request.File.OpenReadStream();
-        var userId = GetUserId();
-
-        var command = new UploadMaterialCommand(
-            request.SubjectId,
-            userId,
-            request.File.FileName,
-            request.Year,
-            request.Semester,
-            request.Description,
-            request.MaterialType,
-            request.File.Length,
-            request.File.ContentType,
-            stream);
-
-        var result = await _mediator.Send(command);
-
-        var response = new MaterialResponse
+        try
         {
-            Id = result.Id,
-            SubjectId = result.SubjectId,
-            Name = result.Name,
-            Year = result.Year,
-            Semester = result.Semester,
-            Description = result.Description,
-            MaterialType = result.MaterialType,
-            Size = result.Size,
-            SizeFormatted = FormatSize(result.Size),
-            UploadedAt = result.UploadedAt,
-            AuthorName = User.Identity?.Name ?? "Me",
-            IsFavorite = false,
-            LikesCount = 0,
-            DislikesCount = 0,
-            CurrentUserRating = null,
-            DownloadUrl = $"{Request.Scheme}://{Request.Host}/api/materials/{result.Id}/download",
-            ViewCount = 0,
-            DownloadCount = 0
-        };
+            if (request.File == null)
+                return BadRequest(new { message = "Файл не выбран" });
 
-        return Created($"/api/materials/{response.Id}", response);
+            await using var stream = request.File.OpenReadStream();
+            var userId = GetUserId();
+
+            var command = new UploadMaterialCommand(
+                request.SubjectId,
+                userId,
+                request.File.FileName,
+                request.Year,
+                request.Semester,
+                request.Description,
+                request.MaterialType,
+                request.File.Length,
+                request.File.ContentType,
+                stream);
+
+            var result = await _mediator.Send(command);
+
+            var response = new MaterialResponse
+            {
+                Id = result.Id,
+                SubjectId = result.SubjectId,
+                Name = result.Name,
+                Year = result.Year,
+                Semester = result.Semester,
+                Description = result.Description,
+                MaterialType = result.MaterialType,
+                Size = result.Size,
+                SizeFormatted = FormatSize(result.Size),
+                UploadedAt = result.UploadedAt,
+                AuthorName = User.Identity?.Name ?? "Me",
+                IsFavorite = false,
+                LikesCount = 0,
+                DislikesCount = 0,
+                CurrentUserRating = null,
+                DownloadUrl = $"{Request.Scheme}://{Request.Host}/api/materials/{result.Id}/download",
+                ViewCount = 0,
+                DownloadCount = 0
+            };
+
+            return Created($"/api/materials/{response.Id}", response);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = ex.Message, details = ex.ToString() });
+        }
     }
 
     [HttpGet("{id}")]
