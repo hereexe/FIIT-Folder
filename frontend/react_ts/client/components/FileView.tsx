@@ -17,6 +17,7 @@ import {
 import { isAdmin } from "../utils/authUtils";
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
+import remarkGfm from 'remark-gfm';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
 
@@ -280,8 +281,9 @@ export default function FileViewer({
             </div>
             <div className="w-full min-h-[500px] p-8 md:p-12 bg-white rounded-2xl shadow-xl prose prose-lg prose-slate max-w-none">
               <ReactMarkdown
-                remarkPlugins={[remarkMath]}
+                remarkPlugins={[remarkMath, remarkGfm]}
                 rehypePlugins={[rehypeKatex]}
+                className="markdown-body"
               >
                 {markdownContent || "*Загрузка...*"}
               </ReactMarkdown>
