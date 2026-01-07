@@ -79,6 +79,14 @@ export default function FileViewer({
   const [likes, setLikes] = useState(initialLikes || 0);
   const [dislikes, setDislikes] = useState(initialDislikes || 0);
   const [markdownContent, setMarkdownContent] = useState<string | null>(null);
+  // Pre-process markdown to remove custom spoiler-markdown code blocks
+  const preprocessMarkdown = (text: string): string => {
+    // Remove ```spoiler-markdown and closing ``` markers while keeping content inside
+    return text
+      .replace(/```spoiler-markdown\s*/g, '')
+      .replace(/```\s*$/gm, '')  // Remove closing ``` at end of lines
+      .replace(/```\n/g, '\n');   // Remove standalone ``` lines
+  };
 
   useEffect(() => {
     if (title.trim().toLowerCase().endsWith('.md') && pdfUrl) {
@@ -92,7 +100,10 @@ export default function FileViewer({
         .then(text => {
           console.log("Fetched content (first 500 chars):", text.substring(0, 500));
           console.log("Content length:", text.length);
-          setMarkdownContent(text);
+          // Pre-process to remove spoiler-markdown code blocks
+          const processedText = preprocessMarkdown(text);
+          console.log("Processed content (first 500 chars):", processedText.substring(0, 500));
+          setMarkdownContent(processedText);
         })
         .catch(err => console.error("Failed to fetch markdown content", err));
     }
