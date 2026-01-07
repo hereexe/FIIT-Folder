@@ -82,7 +82,14 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.SetIsOriginAllowed(_ => true)
+        policy.WithOrigins(
+                "http://localhost:5173", 
+                "http://localhost:3000", 
+                "http://fiit-folder.ru", 
+                "https://fiit-folder.ru",
+                "http://www.fiit-folder.ru",
+                "https://www.fiit-folder.ru"
+              )
               .AllowAnyMethod()
               .AllowAnyHeader()
               .AllowCredentials();
