@@ -80,7 +80,7 @@ export default function FileViewer({
   const [markdownContent, setMarkdownContent] = useState<string | null>(null);
 
   useEffect(() => {
-    if (title.toLowerCase().endsWith('.md') && pdfUrl) {
+    if (title.trim().toLowerCase().endsWith('.md') && pdfUrl) {
       fetch(pdfUrl)
         .then(res => res.text())
         .then(text => setMarkdownContent(text))
@@ -158,8 +158,9 @@ export default function FileViewer({
     }
   };
 
-  const isPdf = title.toLowerCase().endsWith(".pdf");
-  const isMarkdown = title.toLowerCase().endsWith(".md");
+  const cleanTitle = title.trim().toLowerCase();
+  const isPdf = cleanTitle.endsWith(".pdf");
+  const isMarkdown = cleanTitle.endsWith(".md");
 
   return (
     <div className="flex flex-col items-center gap-4 w-full max-w-80p mx-auto px-4 md:px-6 py-6">
