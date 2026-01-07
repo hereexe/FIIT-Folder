@@ -8,6 +8,7 @@ using FIIT_folder.Api.Models;
 using FIIT_folder.Application.Materials.Queries;
 using FIIT_folder.Application.Materials.Commands;
 using FIIT_folder.Application.DTOs;
+using FIIT_folder.Domain.Interfaces;
 using System.Security.Claims;
 
 namespace FIIT_folder.Tests.Api.Controllers;
@@ -18,12 +19,14 @@ namespace FIIT_folder.Tests.Api.Controllers;
 public class MaterialsControllerTests
 {
     private readonly Mock<IMediator> _mediatorMock;
+    private readonly Mock<IMaterialMongoDB> _materialRepositoryMock;
     private readonly MaterialsController _controller;
 
     public MaterialsControllerTests()
     {
         _mediatorMock = new Mock<IMediator>();
-        _controller = new MaterialsController(_mediatorMock.Object);
+        _materialRepositoryMock = new Mock<IMaterialMongoDB>();
+        _controller = new MaterialsController(_mediatorMock.Object, _materialRepositoryMock.Object);
         
         // Setup HttpContext with Request properties
         var httpContext = new DefaultHttpContext();

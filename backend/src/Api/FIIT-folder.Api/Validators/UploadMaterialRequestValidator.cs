@@ -7,7 +7,7 @@ namespace FIIT_folder.Api.Validators;
 
 public class UploadMaterialRequestValidator : AbstractValidator<UploadMaterialRequest>
 {
-    private static readonly string[] AllowedExtensions = { ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".png", ".jpg", ".jpeg", ".ppt", ".pptx", ".txt" };
+    private static readonly string[] AllowedExtensions = { ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".png", ".jpg", ".jpeg", ".ppt", ".pptx", ".txt", ".md" };
 
     public UploadMaterialRequestValidator()
     {

@@ -237,6 +237,7 @@ public class UploadMaterialRequestValidatorTests
     [InlineData("test.ppt")]
     [InlineData("test.pptx")]
     [InlineData("test.txt")]
+    [InlineData("test.md")]
     public void Should_AcceptValidFileExtensions(string fileName)
     {
         // Arrange
