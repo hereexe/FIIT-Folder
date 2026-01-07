@@ -7,7 +7,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   useRateMaterialMutation,
   useAddFavoriteMaterialMutation,
@@ -15,6 +15,10 @@ import {
   useDeleteMaterialMutation
 } from "../../api/api";
 import { isAdmin } from "../utils/authUtils";
+import ReactMarkdown from 'react-markdown';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css';
 
 interface FileViewerProps {
   id: string;
@@ -73,6 +77,16 @@ export default function FileViewer({
   const [isFavorited, setIsFavorited] = useState(isFavorite);
   const [likes, setLikes] = useState(initialLikes || 0);
   const [dislikes, setDislikes] = useState(initialDislikes || 0);
+  const [markdownContent, setMarkdownContent] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (title.toLowerCase().endsWith('.md') && pdfUrl) {
+      fetch(pdfUrl)
+        .then(res => res.text())
+        .then(text => setMarkdownContent(text))
+        .catch(err => console.error("Failed to fetch markdown content", err));
+    }
+  }, [title, pdfUrl]);
 
   const handleLike = async () => {
     const newRating = isLiked ? null : "Like";
@@ -143,6 +157,10 @@ export default function FileViewer({
       console.error("Failed to update favorite", err);
     }
   };
+
+  const isPdf = title.toLowerCase().endsWith(".pdf");
+  const isMarkdown = title.toLowerCase().endsWith(".md");
+
   return (
     <div className="flex flex-col items-center gap-4 w-full max-w-80p mx-auto px-4 md:px-6 py-6">
       {/* Header section */}
@@ -243,7 +261,7 @@ export default function FileViewer({
 
       {/* File content area */}
       <div className="relative w-full mt-4 flex flex-col items-center">
-        {title.toLowerCase().endsWith(".pdf") ? (
+        {isPdf ? (
           <>
             <div className="text-folder-navy text-lg mb-4">
               Просмотров: {viewCount}
@@ -253,6 +271,20 @@ export default function FileViewer({
               title="PDF Viewer"
               className="w-full h-[800px] md:h-[1000px] rounded-2xl border-none shadow-xl bg-white"
             />
+          </>
+        ) : isMarkdown ? (
+          <>
+            <div className="text-folder-navy text-lg mb-4">
+              Просмотров: {viewCount}
+            </div>
+            <div className="w-full min-h-[500px] p-8 md:p-12 bg-white rounded-2xl shadow-xl prose prose-lg prose-slate max-w-none">
+              <ReactMarkdown
+                remarkPlugins={[remarkMath]}
+                rehypePlugins={[rehypeKatex]}
+              >
+                {markdownContent || "*Загрузка...*"}
+              </ReactMarkdown>
+            </div>
           </>
         ) : (
           <div className="w-full aspect-[16/10] md:aspect-[16/9] bg-white/10 backdrop-blur-md rounded-2xl shadow-xl flex flex-col items-center justify-center gap-6 border border-white/20">

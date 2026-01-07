@@ -21,7 +21,7 @@ export default function Index() {
 
   // Increment view count on mount (only once)
   useEffect(() => {
-    if (material?.id && material.name.toLowerCase().endsWith(".pdf") && !viewIncrementedRef.current) {
+    if (material?.id && (material.name.toLowerCase().endsWith(".pdf") || material.name.toLowerCase().endsWith(".md")) && !viewIncrementedRef.current) {
       viewIncrementedRef.current = true;
       incrementViewCount(material.id);
     }
