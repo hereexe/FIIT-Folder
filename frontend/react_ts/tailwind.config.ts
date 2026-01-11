@@ -91,6 +91,9 @@ export default {
           medium: "#C4B1F1",
           dark: "#19024F",
         },
+        grey: {
+          medium: "#D1D3E2"
+        }
       },
       borderRadius: {
         lg: "var(--radius)",
