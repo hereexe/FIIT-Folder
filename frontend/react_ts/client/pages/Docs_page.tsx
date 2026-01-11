@@ -32,7 +32,7 @@ export default function Index() {
   if (isLoading) return <div className="min-h-screen bg-fiit-bg flex items-center justify-center text-fiit-text">Загрузка материалов...</div>;
   if (error) return <div className="min-h-screen bg-fiit-bg flex items-center justify-center text-fiit-text">Ошибка загрузки материалов</div>;
 
-  const materials = materialsData ? [...materialsData].sort((a, b) => b.likesCount - a.likesCount) : [];
+  const materials = materialsData ? [...materialsData].sort((a, b) => (b.likesCount - b.dislikesCount) - (a.likesCount - a.dislikesCount)) : [];
 
   return (
     <div className="min-h-screen bg-fiit-bg font-inter">
