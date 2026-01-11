@@ -14,6 +14,10 @@ public class LoginTests
     [InlineData("test_user")]
     [InlineData("USER")]
     [InlineData("abcd")]
+    [InlineData("user.name")]
+    [InlineData("пользователь")]
+    [InlineData("Иван123")]
+    [InlineData("test.Ёлка")]
     public void Create_ShouldSucceed_WhenValueIsValid(string value)
     {
         // Act
@@ -21,7 +25,7 @@ public class LoginTests
 
         // Assert
         Assert.NotNull(login);
-        Assert.Equal(value.ToLowerInvariant(), login.Value);
+        Assert.Equal(value.Trim().ToLowerInvariant(), login.Value);
     }
 
     [Theory]
@@ -60,8 +64,8 @@ public class LoginTests
     [InlineData("user@name")]
     [InlineData("user name")]
     [InlineData("user-name")]
-    [InlineData("user.name!")]
-    [InlineData("пользователь")]
+    [InlineData("user!name")]
+    [InlineData("user#name")]
     public void Create_ShouldThrowException_WhenValueContainsInvalidCharacters(string value)
     {
         // Act & Assert

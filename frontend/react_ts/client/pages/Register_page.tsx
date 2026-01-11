@@ -35,7 +35,15 @@ export default function Register_page() {
             }, 2000);
         } catch (err: any) {
             console.error("Registration failed:", err);
-            setErrorMsg(err.data?.message || "Registration failed. Try a different username.");
+            // Handle array of validation errors from backend
+            if (Array.isArray(err.data)) {
+                const errorMessages = err.data.map((e: { field: string; errorMessage: string }) => e.errorMessage);
+                setErrorMsg(errorMessages.join(". "));
+            } else if (err.data?.message) {
+                setErrorMsg(err.data.message);
+            } else {
+                setErrorMsg("Ошибка регистрации. Попробуйте снова.");
+            }
         }
     };
 
