@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useRegisterMutation } from "../../api/api";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, Lock, User, AlertCircle, CheckCircle2 } from "lucide-react";
+import { ChevronLeft, Lock, User, AlertCircle, CheckCircle2, Eye, EyeOff } from "lucide-react";
 
 export default function Register_page() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
     const navigate = useNavigate();
@@ -119,12 +121,19 @@ export default function Register_page() {
                                     <Lock className="w-5 h-5" />
                                 </div>
                                 <input
-                                    type="password"
+                                    type={showPassword ? "text" : "password"}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="••••••••"
-                                    className="w-full h-[55px] pl-12 pr-4 rounded-[15px] bg-primary-dark/[0.04] border-2 border-transparent focus:border-primary-dark/10 focus:bg-white transition-all text-lg focus:outline-none"
+                                    className="w-full h-[55px] pl-12 pr-12 rounded-[15px] bg-primary-dark/[0.04] border-2 border-transparent focus:border-primary-dark/10 focus:bg-white transition-all text-lg focus:outline-none"
                                 />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-primary-dark/40 hover:text-primary-dark transition-colors"
+                                >
+                                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                </button>
                             </div>
                         </div>
 
@@ -138,12 +147,19 @@ export default function Register_page() {
                                     <Lock className="w-5 h-5" />
                                 </div>
                                 <input
-                                    type="password"
+                                    type={showConfirmPassword ? "text" : "password"}
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                     placeholder="••••••••"
-                                    className="w-full h-[55px] pl-12 pr-4 rounded-[15px] bg-primary-dark/[0.04] border-2 border-transparent focus:border-primary-dark/10 focus:bg-white transition-all text-lg focus:outline-none"
+                                    className="w-full h-[55px] pl-12 pr-12 rounded-[15px] bg-primary-dark/[0.04] border-2 border-transparent focus:border-primary-dark/10 focus:bg-white transition-all text-lg focus:outline-none"
                                 />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-primary-dark/40 hover:text-primary-dark transition-colors"
+                                >
+                                    {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                </button>
                             </div>
                         </div>
                     </div>
