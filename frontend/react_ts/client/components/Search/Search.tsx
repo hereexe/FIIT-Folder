@@ -3,6 +3,7 @@ import { Search, Filter, CheckIcon, RefreshCcw, X } from "lucide-react";
 import SearchResult from "./SearchResult";
 import { useGetMaterialsQuery, useGetSubjectsQuery } from "../../../api/api";
 import { GetMaterialsParams, SubjectDto } from "../../../api/types";
+import { getYearRange } from "../../utils/dateUtils";
 
 interface FilterState {
   subjects: string[]; // Subject IDs
@@ -130,7 +131,7 @@ export default function SearchMenu({ onClose }: SearchMenuProps) {
   );
 
   const uiContentTypes = Object.values(contentTypeMap);
-  const years = ["2025", "2024", "2023", "2022", "2021"];
+  const years = getYearRange(2019);
   const semesters = ["1", "2", "3", "4", "5", "6", "7", "8"];
 
   // Toggle filter for subjects by NAME (handles all subject IDs with same name)
