@@ -13,7 +13,7 @@ function ListItem({ title, author, onClick }: ListItemProps) {
   return (
     <button
       onClick={onClick}
-      className="w-full flex items-center bg-purple-medium justify-between px-4 py-6 md:px-6 md:py-7 rounded-[20px] bg-item-bg transition-all hover:bg-item-bg/80 active:scale-[0.99]"
+      className="w-full flex items-center bg-grey-medium justify-between px-4 py-6 md:px-6 md:py-7 rounded-[20px] bg-item-bg transition-all hover:bg-item-bg/80 active:scale-[0.99]"
     >
       <div className="flex items-center gap-3 min-w-0 flex-1">
         <div className="w-20 h-20 md:w-24 md:h-24 flex-shrink-0" />
