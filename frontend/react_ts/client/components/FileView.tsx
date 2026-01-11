@@ -14,7 +14,7 @@ import {
   useRemoveFavoriteMaterialMutation,
   useDeleteMaterialMutation
 } from "../../api/api";
-import { isAdmin } from "../utils/authUtils";
+import { isAdmin, isAuthenticated } from "../utils/authUtils";
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import remarkGfm from 'remark-gfm';
@@ -54,6 +54,7 @@ export default function FileViewer({
   const [removeFavorite] = useRemoveFavoriteMaterialMutation();
   const [deleteMaterial, { isLoading: isDeleting }] = useDeleteMaterialMutation();
   const userIsAdmin = isAdmin();
+  const userIsAuthenticated = isAuthenticated();
 
   const handleBackClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -110,6 +111,11 @@ export default function FileViewer({
   }, [title, pdfUrl]);
 
   const handleLike = async () => {
+    if (!userIsAuthenticated) {
+      alert("Пожалуйста, войдите в систему, чтобы оценить материал.");
+      return;
+    }
+
     const newRating = isLiked ? null : "Like";
 
     try {
@@ -143,6 +149,10 @@ export default function FileViewer({
   };
 
   const handleDislike = async () => {
+    if (!userIsAuthenticated) {
+      alert("Пожалуйста, войдите в систему, чтобы оценить материал.");
+      return;
+    }
     try {
       if (isDisliked) {
         setIsDisliked(false);
@@ -166,6 +176,10 @@ export default function FileViewer({
   };
 
   const handleFavorite = async () => {
+    if (!userIsAuthenticated) {
+      alert("Пожалуйста, войдите в систему, чтобы добавить в избранное.");
+      return;
+    }
     try {
       if (isFavorited) {
         await removeFavorite(id).unwrap();
@@ -253,7 +267,9 @@ export default function FileViewer({
       <div className="flex items-center justify-center gap-6 md:gap-8 w-full">
         <button
           onClick={handleLike}
-          className="flex items-center gap-2 md:gap-3 hover:opacity-70 transition-opacity"
+          disabled={!userIsAuthenticated}
+          title={!userIsAuthenticated ? "Войдите, чтобы оценить" : "Нравится"}
+          className={`flex items-center gap-2 md:gap-3 transition-opacity ${!userIsAuthenticated ? "opacity-50 cursor-not-allowed" : "hover:opacity-70"}`}
         >
           <ThumbsUp
             className={`w-5 h-5 md:w-6 md:h-6 transition-all ${isLiked ? "fill-blue-500 text-folder-navy" : "text-folder-navy"
@@ -267,7 +283,9 @@ export default function FileViewer({
         </button>
         <button
           onClick={handleDislike}
-          className="flex items-center gap-2 md:gap-3 hover:opacity-70 transition-opacity"
+          disabled={!userIsAuthenticated}
+          title={!userIsAuthenticated ? "Войдите, чтобы оценить" : "Не нравится"}
+          className={`flex items-center gap-2 md:gap-3 transition-opacity ${!userIsAuthenticated ? "opacity-50 cursor-not-allowed" : "hover:opacity-70"}`}
         >
           <ThumbsDown
             className={`w-5 h-5 md:w-6 md:h-6 transition-all ${isDisliked ? "fill-blue-500 text-folder-navy" : "text-folder-navy"
