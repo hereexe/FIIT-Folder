@@ -21,6 +21,23 @@ export default function Index() {
   const [contentType, setContentType] = useState("");
   const [description, setDescription] = useState("");
   const [files, setFiles] = useState<File | null>(null);
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full min-h-[50vh] gap-6 text-center">
+        <p className="text-xl md:text-2xl font-medium text-primary-dark">
+          Пожалуйста, войдите в аккаунт, чтобы добавить файл
+        </p>
+        <button
+          onClick={() => navigate("/login")}
+          className="px-8 py-3 rounded-[15px] bg-primary-dark text-white text-xl font-bold hover:opacity-90 transition-opacity"
+        >
+          Войти
+        </button>
+      </div>
+    );
+  }
 
   const { data: subjects = [] } = useGetSubjectsQuery() as { data: SubjectDto[] };
 
@@ -133,8 +150,8 @@ export default function Index() {
   };
 
   return (
-    <div className="flex items-center justify-center p-4 ">
-      <div className="w-full rounded-[20px] p-6 md:p-8 lg:p-10">
+    <div className="flex items-center justify-center p-2 Reamctmd:p-4 ">
+      <div className="w-full rounded-[20px] p-4 md:p-8 lg:p-10">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
           {/* Left Section - Form */}
           <div className="flex-1 space-y-12">
@@ -142,14 +159,14 @@ export default function Index() {
             <div className="space-y-6">
               {/* Subject */}
               <div className="space-y-2">
-                <label className="block text-primary-dark text-xl font-normal">
+                <label className="block text-primary-dark text-lg md:text-xl font-normal">
                   Предмет
                 </label>
                 <div className="relative">
                   <select
                     value={selectedSubjectName}
                     onChange={(e) => handleSubjectNameChange(e.target.value)}
-                    className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
+                    className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-base md:text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
                   >
                     <option value="" className="text-primary-dark/50">
                       Выберите предмет
@@ -166,14 +183,14 @@ export default function Index() {
 
               {/* Year */}
               <div className="space-y-2">
-                <label className="block text-primary-dark text-xl font-normal">
+                <label className="block text-primary-dark text-lg md:text-xl font-normal">
                   Год
                 </label>
                 <div className="relative">
                   <select
                     value={year}
                     onChange={(e) => setYear(e.target.value)}
-                    className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
+                    className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-base md:text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
                   >
                     <option value="" className="text-primary-dark/50">
                       Выберите год
@@ -189,7 +206,7 @@ export default function Index() {
 
               {/* Semester */}
               <div className="space-y-2">
-                <label className="block text-primary-dark text-xl font-normal">
+                <label className="block text-primary-dark text-lg md:text-xl font-normal">
                   Семестр
                 </label>
                 <div className="relative">
@@ -197,7 +214,7 @@ export default function Index() {
                     value={semester}
                     onChange={(e) => handleSemesterChange(e.target.value)}
                     disabled={!selectedSubjectName}
-                    className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-base md:text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <option value="" className="text-primary-dark/50">
                       {selectedSubjectName ? "Выберите семестр" : "Сначала выберите предмет"}
@@ -214,7 +231,7 @@ export default function Index() {
 
               {/* Type of content */}
               <div className="space-y-2">
-                <label className="block text-primary-dark text-xl font-normal">
+                <label className="block text-primary-dark text-lg md:text-xl font-normal">
                   Тип контента
                 </label>
                 <div className="relative">
@@ -222,7 +239,7 @@ export default function Index() {
                     value={contentType}
                     onChange={(e) => setContentType(e.target.value)}
                     disabled={!selectedSubjectName}
-                    className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-base md:text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <option value="" className="text-primary-dark/50">
                       {selectedSubjectName ? "Выберите тип" : "Сначала выберите предмет"}
@@ -239,14 +256,14 @@ export default function Index() {
 
               {/* Description */}
               <div className="space-y-2">
-                <label className="block text-primary-dark text-xl font-normal">
+                <label className="block text-primary-dark text-lg md:text-xl font-normal">
                   Описание
                 </label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Дополнительная информация"
-                  className="w-full h-32 px-4 py-3 rounded-[10px] bg-[rgba(228,183,245,0.3)] text-primary-dark text-xl placeholder:text-primary-dark/50 resize-none focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
+                  className="w-full h-32 px-4 py-3 rounded-[10px] bg-[rgba(228,183,245,0.3)] text-primary-dark text-base md:text-xl placeholder:text-primary-dark/50 resize-none focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
                 />
               </div>
             </div>
@@ -256,7 +273,7 @@ export default function Index() {
               <button
                 onClick={handleUpload}
                 disabled={isLoading}
-                className="px-8 h-[55px] min-w-[200px] rounded-[20px] bg-primary-dark text-white text-2xl font-bold shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
+                className="px-8 h-[55px] min-w-[200px] rounded-[20px] bg-primary-dark text-white text-xl md:text-2xl font-bold shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
               >
                 {isLoading ? "Загрузка..." : "Загрузить"}
               </button>
@@ -276,10 +293,10 @@ export default function Index() {
               <FilePlus2 className="w-20 h-20 text-primary-dark stroke-[1.5]" />
 
               <div className="flex flex-col items-center gap-7">
-                <p className="text-primary-dark text-center text-2xl font-medium tracking-[0.25px]">
+                <p className="text-primary-dark text-center text-xl md:text-2xl font-medium tracking-[0.25px]">
                   Кидай сюда или
                 </p>
-                <label className="px-6 py-3 rounded-[15px] bg-primary-dark text-white text-2xl font-bold tracking-[0.25px] cursor-pointer hover:bg-primary-dark/90 transition-all active:scale-[0.95]">
+                <label className="px-6 py-3 rounded-[15px] bg-primary-dark text-white text-xl md:text-2xl font-bold tracking-[0.25px] cursor-pointer hover:bg-primary-dark/90 transition-all active:scale-[0.95]">
                   выбрать файл
                   <input
                     type="file"

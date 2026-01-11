@@ -13,18 +13,19 @@ const HeaderLayout: React.FC = () => {
   }, []);
 
   const excludedPaths = ['/login', '/register', '/landing'];
-  const isExcluded = excludedPaths.some(path => 
+  const isExcluded = excludedPaths.some(path =>
     location.pathname.startsWith(path)
   );
 
   // На сервере рендерим всё, на клиенте - условно
   const showHeader = isClient ? !isExcluded : true;
+  const token = localStorage.getItem("token");
 
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header будет на всех страницах */}
       {!isExcluded && <Header />}
-      {!isExcluded && <AddFileButton />}
+      {!isExcluded && token && <AddFileButton />}
 
       {/* Основной контент страницы */}
       <main>
