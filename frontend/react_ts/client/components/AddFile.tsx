@@ -30,11 +30,7 @@ export default function Index({ onClose }: AddFileProps) {
   if (!token) {
     return (
       <div className="flex flex-col items-center justify-center h-full min-h-[50vh] gap-6 text-center">
-<<<<<<< HEAD
-        <p className="text-2xl font-medium text-primary-dark">
-=======
         <p className="text-xl md:text-2xl font-medium text-primary-dark">
->>>>>>> mobile_frontend
           Пожалуйста, войдите в аккаунт, чтобы добавить файл
         </p>
         <button
@@ -158,7 +154,6 @@ export default function Index({ onClose }: AddFileProps) {
   };
 
   return (
-<<<<<<< HEAD
     <div className="flex items-center justify-center p-2 md:p-4 ">
       <div className="w-full rounded-[20px] p-4 md:p-8 lg:p-10 relative">
         <button
@@ -168,33 +163,12 @@ export default function Index({ onClose }: AddFileProps) {
         >
           <X className="w-8 h-8 text-primary-dark" />
         </button>
-=======
-    <div className="flex items-center justify-center p-2 Reamctmd:p-4 ">
-      <div className="w-full rounded-[20px] p-4 md:p-8 lg:p-10">
->>>>>>> mobile_frontend
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
           {/* Left Section - Form */}
           <div className="flex-1 space-y-12">
             {/* Form Fields */}
             <div className="space-y-6">
               {/* Subject */}
-<<<<<<< HEAD
-              <label className="block text-primary-dark text-lg md:text-xl font-normal">
-                Предмет
-              </label>
-              <div className="relative">
-                <select
-                  value={selectedSubjectName}
-                  onChange={(e) => handleSubjectNameChange(e.target.value)}
-                  className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-base md:text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
-                >
-                  <option value="" className="text-primary-dark/50">
-                    Выберите предмет
-                  </option>
-                  {uniqueSubjectNames.map((name) => (
-                    <option key={name} value={name}>
-                      {name}
-=======
               <div className="space-y-2">
                 <label className="block text-primary-dark text-lg md:text-xl font-normal">
                   Предмет
@@ -207,57 +181,17 @@ export default function Index({ onClose }: AddFileProps) {
                   >
                     <option value="" className="text-primary-dark/50">
                       Выберите предмет
->>>>>>> mobile_frontend
                     </option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
+                    {uniqueSubjectNames.map((name) => (
+                      <option key={name} value={name}>
+                        {name}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
+                </div>
               </div>
-            </div>
 
-<<<<<<< HEAD
-            {/* Year */}
-            <div className="space-y-2">
-              <label className="block text-primary-dark text-lg md:text-xl font-normal">
-                Год
-              </label>
-              <div className="relative">
-                <select
-                  value={year}
-                  onChange={(e) => setYear(e.target.value)}
-                  className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-base md:text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
-                >
-                  <option value="" className="text-primary-dark/50">
-                    Выберите год
-                  </option>
-                  <option value="2025">2025</option>
-                  <option value="2024">2024</option>
-                  <option value="2023">2023</option>
-                  <option value="2022">2022</option>
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
-              </div>
-            </div>
-
-            {/* Semester */}
-            <div className="space-y-2">
-              <label className="block text-primary-dark text-lg md:text-xl font-normal">
-                Семестр
-              </label>
-              <div className="relative">
-                <select
-                  value={semester}
-                  onChange={(e) => handleSemesterChange(e.target.value)}
-                  disabled={!selectedSubjectName}
-                  className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-base md:text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <option value="" className="text-primary-dark/50">
-                    {selectedSubjectName ? "Выберите семестр" : "Сначала выберите предмет"}
-                  </option>
-                  {availableSemesters.map((sem) => (
-                    <option key={sem} value={sem.toString()}>
-                      {sem} семестр
-=======
               {/* Year */}
               <div className="space-y-2">
                 <label className="block text-primary-dark text-lg md:text-xl font-normal">
@@ -271,34 +205,16 @@ export default function Index({ onClose }: AddFileProps) {
                   >
                     <option value="" className="text-primary-dark/50">
                       Выберите год
->>>>>>> mobile_frontend
                     </option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
+                    <option value="2025">2025</option>
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
+                </div>
               </div>
-            </div>
 
-<<<<<<< HEAD
-            {/* Type of content */}
-            <div className="space-y-2">
-              <label className="block text-primary-dark text-lg md:text-xl font-normal">
-                Тип контента
-              </label>
-              <div className="relative">
-                <select
-                  value={contentType}
-                  onChange={(e) => setContentType(e.target.value)}
-                  disabled={!selectedSubjectName}
-                  className="w-full h-[45px] px-4 pr-12 rounded-[10px] bg-[rgba(228,183,245,0.36)] text-primary-dark text-base md:text-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-dark/20 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <option value="" className="text-primary-dark/50">
-                    {selectedSubjectName ? "Выберите тип" : "Сначала выберите предмет"}
-                  </option>
-                  {availableMaterialTypes.map((type) => (
-                    <option key={type.value} value={type.value}>
-                      {type.displayName}
-=======
               {/* Semester */}
               <div className="space-y-2">
                 <label className="block text-primary-dark text-lg md:text-xl font-normal">
@@ -313,27 +229,17 @@ export default function Index({ onClose }: AddFileProps) {
                   >
                     <option value="" className="text-primary-dark/50">
                       {selectedSubjectName ? "Выберите семестр" : "Сначала выберите предмет"}
->>>>>>> mobile_frontend
                     </option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
+                    {availableSemesters.map((sem) => (
+                      <option key={sem} value={sem.toString()}>
+                        {sem} семестр
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
+                </div>
               </div>
-            </div>
 
-<<<<<<< HEAD
-            {/* Description */}
-            <div className="space-y-2">
-              <label className="block text-primary-dark text-lg md:text-xl font-normal">
-                Описание
-              </label>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Дополнительная информация"
-                className="w-full h-32 px-4 py-3 rounded-[10px] bg-[rgba(228,183,245,0.3)] text-primary-dark text-base md:text-xl placeholder:text-primary-dark/50 resize-none focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
-              />
-=======
               {/* Type of content */}
               <div className="space-y-2">
                 <label className="block text-primary-dark text-lg md:text-xl font-normal">
@@ -371,7 +277,6 @@ export default function Index({ onClose }: AddFileProps) {
                   className="w-full h-32 px-4 py-3 rounded-[10px] bg-[rgba(228,183,245,0.3)] text-primary-dark text-base md:text-xl placeholder:text-primary-dark/50 resize-none focus:outline-none focus:ring-2 focus:ring-primary-dark/20"
                 />
               </div>
->>>>>>> mobile_frontend
             </div>
 
             {/* Upload Button */}
@@ -423,6 +328,5 @@ export default function Index({ onClose }: AddFileProps) {
         </div>
       </div>
     </div>
-
   );
 }
