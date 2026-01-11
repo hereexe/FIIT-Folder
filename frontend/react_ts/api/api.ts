@@ -16,7 +16,9 @@ import {
   AddFavoriteRequest,
 } from "./types";
 
+<<<<<<< HEAD
 const BASE_URL = import.meta.env.VITE_API_URL || "/api";
+=======
 
 export const appApi = createApi({
   reducerPath: "appApi",
@@ -263,4 +265,5 @@ export const {
   useRemoveFavoriteMaterialMutation,
   useGetFavoritesQuery,
   useIncrementViewCountMutation,
+const BASE_URL = import.meta.env.VITE_API_URL || "/api";
 } = appApi;
