@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Search, Filter, X, CheckIcon, RefreshCcw } from "lucide-react";
+import { getYearRange } from "../../utils/dateUtils";
 
 interface FilterState {
   subjects: string[];
@@ -15,7 +16,7 @@ export default function SearchMenu() {
     years: [],
     semesters: [],
   });
-  
+
   // Добавляем состояние для видимости окна фильтров
   const [showFilters, setShowFilters] = useState(false);
 
@@ -40,7 +41,7 @@ export default function SearchMenu() {
     "Коллоквиумы",
   ];
 
-  const years = ["2025", "2024", "2023", "2022", "2021"];
+  const years = getYearRange(2019);
 
   const semesters = ["1", "2", "3", "4", "5", "6", "7", "8"];
 
@@ -92,15 +93,15 @@ export default function SearchMenu() {
     isHovered?: boolean
   ) => {
     const isSelected = filters[category].includes(value);
-    
+
     if (isSelected) {
       return "bg-purple-dark text-purple-light";
     }
-    
+
     if (isHovered) {
       return "bg-purple-light/77 text-purple-dark";
     }
-    
+
     return "bg-white/50 text-purple-dark";
   };
 
@@ -118,7 +119,7 @@ export default function SearchMenu() {
           </div>
 
           <div className="lg:w-40 flex items-center justify-between px-2.5 py-2.5 rounded-[30px] bg-purple-medium gap-2">
-            <button 
+            <button
               onClick={toggleFilters}
               className="flex items-center gap-2.5 hover:opacity-70 transition-opacity"
             >
@@ -131,7 +132,7 @@ export default function SearchMenu() {
                 </div>
               </div>
             </button>
-            <button 
+            <button
               onClick={saveFilters}
               className="flex-shrink-0 hover:opacity-70 transition-opacity"
             >
@@ -161,7 +162,7 @@ export default function SearchMenu() {
                         )}`}
                       >
                         {subject}
-                    </button>
+                      </button>
                     ))}
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -252,7 +253,7 @@ export default function SearchMenu() {
             >
               <RefreshCcw className="w-12 h-12 text-purple-dark" strokeWidth={2} />
             </button>
-            
+
             {/* Кнопка закрытия */}
             <button
               onClick={() => setShowFilters(false)}

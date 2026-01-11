@@ -3,6 +3,7 @@ import { useState, useMemo } from "react";
 import { useUploadMaterialMutation, useGetSubjectsQuery } from "../../api/api";
 import { UploadMaterialRequest } from "../../api/types";
 import { useNavigate } from "react-router-dom";
+import { getYearRange } from "../../utils/dateUtils";
 
 interface SubjectDto {
   id: string;
@@ -206,10 +207,9 @@ export default function Index({ onClose }: AddFileProps) {
                     <option value="" className="text-primary-dark/50">
                       Выберите год
                     </option>
-                    <option value="2025">2025</option>
-                    <option value="2024">2024</option>
-                    <option value="2023">2023</option>
-                    <option value="2022">2022</option>
+                    {getYearRange(2019).map((y) => (
+                      <option key={y} value={y}>{y}</option>
+                    ))}
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 text-primary-dark pointer-events-none" />
                 </div>
