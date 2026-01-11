@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Search, Filter, X, CheckIcon, RefreshCcw } from "lucide-react";
-import { getYearRange } from "../../utils/dateUtils";
+import { getYearRange } from "../utils/dateUtils";
 
 interface FilterState {
   subjects: string[];

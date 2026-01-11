@@ -3,7 +3,7 @@ import { useState, useMemo } from "react";
 import { useUploadMaterialMutation, useGetSubjectsQuery } from "../../api/api";
 import { UploadMaterialRequest } from "../../api/types";
 import { useNavigate } from "react-router-dom";
-import { getYearRange } from "../../utils/dateUtils";
+import { getYearRange } from "../utils/dateUtils";
 
 interface SubjectDto {
   id: string;
