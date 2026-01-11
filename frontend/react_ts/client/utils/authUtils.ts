@@ -45,3 +45,10 @@ export function getUserRole(): string | null {
 export function isAdmin(): boolean {
     return getUserRole() === "Admin";
 }
+
+/**
+ * Returns true if the user is authenticated.
+ */
+export function isAuthenticated(): boolean {
+    return !!localStorage.getItem("token");
+}
